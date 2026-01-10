@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Trip Bookings - SoleGoes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <link rel="stylesheet" href="modern_theme.css">
+    <style>
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            padding-bottom: 20px;
+        }
+
+        .booking-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .booking-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--border-glass);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+        }
+
+        .status-paid { background-color: #4ade80; box-shadow: 0 0 8px rgba(74, 222, 128, 0.4); }
+        .status-partial { background-color: #facc15; box-shadow: 0 0 8px rgba(250, 204, 21, 0.4); }
+        .status-unpaid { background-color: #f87171; box-shadow: 0 0 8px rgba(248, 113, 113, 0.4); }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header-sticky">
+        <div class="flex items-center gap-3">
+            <button onclick="window.history.back()" class="btn-icon bg-transparent border-transparent hover:bg-white/5">
+                <i data-lucide="arrow-left" class="w-6 h-6 text-white"></i>
+            </button>
+            <div class="flex-1 min-w-0">
+                <h1 class="font-bold text-sm truncate">Bali Spiritual Awakening</h1>
+                <div class="text-xs text-white/50">Aug 12-18 • 12/15 Booked</div>
+            </div>
+        </div>
+        <button class="btn-icon bg-transparent border-transparent hover:bg-white/5">
+            <i data-lucide="download" class="w-5 h-5 text-white/70"></i>
+        </button>
+    </header>
+
+    <div class="container mx-auto max-w-lg px-4 pt-4">
+        
+        <!-- Search & Filter -->
+        <div class="flex gap-3 mb-6">
+            <div class="relative flex-1">
+                <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40"></i>
+                <input type="text" class="input-field pl-9 py-2.5 text-sm" placeholder="Search travelers...">
+            </div>
+            <button class="btn-icon rounded-lg w-11 h-11 bg-white/5 border border-white/10">
+                <i data-lucide="filter" class="w-4 h-4 text-white/70"></i>
+            </button>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="grid grid-cols-3 gap-3 mb-6">
+            <div class="bg-white/5 rounded-lg p-3 text-center border border-white/5">
+                <div class="text-xs text-white/40 mb-1">Confirmed</div>
+                <div class="font-bold text-green-400">12</div>
+            </div>
+            <div class="bg-white/5 rounded-lg p-3 text-center border border-white/5">
+                <div class="text-xs text-white/40 mb-1">Pending</div>
+                <div class="font-bold text-yellow-400">3</div>
+            </div>
+            <div class="bg-white/5 rounded-lg p-3 text-center border border-white/5">
+                <div class="text-xs text-white/40 mb-1">Revenue</div>
+                <div class="font-bold text-white">₹5.4L</div>
+            </div>
+        </div>
+
+        <!-- Booking List -->
+        <div class="space-y-1">
+            <div class="text-xs font-bold text-white/40 uppercase tracking-wider mb-3 px-1">Participants</div>
+
+            <!-- User 1 -->
+            <div class="booking-card" onclick="window.location.href='option15_agency_participant_profile.html'">
+                <img src="https://i.pravatar.cc/150?img=32" class="w-10 h-10 rounded-full object-cover border border-white/10" alt="User">
+                <div class="flex-1 min-w-0">
+                    <div class="flex justify-between items-start">
+                        <h3 class="font-bold text-sm text-white truncate">Sarah Jenkins</h3>
+                        <span class="text-xs font-medium text-green-400">Paid</span>
+                    </div>
+                    <div class="flex justify-between items-center mt-1">
+                        <div class="text-xs text-white/50">Solo Traveler • 24y</div>
+                        <div class="text-xs text-white/30">Booked 2d ago</div>
+                    </div>
+                </div>
+                <i data-lucide="chevron-right" class="w-4 h-4 text-white/20"></i>
+            </div>
+
+            <!-- User 2 -->
+            <div class="booking-card" onclick="window.location.href='option15_agency_participant_profile.html'">
+                <img src="https://i.pravatar.cc/150?img=11" class="w-10 h-10 rounded-full object-cover border border-white/10" alt="User">
+                <div class="flex-1 min-w-0">
+                    <div class="flex justify-between items-start">
+                        <h3 class="font-bold text-sm text-white truncate">Michael Chen</h3>
+                        <span class="text-xs font-medium text-yellow-400">Partial</span>
+                    </div>
+                    <div class="flex justify-between items-center mt-1">
+                        <div class="text-xs text-white/50">Group of 2 • 28y</div>
+                        <div class="text-xs text-white/30">Booked 5d ago</div>
+                    </div>
+                </div>
+                <i data-lucide="chevron-right" class="w-4 h-4 text-white/20"></i>
+            </div>
+
+            <!-- User 3 -->
+            <div class="booking-card" onclick="window.location.href='option15_agency_participant_profile.html'">
+                <img src="https://i.pravatar.cc/150?img=5" class="w-10 h-10 rounded-full object-cover border border-white/10" alt="User">
+                <div class="flex-1 min-w-0">
+                    <div class="flex justify-between items-start">
+                        <h3 class="font-bold text-sm text-white truncate">Emma Watson</h3>
+                        <span class="text-xs font-medium text-green-400">Paid</span>
+                    </div>
+                    <div class="flex justify-between items-center mt-1">
+                        <div class="text-xs text-white/50">Solo Traveler • 22y</div>
+                        <div class="text-xs text-white/30">Booked 1w ago</div>
+                    </div>
+                </div>
+                <i data-lucide="chevron-right" class="w-4 h-4 text-white/20"></i>
+            </div>
+
+             <!-- User 4 -->
+             <div class="booking-card" onclick="window.location.href='option15_agency_participant_profile.html'">
+                <img src="https://i.pravatar.cc/150?img=68" class="w-10 h-10 rounded-full object-cover border border-white/10" alt="User">
+                <div class="flex-1 min-w-0">
+                    <div class="flex justify-between items-start">
+                        <h3 class="font-bold text-sm text-white truncate">David Miller</h3>
+                        <span class="text-xs font-medium text-red-400">Unpaid</span>
+                    </div>
+                    <div class="flex justify-between items-center mt-1">
+                        <div class="text-xs text-white/50">Solo Traveler • 26y</div>
+                        <div class="text-xs text-white/30">Booked 1h ago</div>
+                    </div>
+                </div>
+                <i data-lucide="chevron-right" class="w-4 h-4 text-white/20"></i>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

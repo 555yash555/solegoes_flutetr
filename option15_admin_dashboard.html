@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin Dashboard - SoleGoes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <link rel="stylesheet" href="modern_theme.css">
+    <style>
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+        }
+
+        .admin-stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .approval-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .approval-header {
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header-sticky">
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-red-500 flex items-center justify-center font-bold text-white text-sm shadow-lg shadow-red-500/20">
+                AD
+            </div>
+            <span class="font-bold text-lg">Super Admin</span>
+        </div>
+        <button class="btn-icon bg-transparent border-transparent hover:bg-white/5" onclick="window.location.href='option15_login.html'">
+            <i data-lucide="log-out" class="w-5 h-5 text-white/70"></i>
+        </button>
+    </header>
+
+    <div class="container mx-auto max-w-lg px-4 pt-6 pb-20">
+        
+        <!-- Stats -->
+        <div class="grid grid-cols-2 gap-3 mb-8">
+            <div class="admin-stat-card">
+                <div class="w-10 h-10 rounded-full bg-yellow-500/10 flex items-center justify-center text-yellow-500">
+                    <i data-lucide="clock" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-white">12</div>
+                    <div class="text-xs text-white/50">Pending</div>
+                </div>
+            </div>
+            <div class="admin-stat-card">
+                <div class="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center text-green-500">
+                    <i data-lucide="check-circle" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-white">145</div>
+                    <div class="text-xs text-white/50">Active Trips</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Approvals -->
+        <div class="mb-6">
+            <div class="section-title">Pending Approvals</div>
+            
+            <!-- Card 1 -->
+            <div class="approval-card" id="card-1">
+                <div class="approval-header">
+                    <div class="flex items-center gap-3">
+                        <img src="https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=100&q=80" class="w-10 h-10 rounded-md object-cover" alt="Trip">
+                        <div>
+                            <h3 class="font-bold text-white text-sm">Ladakh Bike Expedition</h3>
+                            <div class="text-xs text-white/50">by Wanderlust Travels</div>
+                        </div>
+                    </div>
+                    <span class="text-xs font-bold text-yellow-500 bg-yellow-500/10 px-2 py-1 rounded">PENDING</span>
+                </div>
+                <div class="p-4">
+                    <div class="grid grid-cols-3 gap-4 mb-4 text-center">
+                        <div>
+                            <div class="text-xs text-white/40 mb-1">Price</div>
+                            <div class="font-bold text-white">₹22,000</div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-white/40 mb-1">Duration</div>
+                            <div class="font-bold text-white">6 Days</div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-white/40 mb-1">Dates</div>
+                            <div class="font-bold text-white">Sep 05</div>
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <button class="btn btn-secondary flex-1 text-red-400 border-red-500/20 hover:bg-red-500/10" onclick="rejectTrip('card-1')">Reject</button>
+                        <button class="btn btn-primary flex-1 bg-green-600 hover:bg-green-500 border-none shadow-green-500/20" onclick="approveTrip('card-1')">Approve</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="approval-card" id="card-2">
+                <div class="approval-header">
+                    <div class="flex items-center gap-3">
+                        <img src="https://images.unsplash.com/photo-1596895111956-bf1cf0599ce5?w=100&q=80" class="w-10 h-10 rounded-md object-cover" alt="Trip">
+                        <div>
+                            <h3 class="font-bold text-white text-sm">Kerala Backwaters</h3>
+                            <div class="text-xs text-white/50">by Kerala Vibe</div>
+                        </div>
+                    </div>
+                    <span class="text-xs font-bold text-yellow-500 bg-yellow-500/10 px-2 py-1 rounded">PENDING</span>
+                </div>
+                <div class="p-4">
+                    <div class="grid grid-cols-3 gap-4 mb-4 text-center">
+                        <div>
+                            <div class="text-xs text-white/40 mb-1">Price</div>
+                            <div class="font-bold text-white">₹18,500</div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-white/40 mb-1">Duration</div>
+                            <div class="font-bold text-white">4 Days</div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-white/40 mb-1">Dates</div>
+                            <div class="font-bold text-white">Oct 12</div>
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <button class="btn btn-secondary flex-1 text-red-400 border-red-500/20 hover:bg-red-500/10" onclick="rejectTrip('card-2')">Reject</button>
+                        <button class="btn btn-primary flex-1 bg-green-600 hover:bg-green-500 border-none shadow-green-500/20" onclick="approveTrip('card-2')">Approve</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        function approveTrip(id) {
+            const card = document.getElementById(id);
+            card.style.transition = 'all 0.3s ease';
+            card.style.transform = 'scale(0.95)';
+            card.style.opacity = '0';
+            setTimeout(() => {
+                card.remove();
+                // Show toast or notification
+            }, 300);
+        }
+
+        function rejectTrip(id) {
+            const reason = prompt("Please enter a reason for rejection:");
+            if (reason) {
+                const card = document.getElementById(id);
+                card.style.transition = 'all 0.3s ease';
+                card.style.transform = 'scale(0.95)';
+                card.style.opacity = '0';
+                setTimeout(() => {
+                    card.remove();
+                }, 300);
+            }
+        }
+    </script>
+</body>
+</html>

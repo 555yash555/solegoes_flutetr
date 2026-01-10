@@ -1,0 +1,25 @@
+/* Force button styles to override Tailwind */
+.btn-primary {
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: #0d0d0d !important;
+    border: none !important;
+    padding: 1rem !important;
+    border-radius: 0.875rem !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+}
+
+.btn-primary:hover {
+    background: #fff !important;
+}
+
+.btn-social {
+    background: rgba(255, 255, 255, 0.05) !important;
+    color: #fff !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.book-btn {
+    background: #fff !important;
+    color: #0d0d0d !important;
+}

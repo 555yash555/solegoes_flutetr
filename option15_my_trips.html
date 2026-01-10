@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>My Trips - SoleGoes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <link rel="stylesheet" href="modern_theme.css">
+</head>
+<body class="pb-10">
+
+    <!-- Header -->
+    <header class="header-sticky">
+        <div class="flex items-center gap-3">
+            <button onclick="window.history.back()" class="btn-icon">
+                <i data-lucide="chevron-left" class="w-5 h-5"></i>
+            </button>
+            <div class="text-lg font-bold text-white">My Trips</div>
+        </div>
+    </header>
+
+    <!-- Tabs -->
+    <div class="px-4 py-4">
+        <div class="flex p-1 bg-white/5 rounded-full">
+            <button class="flex-1 py-2 rounded-full bg-white/10 text-white font-bold text-sm shadow-lg">Upcoming</button>
+            <button class="flex-1 py-2 rounded-full text-white/50 font-medium text-sm">Past</button>
+            <button class="flex-1 py-2 rounded-full text-white/50 font-medium text-sm">Saved</button>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="px-4 space-y-4">
+        
+        <!-- Trip Card -->
+        <div class="glass-card p-0 overflow-hidden group cursor-pointer" onclick="window.location.href='option15_trip_detail.html'">
+            <div class="relative h-40">
+                <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80" alt="Bali" class="w-full h-full object-cover">
+                <div class="absolute top-3 right-3 bg-green-500 text-black text-xs font-bold px-2 py-1 rounded-md">
+                    Confirmed
+                </div>
+            </div>
+            <div class="p-4">
+                <div class="flex justify-between items-start mb-2">
+                    <h3 class="text-lg font-bold text-white">Bali Spiritual Awakening</h3>
+                    <span class="text-sm text-white/60">5 Days</span>
+                </div>
+                <div class="flex items-center gap-4 text-sm text-white/60 mb-4">
+                    <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-4 h-4"></i> Oct 15 - 20</span>
+                    <span class="flex items-center gap-1"><i data-lucide="map-pin" class="w-4 h-4"></i> Ubud</span>
+                </div>
+                <div class="flex gap-2">
+                    <button class="flex-1 btn btn-secondary text-xs py-2 h-auto">View Details</button>
+                    <button class="flex-1 btn btn-primary text-xs py-2 h-auto">Chat</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trip Card -->
+        <div class="glass-card p-0 overflow-hidden group cursor-pointer" onclick="window.location.href='option15_trip_detail.html'">
+            <div class="relative h-40">
+                <img src="https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=600&q=80" alt="Ladakh" class="w-full h-full object-cover grayscale">
+                <div class="absolute top-3 right-3 bg-yellow-500 text-black text-xs font-bold px-2 py-1 rounded-md">
+                    Pending
+                </div>
+            </div>
+            <div class="p-4">
+                <div class="flex justify-between items-start mb-2">
+                    <h3 class="text-lg font-bold text-white">Ladakh Bike Trip</h3>
+                    <span class="text-sm text-white/60">6 Days</span>
+                </div>
+                <div class="flex items-center gap-4 text-sm text-white/60 mb-4">
+                    <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-4 h-4"></i> Nov 10 - 16</span>
+                    <span class="flex items-center gap-1"><i data-lucide="map-pin" class="w-4 h-4"></i> Leh</span>
+                </div>
+                <button class="w-full btn btn-secondary text-xs py-2 h-auto">Complete Payment</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

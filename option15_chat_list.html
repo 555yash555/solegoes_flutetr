@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Messages - SoleGoes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <link rel="stylesheet" href="modern_theme.css">
+</head>
+<body class="pb-32">
+
+    <!-- Header -->
+    <header class="header-sticky">
+        <div class="text-lg font-bold text-white">Messages</div>
+        <button class="btn-icon">
+            <i data-lucide="edit" class="w-5 h-5"></i>
+        </button>
+    </header>
+
+    <!-- Search -->
+    <div class="px-4 py-4">
+        <div class="relative">
+            <input type="text" class="input-field pl-10" placeholder="Search messages...">
+            <i data-lucide="search" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40"></i>
+        </div>
+    </div>
+
+    <!-- Chat List -->
+    <div class="px-4 space-y-2">
+        <!-- Group Chat -->
+        <div class="glass-card p-4 flex items-center gap-4 cursor-pointer hover:bg-white/5 transition-colors" onclick="window.location.href='option15_chat_detail.html'">
+            <div class="relative">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center text-white font-bold text-lg">
+                    B
+                </div>
+                <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-[#18181b]"></div>
+            </div>
+            <div class="flex-1 min-w-0">
+                <div class="flex justify-between items-baseline mb-1">
+                    <h3 class="font-bold text-white truncate">Bali Squad 🌴</h3>
+                    <span class="text-xs text-white/40">2m ago</span>
+                </div>
+                <p class="text-sm text-white/60 truncate">Sarah: Anyone up for surfing tomorrow?</p>
+            </div>
+            <div class="w-5 h-5 rounded-full bg-primary flex items-center justify-center text-[10px] font-bold text-white bg-indigo-500">
+                3
+            </div>
+        </div>
+
+        <!-- Direct Message -->
+        <div class="glass-card p-4 flex items-center gap-4 cursor-pointer hover:bg-white/5 transition-colors">
+            <div class="relative">
+                <img src="https://i.pravatar.cc/150?img=12" class="w-12 h-12 rounded-full object-cover" alt="User">
+            </div>
+            <div class="flex-1 min-w-0">
+                <div class="flex justify-between items-baseline mb-1">
+                    <h3 class="font-bold text-white truncate">Alex Chen</h3>
+                    <span class="text-xs text-white/40">1h ago</span>
+                </div>
+                <p class="text-sm text-white/60 truncate">Hey! Are you joining the Ladakh trip?</p>
+            </div>
+        </div>
+
+        <!-- Direct Message -->
+        <div class="glass-card p-4 flex items-center gap-4 cursor-pointer hover:bg-white/5 transition-colors">
+            <div class="relative">
+                <img src="https://i.pravatar.cc/150?img=5" class="w-12 h-12 rounded-full object-cover" alt="User">
+            </div>
+            <div class="flex-1 min-w-0">
+                <div class="flex justify-between items-baseline mb-1">
+                    <h3 class="font-bold text-white truncate">Priya Patel</h3>
+                    <span class="text-xs text-white/40">Yesterday</span>
+                </div>
+                <p class="text-sm text-white/60 truncate">Thanks for the recommendation!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Island -->
+    <div class="nav-island-container">
+        <nav class="nav-island">
+            <a href="option15_mobile.html" class="nav-item">
+                <i data-lucide="home" class="w-6 h-6"></i>
+            </a>
+            <a href="option15_explore.html" class="nav-item">
+                <i data-lucide="compass" class="w-6 h-6"></i>
+            </a>
+            <a href="option15_create_trip.html" class="nav-fab hover-scale">
+                <i data-lucide="plus" class="w-6 h-6"></i>
+            </a>
+            <a href="#" class="nav-item active">
+                <i data-lucide="message-circle" class="w-6 h-6"></i>
+            </a>
+            <a href="option15_profile_page.html" class="nav-item">
+                <i data-lucide="user" class="w-6 h-6"></i>
+            </a>
+        </nav>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

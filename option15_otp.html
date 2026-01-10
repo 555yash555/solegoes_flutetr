@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>OTP Verification - SoleGoes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <link rel="stylesheet" href="modern_theme.css">
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-10 p-4">
+        <button onclick="window.location.href='option15_login.html'" class="btn-icon">
+            <i data-lucide="chevron-left" class="w-5 h-5"></i>
+        </button>
+    </header>
+
+    <div class="flex-1 flex flex-col max-w-md mx-auto px-6 pt-8 pb-6 w-full">
+        <div class="list-icon w-20 h-20 mx-auto mb-8 !bg-white/5 !border !border-white/10">
+            <i data-lucide="smartphone" class="w-10 h-10"></i>
+        </div>
+
+        <h1 class="text-2xl font-bold text-white text-center mb-2">Verify Your Number</h1>
+        <p class="text-white/50 text-center text-sm mb-1">We sent a code to +91 98765 43210</p>
+        <button onclick="editNumber()" class="text-indigo-400 text-sm font-semibold text-center mb-8 hover:text-indigo-300 transition-colors">Edit Number</button>
+
+        <div class="text-white/70 text-sm font-semibold text-center mb-4">Enter 6-digit code</div>
+
+        <div class="otp-container mb-8" id="otpContainer">
+            <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric">
+            <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric">
+            <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric">
+            <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric">
+            <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric">
+            <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric">
+        </div>
+
+        <div class="text-center mb-auto">
+            <div class="text-white/40 text-sm mb-2">Didn't receive code?</div>
+            <button id="resendLink" onclick="resendOTP()" class="text-white font-semibold text-sm hover:text-white/80 transition-colors">
+                Resend (<span id="timer">30</span>s)
+            </button>
+        </div>
+
+        <button id="verifyBtn" onclick="verifyOTP()" class="btn btn-primary py-3.5 text-lg mt-8">
+            Verify
+        </button>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const inputs = document.querySelectorAll('.otp-input');
+        const verifyBtn = document.getElementById('verifyBtn');
+        const resendLink = document.getElementById('resendLink');
+        const timerSpan = document.getElementById('timer');
+        let timer = 30;
+        let timerInterval;
+
+        // OTP Input handling
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                const value = e.target.value;
+
+                // Only allow numbers
+                if (!/^\d*$/.test(value)) {
+                    e.target.value = '';
+                    return;
+                }
+
+                if (value) {
+                    input.classList.add('filled');
+                    // Move to next input
+                    if (index < inputs.length - 1) {
+                        inputs[index + 1].focus();
+                    }
+                } else {
+                    input.classList.remove('filled');
+                }
+
+                checkComplete();
+            });
+
+            input.addEventListener('keydown', (e) => {
+                // Move to previous input on backspace
+                if (e.key === 'Backspace' && !input.value && index > 0) {
+                    inputs[index - 1].focus();
+                    inputs[index - 1].value = '';
+                    inputs[index - 1].classList.remove('filled');
+                    checkComplete();
+                }
+            });
+
+            input.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const pastedData = e.clipboardData.getData('text').slice(0, 6);
+
+                if (/^\d+$/.test(pastedData)) {
+                    pastedData.split('').forEach((char, i) => {
+                        if (inputs[i]) {
+                            inputs[i].value = char;
+                            inputs[i].classList.add('filled');
+                        }
+                    });
+                    checkComplete();
+                }
+            });
+        });
+
+        function checkComplete() {
+            const allFilled = Array.from(inputs).every(input => input.value);
+        }
+
+        function verifyOTP() {
+            const otp = Array.from(inputs).map(input => input.value).join('');
+            
+            // Simulate verification (accept any 6 digits for demo)
+            if (otp.length === 6) {
+                window.location.href = "option15_profile_setup.html";
+            } else {
+                // Shake animation on error
+                const container = document.getElementById('otpContainer');
+                container.classList.add('animate-shake');
+                setTimeout(() => container.classList.remove('animate-shake'), 300);
+            }
+        }
+
+        function editNumber() {
+            window.history.back();
+        }
+
+        function resendOTP() {
+            if (resendLink.classList.contains('opacity-50')) return;
+            startTimer();
+        }
+
+        function startTimer() {
+            timer = 30;
+            resendLink.classList.add('opacity-50', 'cursor-not-allowed');
+            
+            timerInterval = setInterval(() => {
+                timer--;
+                timerSpan.textContent = timer;
+
+                if (timer <= 0) {
+                    clearInterval(timerInterval);
+                    resendLink.classList.remove('opacity-50', 'cursor-not-allowed');
+                    timerSpan.textContent = '30';
+                }
+            }, 1000);
+        }
+
+        // Auto-focus first input
+        inputs[0].focus();
+
+        // Start timer on load
+        startTimer();
+    </script>
+</body>
+</html>

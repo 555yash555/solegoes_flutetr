@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoleGoes Database Schema</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap');
+        
+        :root {
+            --bg-deep: #050505;
+            --bg-surface: #121212;
+            --card-bg: #1A1A1A;
+            --border: #333;
+            --primary: #818cf8;
+            --accent: #c084fc;
+            --text-main: #e5e5e5;
+            --text-dim: #a3a3a3;
+            --key-color: #f472b6;
+            --string-color: #a5f3fc;
+            --bool-color: #fbace6;
+            --number-color: #fcd34d;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .collection-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .collection-header {
+            background: linear-gradient(90deg, rgba(129, 140, 248, 0.1), transparent);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .doc-structure {
+            padding: 1.5rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .field {
+            display: flex;
+            margin-bottom: 0.5rem;
+            padding-left: 1rem;
+            border-left: 1px solid var(--border);
+        }
+
+        .field:hover {
+            border-left-color: var(--primary);
+            background: rgba(255,255,255,0.02);
+        }
+
+        .key { color: var(--key-color); }
+        .type { color: var(--text-dim); font-size: 0.75rem; margin-right: 0.5rem; }
+        .val-str { color: var(--string-color); }
+        .val-bool { color: var(--bool-color); }
+        .val-num { color: var(--number-color); }
+        .val-vector { color: #a78bfa; font-weight: bold; }
+        
+        .sub-collection {
+            margin-left: 1.5rem;
+            margin-top: 1rem;
+            border-left: 2px dashed var(--border);
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .sub-collection::before {
+            content: 'SUB-COLLECTION';
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            background: var(--bg-surface);
+            padding: 0 5px;
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .badge {
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 99px;
+            font-weight: 600;
+        }
+        .badge-core { background: rgba(129, 140, 248, 0.2); color: #818cf8; }
+        .badge-ref { background: rgba(251, 146, 60, 0.2); color: #fb923c; }
+        .badge-ai { background: rgba(192, 132, 252, 0.2); color: #c084fc; border: 1px solid rgba(192, 132, 252, 0.4); }
+    </style>
+</head>
+<body class="p-8 max-w-5xl mx-auto">
+
+    <div class="mb-12">
+        <h1 class="text-3xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">SoleGoes Database Schema</h1>
+        <p class="text-gray-400 max-w-2xl">
+            Optimized for Firestore (NoSQL). Fully addresses Agency Management, Trip Booking, and Native Vector Search for AI Recommendations.
+        </p>
+    </div>
+
+    <!-- USERS COLLECTION -->
+    <div class="collection-card">
+        <div class="collection-header">
+            <i data-lucide="users" class="w-5 h-5 text-indigo-400"></i>
+            <h2 class="text-xl font-bold mono text-white">users</h2>
+            <span class="badge badge-core">ROOT</span>
+        </div>
+        <div class="doc-structure mono">
+            <div class="text-gray-500 mb-2">// One collection for Customers, Admins, and Agency Owners.</div>
+            
+            <div class="field"><span class="key">uid</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"auth_uid_123"</span></div>
+            <div class="field"><span class="key">role</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"customer" | "admin" | "agency"</span></div>
+            <div class="field"><span class="key">username</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"@sarahj_travels"</span></div>
+            <div class="field"><span class="key">displayName</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"Sarah Jenkins"</span></div>
+            <div class="field"><span class="key">bio</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"Digital nomad exploring..."</span></div>
+            <div class="field"><span class="key">website</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"sarah-travels.com"</span></div>
+            <div class="field"><span class="key">isOnline</span> <span class="text-gray-600 px-2">:</span> <span class="val-bool">true</span> <span class="text-gray-600 text-xs">// For Chat "12 online" status</span></div>
+            
+            <div class="mt-4 mb-1 text-xs uppercase text-gray-500 font-bold">Preferences (Interests & Booking)</div>
+            <div class="field"><span class="key">travelStyle</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"Backpacker" | "Luxury" | "Eco"</span></div>
+            <div class="field"><span class="key">budgetRange</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"Under ₹10k" | "₹10k-25k" | "25k+"</span></div>
+            <div class="field"><span class="key">dietaryPreference</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"Vegetarian" | "Vegan" | "Non-Veg"</span></div>
+            
+            <div class="field mt-2"><span class="key">appSettings</span> <span class="text-gray-600 px-2">:</span> <span class="text-white">{ language: "en", darkMode: true }</span></div>
+            
+            <div class="mt-4 mb-1 text-xs uppercase text-purple-400 font-bold">AI Recommendations</div>
+            <div class="field"><span class="key">interest_embedding</span> <span class="text-gray-600 px-2">:</span> <span class="val-vector">Vector&lt;768&gt;</span></div>
+            <div class="field"><span class="key">interests_raw</span> <span class="text-gray-600 px-2">:</span> <span class="text-emerald-400">["beaches", "hiking", "nightlife"]</span></div>
+        </div>
+    </div>
+
+    <!-- NOTIFICATIONS -->
+    <div class="collection-card border-blue-500/30">
+        <div class="collection-header bg-blue-500/10">
+            <i data-lucide="bell" class="w-5 h-5 text-blue-400"></i>
+            <h2 class="text-xl font-bold mono text-white">notifications</h2>
+            <span class="badge bg-blue-500/20 text-blue-400">INBOX</span>
+        </div>
+        <div class="doc-structure mono">
+            <div class="text-gray-500 mb-2">// User specific activity feed.</div>
+            <div class="field"><span class="key">notificationId</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"notif_123"</span></div>
+            <div class="field"><span class="key">userId</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"auth_uid_123"</span></div>
+            <div class="field"><span class="key">type</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"booking_confirmed" | "like" | "message"</span></div>
+            <div class="field"><span class="key">title</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"Trip Confirmed!"</span></div>
+            <div class="field"><span class="key">body</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"Your booking for Bali is set."</span></div>
+            <div class="field"><span class="key">read</span> <span class="text-gray-600 px-2">:</span> <span class="val-bool">false</span></div>
+            <div class="field"><span class="key">createdAt</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">Timestamp</span></div>
+        </div>
+    </div>
+
+    <!-- AGENCIES COLLECTION -->
+    <div class="collection-card">
+        <div class="collection-header">
+            <i data-lucide="briefcase" class="w-5 h-5 text-orange-400"></i>
+            <h2 class="text-xl font-bold mono text-white">agencies</h2>
+            <span class="badge badge-core">ROOT</span>
+        </div>
+        <div class="doc-structure mono">
+            <div class="text-gray-500 mb-2">// Business profiles linked to an owner UID.</div>
+            
+            <div class="field"><span class="key">agencyId</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"agency_xyz"</span></div>
+            <div class="field"><span class="key">ownerUid</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"auth_uid_123"</span> <span class="badge badge-ref ml-2">REF: users</span></div>
+            <div class="field"><span class="key">businessName</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"Wanderlust Travels"</span></div>
+            
+            <!-- Specific Fields from Signup Form -->
+            <div class="mt-4 mb-1 text-xs uppercase text-gray-500 font-bold">Verification Details</div>
+            <div class="field"><span class="key">verificationStatus</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"pending" | "approved" | "rejected"</span></div>
+            <div class="field"><span class="key">gstin</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"22AAAAA0000A1Z5"</span></div>
+            <div class="field"><span class="key">ownerAadhaar</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"XXXX-XXXX-XXXX"</span> <span class="text-gray-600 text-xs">// Stored hashed/encrypted</span></div>
+            <div class="field"><span class="key">teamSize</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"1-5"</span></div>
+            <div class="field"><span class="key">yearsExperience</span> <span class="text-gray-600 px-2">:</span> <span class="val-num">5</span></div>
+
+            <div class="field mt-2">
+                <span class="key">documents</span> <span class="text-gray-600 px-2">:</span> 
+                <span class="text-white">{</span>
+                <div class="pl-4 border-l border-gray-700 mt-1">
+                    <div class="field border-none"><span class="key">gstCertificate</span>: <span class="val-str">"gs://..."</span></div>
+                    <div class="field border-none"><span class="key">portfolioPhotos</span>: <span class="text-gray-500">["url1", "url2", "url3"]</span></div>
+                </div>
+                <span class="text-white">}</span>
+            </div>
+            
+            <!-- Dashboard Analytics Aggregation -->
+            <div class="field mt-2"><span class="key">stats</span> <span class="text-gray-600 px-2">:</span> <span class="text-white">{ totalRevenue: <span class="val-num">420000</span>, activeBookings: <span class="val-num">28</span> }</span></div>
+        </div>
+    </div>
+
+    <!-- TRIPS COLLECTION -->
+    <div class="collection-card">
+        <div class="collection-header">
+            <i data-lucide="map" class="w-5 h-5 text-cyan-400"></i>
+            <h2 class="text-xl font-bold mono text-white">trips</h2>
+            <span class="badge badge-core">ROOT</span>
+            <span class="badge badge-ai ml-2">VECTOR SEARCH</span>
+        </div>
+        <div class="doc-structure mono">
+            <div class="field"><span class="key">tripId</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"trip_bali_2024"</span></div>
+            <div class="field"><span class="key">status</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"pending_approval" | "live" | "rejected" | "completed"</span></div>
+            <div class="field"><span class="key">rejectionReason</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"Missing insurance docs"</span> <span class="text-gray-600 text-xs">// Only if rejected</span></div>
+            
+            <div class="field"><span class="key">title</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"Bali Spiritual Awakening"</span></div>
+            <div class="field"><span class="key">price</span> <span class="text-gray-600 px-2">:</span> <span class="val-num">45000</span></div>
+            <div class="field"><span class="key">dates</span> <span class="text-gray-600 px-2">:</span> <span class="text-white">{ start: <span class="val-str">Timestamp</span>, end: <span class="val-str">Timestamp</span> }</span></div>
+            
+            <div class="mt-4 mb-1 text-xs uppercase text-gray-500 font-bold">Details</div>
+            <div class="field"><span class="key">itinerary</span> <span class="text-gray-600 px-2">:</span> <span class="text-gray-500">[Array of Day Objects]</span></div>
+            <div class="field"><span class="key">inclusions</span> <span class="text-gray-600 px-2">:</span> <span class="text-gray-500">["Resort Stay", "All Meals"]</span></div>
+            <div class="field"><span class="key">categories</span> <span class="text-gray-600 px-2">:</span> <span class="text-gray-500">["Beach", "Wellness"]</span> <span class="text-gray-600 text-xs">// For Explore filters</span></div>
+            <div class="field"><span class="key">coordinates</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">GeoPoint(-8.409, 115.188)</span> <span class="text-gray-600 text-xs">// For identifying location</span></div>
+            
+            <div class="field mt-2"><span class="key">embedding_vector</span> <span class="text-gray-600 px-2">:</span> <span class="val-vector">Vector&lt;768&gt;</span></div>
+        </div>
+    </div>
+
+    <!-- BOOKINGS -->
+    <div class="collection-card">
+        <div class="collection-header">
+            <i data-lucide="ticket" class="w-5 h-5 text-green-400"></i>
+            <h2 class="text-xl font-bold mono text-white">bookings</h2>
+            <span class="badge badge-core">ROOT</span>
+        </div>
+        <div class="doc-structure mono">
+            <div class="field"><span class="key">bookingId</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"bk_88392"</span></div>
+            <div class="field"><span class="key">userId</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"auth_uid_123"</span></div>
+            <div class="field"><span class="key">tripId</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"trip_bali_2024"</span></div>
+            <div class="field"><span class="key">agencyId</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"agency_xyz"</span></div>
+            
+            <div class="field"><span class="key">status</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"confirmed" | "pending_payment" | "cancelled" | "lead"</span></div>
+            <div class="field"><span class="key">paymentStatus</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"paid" | "partial" | "unpaid" | "failed"</span></div>
+            <div class="field"><span class="key">amountPaid</span> <span class="text-gray-600 px-2">:</span> <span class="val-num">45000</span></div>
+            <div class="field"><span class="key">paymentMethod</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"upi" | "card" | "netbanking"</span></div>
+            <div class="field"><span class="key">transactionId</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"TXN1234567890"</span></div>
+            <div class="field"><span class="key">createdAt</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">Timestamp</span></div>
+        </div>
+    </div>
+
+    <!-- CHATS & SOCIAL -->
+    <div class="collection-card">
+        <div class="collection-header">
+            <i data-lucide="message-square" class="w-5 h-5 text-pink-400"></i>
+            <h2 class="text-xl font-bold mono text-white">chats</h2>
+            <span class="badge badge-core">ROOT</span>
+        </div>
+        <div class="doc-structure mono">
+            <div class="field"><span class="key">type</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"trip_group" | "direct"</span></div>
+            <div class="field"><span class="key">participants</span> <span class="text-gray-600 px-2">:</span> <span class="text-emerald-400">["uid_1", "uid_2", "agency_id"]</span></div>
+            <div class="field"><span class="key">tripId</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"trip_bali_2024"</span> <span class="text-gray-600 text-xs">// Optional, for group chats</span></div>
+            <div class="field"><span class="key">lastMessageTime</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">Timestamp</span> <span class="text-gray-600 text-xs">// Sorting</span></div>
+            
+            <div class="sub-collection">
+                <div class="text-white font-bold mb-2">messages/{msgId}</div>
+                <div class="field border-none"><span class="key">text</span>: <span class="val-str">"Anyone up for surfing?"</span></div>
+                <div class="field border-none"><span class="key">senderId</span>: <span class="val-str">"uid_1"</span></div>
+                <div class="field border-none"><span class="key">timestamp</span>: <span class="val-str">Timestamp</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ANALYTICS (Aggregated) -->
+    <div class="collection-card border-yellow-500/30">
+        <div class="collection-header bg-yellow-500/10">
+            <i data-lucide="bar-chart-2" class="w-5 h-5 text-yellow-500"></i>
+            <h2 class="text-xl font-bold mono text-white">analytics_events</h2>
+            <span class="badge bg-yellow-500/20 text-yellow-500">DATA</span>
+        </div>
+        <div class="doc-structure mono">
+            <div class="text-gray-500 mb-2">// High volume collection for tracking views/clicks.</div>
+            <div class="field"><span class="key">eventType</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"trip_view" | "booking_attempt"</span></div>
+            <div class="field"><span class="key">tripId</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"trip_bali_2024"</span></div>
+            <div class="field"><span class="key">userId</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">"auth_uid_123"</span></div>
+            <div class="field"><span class="key">timestamp</span> <span class="text-gray-600 px-2">:</span> <span class="val-str">Timestamp</span></div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

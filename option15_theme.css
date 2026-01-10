@@ -1,0 +1,90 @@
+/* Option 15: Playful Illustrations Theme (Standard Layout) */
+/* Inspired by: Duolingo, Headspace, friendly apps */
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Playful pastel colors */
+  --background: #FFF8E7;
+  --foreground: #2D3436;
+  --card: #FFFFFF;
+  --card-foreground: #2D3436;
+
+  /* Purple primary */
+  --primary: #6C5CE7;
+  --primary-foreground: #FFFFFF;
+
+  /* Pink accent */
+  --accent: #FF6B9D;
+  --accent-foreground: #FFFFFF;
+
+  /* Yellow secondary */
+  --secondary: #FFEAA7;
+  --secondary-foreground: #2D3436;
+
+  /* Blue tertiary */
+  --tertiary: #74B9FF;
+
+  /* Fonts */
+  --font-sans: 'Fredoka', sans-serif;
+
+  /* Radius */
+  --radius: 1.25rem;
+
+  /* Border */
+  --border: 3px solid #2D3436;
+}
+
+/* Playful Shadows */
+.playful-shadow {
+  box-shadow: 4px 4px 0 #2D3436;
+}
+
+.playful-shadow-lg {
+  box-shadow: 6px 6px 0 #2D3436;
+}
+
+/* Emoji Decorations */
+.emoji-large {
+  font-size: 2.5rem;
+  line-height: 1;
+  display: inline-block;
+}
+
+/* Bouncy Animations */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.bounce {
+  animation: bounce 2s infinite;
+}
+
+/* Playful Button */
+.btn-playful {
+  background: var(--accent);
+  color: white;
+  border: var(--border);
+  border-radius: 100px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 700;
+  box-shadow: 4px 4px 0 #2D3436;
+  transition: all 0.2s;
+}
+
+.btn-playful:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 #2D3436;
+}
+
+/* Rounded Chip */
+.chip-playful {
+  background: var(--secondary);
+  border: var(--border);
+  border-radius: 100px;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  display: inline-block;
+  box-shadow: 3px 3px 0 #2D3436;
+}

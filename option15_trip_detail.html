@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bali Beach Escape - SoleGoes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <link rel="stylesheet" href="modern_theme.css">
+    <style>
+        /* Page-specific overrides */
+        .hero-section {
+            position: relative;
+            height: 50vh;
+            min-height: 400px;
+            overflow: hidden;
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 120%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            will-change: transform;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, 
+                rgba(5,5,5,0.2) 0%, 
+                rgba(5,5,5,0.6) 60%, 
+                var(--bg-deep) 100%);
+        }
+
+        .content-container {
+            position: relative;
+            margin-top: -60px;
+            padding-bottom: 180px;
+            z-index: 10;
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .accordion-item.active .accordion-content {
+            max-height: 500px;
+        }
+
+        .accordion-icon {
+            transition: transform 0.3s;
+        }
+
+        .accordion-item.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+
+        .gallery-item {
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            position: relative;
+            aspect-ratio: 4/5;
+        }
+
+        .gallery-item.large {
+            grid-column: span 2;
+            aspect-ratio: 16/9;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .play-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .play-overlay:hover {
+            background: rgba(0,0,0,0.4);
+        }
+
+        .cta-bar {
+            background: rgba(5, 5, 5, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border-glass);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .avatar-stack {
+            display: flex;
+            align-items: center;
+        }
+        
+        .avatar-stack img {
+            border: 2px solid var(--bg-surface);
+            margin-left: -10px;
+            transition: transform 0.2s;
+        }
+
+        .avatar-stack img:first-child {
+            margin-left: 0;
+        }
+
+        .avatar-stack img:hover {
+            transform: translateY(-4px);
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 p-4">
+        <div class="flex items-center justify-between">
+            <button onclick="window.location.href='option15_mobile.html'" class="btn-icon bg-black/20 backdrop-blur-md border-white/10 hover:bg-black/40">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+            </button>
+            <div class="flex items-center gap-3">
+                <button class="btn-icon bg-black/20 backdrop-blur-md border-white/10 hover:bg-black/40">
+                    <i data-lucide="share-2" class="w-5 h-5"></i>
+                </button>
+                <button class="btn-icon bg-black/20 backdrop-blur-md border-white/10 hover:bg-black/40">
+                    <i data-lucide="heart" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <div class="hero-section">
+        <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80" alt="Bali" class="hero-image" id="heroImage">
+        <div class="hero-overlay"></div>
+        <div class="absolute bottom-20 left-4 right-4 z-0">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-xs font-bold text-white mb-3">
+                <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                Filling Fast
+            </div>
+            <h1 class="text-4xl font-bold text-white leading-tight mb-2">Bali Spiritual <br> Awakening</h1>
+            <div class="flex items-center gap-4 text-white/80 text-sm font-medium">
+                <span class="flex items-center gap-1"><i data-lucide="map-pin" class="w-4 h-4 text-purple-400"></i> Ubud, Bali</span>
+                <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-4 h-4 text-pink-400"></i> 5 Days</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content-container px-4">
+        
+        <!-- Quick Stats -->
+        <div class="glass-card mb-6 flex justify-between items-center">
+            <div class="text-center">
+                <div class="text-2xl font-bold text-white">4.9</div>
+                <div class="text-xs text-white/50">Rating</div>
+            </div>
+            <div class="w-px h-8 bg-white/10"></div>
+            <div class="text-center">
+                <div class="text-2xl font-bold text-white">12</div>
+                <div class="text-xs text-white/50">Spots</div>
+            </div>
+            <div class="w-px h-8 bg-white/10"></div>
+            <div class="text-center">
+                <div class="text-2xl font-bold text-white">Easy</div>
+                <div class="text-xs text-white/50">Level</div>
+            </div>
+        </div>
+
+        <!-- Participants -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="text-lg font-bold text-white">Who's Going</h3>
+                <span class="text-sm text-purple-400 font-medium">See All</span>
+            </div>
+            <div class="glass-card flex items-center justify-between">
+                <div class="avatar-stack pl-2">
+                    <img src="https://i.pravatar.cc/150?img=1" class="w-10 h-10 rounded-full" alt="User">
+                    <img src="https://i.pravatar.cc/150?img=2" class="w-10 h-10 rounded-full" alt="User">
+                    <img src="https://i.pravatar.cc/150?img=3" class="w-10 h-10 rounded-full" alt="User">
+                    <img src="https://i.pravatar.cc/150?img=4" class="w-10 h-10 rounded-full" alt="User">
+                    <div class="w-10 h-10 rounded-full bg-white/10 border-2 border-[#0A0A0A] flex items-center justify-center text-xs font-bold text-white ml-[-10px]">
+                        +8
+                    </div>
+                </div>
+                <button class="btn btn-secondary text-xs px-4 py-2 h-auto w-auto" onclick="window.location.href='option15_chat_detail.html'">
+                    Join Chat
+                </button>
+            </div>
+        </div>
+
+        <!-- Itinerary -->
+        <div class="mb-8">
+            <h3 class="text-lg font-bold text-white mb-4">Itinerary</h3>
+            <div class="flex flex-col gap-3">
+                <!-- Day 1 -->
+                <div class="glass-card p-0 overflow-hidden accordion-item">
+                    <div class="p-4 flex items-center justify-between cursor-pointer" onclick="toggleAccordion(this)">
+                        <div class="flex items-center gap-4">
+                            <div class="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 font-bold text-sm">01</div>
+                            <span class="font-bold text-white">Arrival & Welcome</span>
+                        </div>
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-white/40 accordion-icon"></i>
+                    </div>
+                    <div class="accordion-content bg-white/5">
+                        <div class="p-4 pt-0 text-sm text-white/70 leading-relaxed border-t border-white/5 mt-2">
+                            <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&q=80" alt="Ubud Resort" class="w-full h-32 object-cover rounded-lg mb-3 border border-white/10">
+                            Land at Ngurah Rai International Airport. Private transfer to your jungle resort in Ubud. Evening welcome dinner with traditional Balinese dance.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 2 -->
+                <div class="glass-card p-0 overflow-hidden accordion-item">
+                    <div class="p-4 flex items-center justify-between cursor-pointer" onclick="toggleAccordion(this)">
+                        <div class="flex items-center gap-4">
+                            <div class="w-8 h-8 rounded-full bg-pink-500/20 flex items-center justify-center text-pink-400 font-bold text-sm">02</div>
+                            <span class="font-bold text-white">Sacred Temples</span>
+                        </div>
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-white/40 accordion-icon"></i>
+                    </div>
+                    <div class="accordion-content bg-white/5">
+                        <div class="p-4 pt-0 text-sm text-white/70 leading-relaxed border-t border-white/5 mt-2">
+                            <img src="https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=600&q=80" alt="Bali Temple" class="w-full h-32 object-cover rounded-lg mb-3 border border-white/10">
+                            Early morning yoga session. Visit the Monkey Forest and Tegalalang Rice Terraces. Sunset at Tanah Lot temple.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 3 -->
+                <div class="glass-card p-0 overflow-hidden accordion-item">
+                    <div class="p-4 flex items-center justify-between cursor-pointer" onclick="toggleAccordion(this)">
+                        <div class="flex items-center gap-4">
+                            <div class="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold text-sm">03</div>
+                            <span class="font-bold text-white">Waterfall Trek</span>
+                        </div>
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-white/40 accordion-icon"></i>
+                    </div>
+                    <div class="accordion-content bg-white/5">
+                        <div class="p-4 pt-0 text-sm text-white/70 leading-relaxed border-t border-white/5 mt-2">
+                            <img src="https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=600&q=80" alt="Bali Temple" class="w-full h-32 object-cover rounded-lg mb-3 border border-white/10">
+                            Trek to Sekumpul Waterfall. Swim in natural pools. Traditional cooking class in the evening.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vibes/Gallery -->
+        <div class="mb-8">
+            <h3 class="text-lg font-bold text-white mb-4">Vibes</h3>
+            <div class="gallery-grid">
+                <!-- Video Item (Large) -->
+                <div class="gallery-item large cursor-pointer group" onclick="openVideoModal()">
+                    <img src="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=800&q=80" alt="Video Thumbnail">
+                    <div class="play-overlay">
+                        <div class="w-14 h-14 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 group-hover:scale-110 transition-transform shadow-lg">
+                            <i data-lucide="play" class="w-6 h-6 text-white fill-white ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-3 left-3 px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-sm text-xs text-white font-medium border border-white/10">
+                        Watch Experience
+                    </div>
+                </div>
+
+                <!-- Image 1 -->
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&q=80" alt="Bali">
+                </div>
+                <!-- Image 2 -->
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1559628376-f3fe5f782a2e?w=600&q=80" alt="Bali">
+                </div>
+                <!-- Image 3 -->
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1573790387438-4da905039392?w=600&q=80" alt="Bali">
+                </div>
+                <!-- Image 4 -->
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?w=600&q=80" alt="Bali">
+                </div>
+            </div>
+        </div>
+
+        <!-- Video Modal -->
+        <div id="videoModal" class="fixed inset-0 bg-black/95 z-[100] hidden flex-col items-center justify-center p-4 backdrop-blur-xl">
+            <button onclick="closeVideoModal()" class="absolute top-6 right-6 btn-icon bg-white/10 hover:bg-white/20 z-10 w-12 h-12">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <div class="w-full max-w-5xl aspect-video rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-black relative">
+                <video id="promoVideo" controls class="w-full h-full object-cover">
+                    <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+
+        <!-- Included -->
+        <div class="mb-8">
+            <h3 class="text-lg font-bold text-white mb-4">What's Included</h3>
+            <div class="glass-card grid grid-cols-2 gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center">
+                        <i data-lucide="bed" class="w-4 h-4 text-green-400"></i>
+                    </div>
+                    <span class="text-sm text-white/80">Resort Stay</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center">
+                        <i data-lucide="utensils" class="w-4 h-4 text-orange-400"></i>
+                    </div>
+                    <span class="text-sm text-white/80">All Meals</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center">
+                        <i data-lucide="bus" class="w-4 h-4 text-blue-400"></i>
+                    </div>
+                    <span class="text-sm text-white/80">Transfers</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center">
+                        <i data-lucide="camera" class="w-4 h-4 text-pink-400"></i>
+                    </div>
+                    <span class="text-sm text-white/80">Photographer</span>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Meet Your Host -->
+        <div class="mb-8">
+            <h3 class="text-lg font-bold text-white mb-4">Meet Your Host</h3>
+            <div class="glass-card p-4">
+                <div class="flex items-center gap-4 mb-3">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&q=80" alt="Host" class="w-14 h-14 rounded-full border-2 border-white/10 object-cover">
+                    <div>
+                        <div class="font-bold text-white text-lg">TravelHub India</div>
+                        <div class="flex items-center gap-1 text-xs text-white/60">
+                            <i data-lucide="shield-check" class="w-3 h-3 text-green-400"></i>
+                            Verified Agency • 4.9 Rating
+                        </div>
+                    </div>
+                </div>
+                <p class="text-sm text-white/80 leading-relaxed mb-4">
+                    We specialize in curating immersive travel experiences for young solo travelers. Our guides are locals who know the hidden gems of Bali.
+                </p>
+                <button class="btn btn-secondary w-full justify-center text-sm py-2.5 h-auto">
+                    Contact Host
+                </button>
+            </div>
+        </div>
+
+        <!-- Location -->
+        <div class="mb-8">
+            <h3 class="text-lg font-bold text-white mb-4">Location</h3>
+            <div class="glass-card p-0 overflow-hidden relative h-48">
+                <img src="https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=800&q=80" alt="Map Preview" class="w-full h-full object-cover opacity-60">
+                <div class="absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-[2px]">
+                    <button class="btn btn-secondary bg-black/60 border-white/20 hover:bg-black/80 text-sm gap-2">
+                        <i data-lucide="map" class="w-4 h-4"></i>
+                        View on Map
+                    </button>
+                </div>
+            </div>
+            <div class="flex items-start gap-2 mt-3 px-1">
+                <i data-lucide="map-pin" class="w-4 h-4 text-white/40 mt-0.5"></i>
+                <span class="text-sm text-white/60">Ubud, Bali, Indonesia (Exact location provided after booking)</span>
+            </div>
+        </div>
+
+        <!-- FAQ -->
+        <div class="mb-8">
+            <h3 class="text-lg font-bold text-white mb-4">FAQ</h3>
+            <div class="flex flex-col gap-3">
+                <div class="glass-card p-0 overflow-hidden accordion-item">
+                    <div class="p-4 flex items-center justify-between cursor-pointer" onclick="toggleAccordion(this)">
+                        <span class="font-medium text-white text-sm">Do I need a visa?</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-white/40 accordion-icon"></i>
+                    </div>
+                    <div class="accordion-content bg-white/5">
+                        <div class="p-4 pt-0 text-sm text-white/70 leading-relaxed border-t border-white/5 mt-2">
+                            Visa on Arrival is available for Indian citizens for 30 days. Cost is approx IDR 500,000 (~₹2,700).
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card p-0 overflow-hidden accordion-item">
+                    <div class="p-4 flex items-center justify-between cursor-pointer" onclick="toggleAccordion(this)">
+                        <span class="font-medium text-white text-sm">Are flights included?</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-white/40 accordion-icon"></i>
+                    </div>
+                    <div class="accordion-content bg-white/5">
+                        <div class="p-4 pt-0 text-sm text-white/70 leading-relaxed border-t border-white/5 mt-2">
+                            No, flights are not included in the package price. You will need to book your own flights to Denpasar (DPS).
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card p-0 overflow-hidden accordion-item">
+                    <div class="p-4 flex items-center justify-between cursor-pointer" onclick="toggleAccordion(this)">
+                        <span class="font-medium text-white text-sm">Is it safe for solo female travelers?</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-white/40 accordion-icon"></i>
+                    </div>
+                    <div class="accordion-content bg-white/5">
+                        <div class="p-4 pt-0 text-sm text-white/70 leading-relaxed border-t border-white/5 mt-2">
+                            Absolutely! Our groups are vetted, and we have a verified host with you at all times. 60% of our travelers are solo women.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Important Notes -->
+        <div class="mb-8 p-4 rounded-2xl bg-white/5 border border-white/10">
+            <div class="flex items-center gap-2 mb-2 text-white/80 font-semibold text-sm">
+                <i data-lucide="info" class="w-4 h-4 text-blue-400"></i>
+                Cancellation Policy
+            </div>
+            <p class="text-xs text-white/50 leading-relaxed">
+                Free cancellation up to 14 days before the trip start date. 50% refund up to 7 days before. No refund within 7 days.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- Floating CTA -->
+    <div class="cta-bar fixed bottom-0 left-0 right-0 z-50">
+        <div class="p-4 flex items-center justify-between max-w-md mx-auto">
+            <div>
+                <p class="text-xs text-white/50 font-medium uppercase tracking-wider">Total Price</p>
+                <div class="flex items-baseline gap-1">
+                    <span class="text-2xl font-bold text-white">₹15,000</span>
+                    <span class="text-sm text-white/40 line-through">₹18k</span>
+                </div>
+            </div>
+            <button onclick="window.location.href='option15_payment_method.html'" class="btn btn-primary btn-rounded btn-pulse-glow px-8 py-3 text-lg w-auto">
+                Book Now
+            </button>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // Parallax Logic
+        const heroImage = document.getElementById('heroImage');
+        const header = document.getElementById('header');
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            
+            // Parallax
+            if (scrollY < 500) {
+                heroImage.style.transform = `translateY(${scrollY * 0.4}px)`;
+            }
+
+            // Header Glass Effect
+            if (scrollY > 50) {
+                header.classList.add('bg-black/80', 'backdrop-blur-xl', 'border-b', 'border-white/10');
+            } else {
+                header.classList.remove('bg-black/80', 'backdrop-blur-xl', 'border-b', 'border-white/10');
+            }
+        });
+
+        // Accordion Logic
+        function toggleAccordion(element) {
+            const item = element.parentElement;
+            const isActive = item.classList.contains('active');
+            
+            // Close all
+            document.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('active'));
+            
+            // Open clicked if wasn't active
+            if (!isActive) {
+                item.classList.add('active');
+            }
+        }
+
+        // Video Modal Logic
+        function openVideoModal() {
+            const modal = document.getElementById('videoModal');
+            const video = document.getElementById('promoVideo');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            video.play();
+        }
+
+        function closeVideoModal() {
+            const modal = document.getElementById('videoModal');
+            const video = document.getElementById('promoVideo');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            video.pause();
+            video.currentTime = 0;
+        }
+    </script>
+</body>
+</html>

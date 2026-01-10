@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Preferences - SoleGoes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <link rel="stylesheet" href="modern_theme.css">
+    <style>
+        /* Specific component style for budget option */
+        .budget-option {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .budget-option:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .budget-option.selected {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--primary);
+        }
+
+        .budget-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+        }
+
+        .budget-option.selected .budget-icon {
+            background: var(--primary);
+            color: white;
+        }
+    </style>
+</head>
+<body class="pb-24">
+
+    <!-- Header -->
+    <header class="header-sticky">
+        <button onclick="window.location.href='option15_profile_setup.html'" class="btn-icon">
+            <i data-lucide="chevron-left" class="w-5 h-5"></i>
+        </button>
+        <div class="text-sm font-bold text-white/60">Step 4 of 4</div>
+        <button onclick="skip()" class="text-sm font-semibold text-white/60 hover:text-white transition-colors">Skip</button>
+    </header>
+
+    <div class="container-mobile pt-8">
+        <h1 class="text-2xl font-bold text-white mb-2">Your Preferences</h1>
+        <p class="text-white/50 text-sm mb-8">Help us personalize your experience</p>
+
+        <div class="space-y-8">
+            <!-- Interests -->
+            <div>
+                <div class="flex justify-between items-baseline mb-2">
+                    <div class="section-title mb-0">Interests</div>
+                    <div class="text-xs text-white/30">Select at least 3</div>
+                </div>
+                <div class="pill-grid" id="interestsGrid">
+                    <div class="pill" onclick="togglePill(this, 'interests')">Beach 🏖️</div>
+                    <div class="pill" onclick="togglePill(this, 'interests')">Mountain 🏔️</div>
+                    <div class="pill" onclick="togglePill(this, 'interests')">Heritage 🏛️</div>
+                    <div class="pill" onclick="togglePill(this, 'interests')">Adventure 🎉</div>
+                    <div class="pill" onclick="togglePill(this, 'interests')">Food 🍜</div>
+                    <div class="pill" onclick="togglePill(this, 'interests')">Art 🎨</div>
+                    <div class="pill" onclick="togglePill(this, 'interests')">Music 🎵</div>
+                    <div class="pill" onclick="togglePill(this, 'interests')">Camping 🏕️</div>
+                    <div class="pill" onclick="togglePill(this, 'interests')">Wellness 🧘</div>
+                    <div class="pill" onclick="togglePill(this, 'interests')">Nightlife 🌃</div>
+                </div>
+            </div>
+
+            <!-- Budget -->
+            <div>
+                <div class="section-title">Budget per Trip</div>
+                <div class="space-y-3" id="budgetOptions">
+                    <div class="budget-option" onclick="toggleBudget(this)">
+                        <div class="budget-icon"><i data-lucide="banknote" class="w-5 h-5"></i></div>
+                        <div class="flex-1 font-semibold text-white">Under ₹10,000</div>
+                    </div>
+                    <div class="budget-option" onclick="toggleBudget(this)">
+                        <div class="budget-icon"><i data-lucide="coins" class="w-5 h-5"></i></div>
+                        <div class="flex-1 font-semibold text-white">₹10,000 - ₹25,000</div>
+                    </div>
+                    <div class="budget-option" onclick="toggleBudget(this)">
+                        <div class="budget-icon"><i data-lucide="gem" class="w-5 h-5"></i></div>
+                        <div class="flex-1 font-semibold text-white">₹25,000+</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Travel Style -->
+            <div>
+                <div class="section-title">Travel Style</div>
+                <div class="pill-grid" id="styleGrid">
+                    <div class="pill" onclick="togglePill(this, 'style')">Backpacker 🎒</div>
+                    <div class="pill" onclick="togglePill(this, 'style')">Comfort 🏨</div>
+                    <div class="pill" onclick="togglePill(this, 'style')">Luxury 👑</div>
+                    <div class="pill" onclick="togglePill(this, 'style')">Eco 🌿</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fixed Bottom Button -->
+    <div class="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#09090b] to-transparent">
+        <button onclick="continue_next()" class="btn btn-primary py-3.5 text-lg max-w-md mx-auto block">
+            Finish Setup
+        </button>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        function togglePill(element, type) {
+            if (type === 'interests') {
+                element.classList.toggle('selected');
+            } else {
+                // Single select for style
+                const container = element.parentElement;
+                container.querySelectorAll('.pill').forEach(p => p.classList.remove('selected'));
+                element.classList.add('selected');
+            }
+        }
+
+        function toggleBudget(element) {
+            document.querySelectorAll('.budget-option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        function continue_next() {
+            window.location.href = "option15_mobile.html";
+        }
+
+        function skip() {
+            window.location.href = 'option15_mobile.html';
+        }
+    </script>
+</body>
+</html>

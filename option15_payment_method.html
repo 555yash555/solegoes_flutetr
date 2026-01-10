@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Payment Method - SoleGoes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <link rel="stylesheet" href="modern_theme.css">
+    <style>
+        /* Specific component style for payment option */
+        .payment-option {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .payment-option:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--border-glass);
+        }
+
+        .payment-option.selected {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--primary);
+        }
+
+        .payment-icon {
+            width: 42px;
+            height: 42px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+        }
+
+        .payment-option.selected .payment-icon {
+            background: var(--primary);
+            color: white;
+        }
+
+        .radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--text-tertiary);
+            border-radius: 50%;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .payment-option.selected .radio {
+            border-color: var(--primary);
+        }
+
+        .payment-option.selected .radio::after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--primary);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body class="pb-32">
+
+    <!-- Header -->
+    <header class="header-sticky">
+        <button onclick="window.location.href='option15_trip_detail.html'" class="btn-icon">
+            <i data-lucide="chevron-left" class="w-5 h-5"></i>
+        </button>
+        <div class="text-lg font-bold text-white">Payment Method</div>
+        <div class="w-10"></div> <!-- Spacer -->
+    </header>
+
+    <div class="container-mobile pt-6">
+        <h1 class="text-2xl font-bold text-white mb-6">Select Payment Method</h1>
+
+        <!-- Cards & UPI -->
+        <div class="section-title">Cards & UPI</div>
+        <div class="payment-option selected" onclick="selectPayment(this)">
+            <div class="payment-icon">
+                <i data-lucide="credit-card" class="w-5 h-5"></i>
+            </div>
+            <div class="flex-1 font-semibold text-white">Credit/Debit Card</div>
+            <div class="radio"></div>
+        </div>
+        <div class="payment-option" onclick="selectPayment(this)">
+            <div class="payment-icon">
+                <i data-lucide="smartphone" class="w-5 h-5"></i>
+            </div>
+            <div class="flex-1 font-semibold text-white">UPI</div>
+            <div class="radio"></div>
+        </div>
+
+        <!-- Wallets -->
+        <div class="section-title mt-6">Wallets</div>
+        <div class="payment-option" onclick="selectPayment(this)">
+            <div class="payment-icon">
+                <i data-lucide="wallet" class="w-5 h-5"></i>
+            </div>
+            <div class="flex-1 font-semibold text-white">Paytm</div>
+            <div class="radio"></div>
+        </div>
+        <div class="payment-option" onclick="selectPayment(this)">
+            <div class="payment-icon">
+                <i data-lucide="wallet" class="w-5 h-5"></i>
+            </div>
+            <div class="flex-1 font-semibold text-white">PhonePe</div>
+            <div class="radio"></div>
+        </div>
+        <div class="payment-option" onclick="selectPayment(this)">
+            <div class="payment-icon">
+                <i data-lucide="wallet" class="w-5 h-5"></i>
+            </div>
+            <div class="flex-1 font-semibold text-white">Google Pay</div>
+            <div class="radio"></div>
+        </div>
+
+        <!-- Banking -->
+        <div class="section-title mt-6">Banking</div>
+        <div class="payment-option" onclick="selectPayment(this)">
+            <div class="payment-icon">
+                <i data-lucide="landmark" class="w-5 h-5"></i>
+            </div>
+            <div class="flex-1 font-semibold text-white">Net Banking</div>
+            <div class="radio"></div>
+        </div>
+    </div>
+
+    <!-- Bottom Section -->
+    <div class="fixed bottom-0 left-0 right-0 p-4 bg-[#09090b] border-t border-white/5">
+        <div class="max-w-md mx-auto">
+            <div class="flex justify-between items-center mb-4">
+                <div class="text-sm font-semibold text-white/60">Total Amount</div>
+                <div class="text-2xl font-bold text-white">₹15,000</div>
+            </div>
+            <button onclick="proceedToPay()" class="btn btn-primary py-3.5 text-lg">
+                Proceed to Pay
+            </button>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        function selectPayment(element) {
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            element.classList.add('selected');
+        }
+
+        function proceedToPay() {
+            window.location.href = 'option15_payment_confirmation.html';
+        }
+    </script>
+</body>
+</html>

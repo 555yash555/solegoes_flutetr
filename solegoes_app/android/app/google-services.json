@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1010941869770",
+    "firebase_url": "https://solegoes-8110c-default-rtdb.firebaseio.com",
+    "project_id": "solegoes-8110c",
+    "storage_bucket": "solegoes-8110c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1010941869770:android:5b8ded51d988fac2a13e33",
+        "android_client_info": {
+          "package_name": "com.solegoes.solegoes_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1010941869770-2b5k6r9krv7n74p04063o35kb41vclm6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.solegoes.solegoes_app",
+            "certificate_hash": "484d11475d3cd8969126b671d72f0315a56c93d6"
+          }
+        },
+        {
+          "client_id": "1010941869770-8u61tin3gajjobqa50h4ddjp8f9rel2m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZ0PzDf4D2JDqFI-k7vNIuExS-AEXK-jY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1010941869770-8u61tin3gajjobqa50h4ddjp8f9rel2m.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1010941869770-oj2m47g6q54k1q57fo6iqb782ms1erso.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.solegoes.solegoesApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

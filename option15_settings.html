@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Settings - SoleGoes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <link rel="stylesheet" href="modern_theme.css">
+</head>
+<body class="pb-10">
+
+    <!-- Header -->
+    <header class="header-sticky">
+        <div class="flex items-center gap-3">
+            <button onclick="window.history.back()" class="btn-icon">
+                <i data-lucide="chevron-left" class="w-5 h-5"></i>
+            </button>
+            <div class="text-lg font-bold text-white">Settings</div>
+        </div>
+    </header>
+
+    <!-- Content -->
+    <div class="px-4 py-6 space-y-6">
+        
+        <!-- Account -->
+        <div>
+            <h3 class="section-title text-sm text-white/50 uppercase tracking-wider mb-3">Account</h3>
+            <div class="glass-card overflow-hidden">
+                <div class="list-group">
+                    <button class="list-item" onclick="window.location.href='option15_edit_profile.html'">
+                        <div class="flex items-center gap-3">
+                            <div class="list-icon">
+                                <i data-lucide="user" class="w-5 h-5"></i>
+                            </div>
+                            <span>Edit Profile</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-5 h-5 text-white/30"></i>
+                    </button>
+                    <button class="list-item">
+                        <div class="flex items-center gap-3">
+                            <div class="list-icon">
+                                <i data-lucide="bell" class="w-5 h-5"></i>
+                            </div>
+                            <span>Notifications</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-5 h-5 text-white/30"></i>
+                    </button>
+                    <button class="list-item">
+                        <div class="flex items-center gap-3">
+                            <div class="list-icon">
+                                <i data-lucide="lock" class="w-5 h-5"></i>
+                            </div>
+                            <span>Privacy & Security</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-5 h-5 text-white/30"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preferences -->
+        <div>
+            <h3 class="section-title text-sm text-white/50 uppercase tracking-wider mb-3">Preferences</h3>
+            <div class="glass-card overflow-hidden">
+                <div class="list-group">
+                    <button class="list-item">
+                        <div class="flex items-center gap-3">
+                            <div class="list-icon">
+                                <i data-lucide="globe" class="w-5 h-5"></i>
+                            </div>
+                            <span>Language</span>
+                        </div>
+                        <span class="text-sm text-white/50 mr-2">English</span>
+                    </button>
+                    <button class="list-item">
+                        <div class="flex items-center gap-3">
+                            <div class="list-icon">
+                                <i data-lucide="moon" class="w-5 h-5"></i>
+                            </div>
+                            <span>Dark Mode</span>
+                        </div>
+                        <div class="w-10 h-6 bg-indigo-500 rounded-full relative">
+                            <div class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Support -->
+        <div>
+            <h3 class="section-title text-sm text-white/50 uppercase tracking-wider mb-3">Support</h3>
+            <div class="glass-card overflow-hidden">
+                <div class="list-group">
+                    <button class="list-item">
+                        <div class="flex items-center gap-3">
+                            <div class="list-icon">
+                                <i data-lucide="help-circle" class="w-5 h-5"></i>
+                            </div>
+                            <span>Help Center</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-5 h-5 text-white/30"></i>
+                    </button>
+                    <button class="list-item text-red-400 hover:text-red-300" onclick="window.location.href='option15_login.html'">
+                        <div class="flex items-center gap-3">
+                            <div class="list-icon bg-red-500/10 text-red-400">
+                                <i data-lucide="log-out" class="w-5 h-5"></i>
+                            </div>
+                            <span>Log Out</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center text-xs text-white/30 pt-4">
+            Version 1.0.0 • SoleGoes Inc.
+        </div>
+
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

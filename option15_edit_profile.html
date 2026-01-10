@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Edit Profile - SoleGoes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <link rel="stylesheet" href="modern_theme.css">
+</head>
+<body class="pb-10">
+
+    <!-- Header -->
+    <header class="header-sticky">
+        <div class="flex items-center justify-between w-full">
+            <div class="flex items-center gap-3">
+                <button onclick="window.history.back()" class="btn-icon">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+                <div class="text-lg font-bold text-white">Edit Profile</div>
+            </div>
+            <button class="text-indigo-400 font-bold text-sm hover:text-indigo-300 transition-colors" onclick="window.history.back()">
+                Save
+            </button>
+        </div>
+    </header>
+
+    <!-- Content -->
+    <div class="px-4 py-6 space-y-6">
+        
+        <!-- Photo -->
+        <div class="flex flex-col items-center gap-4">
+            <div class="relative group cursor-pointer">
+                <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-white/10 group-hover:border-indigo-500 transition-colors">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80" alt="Profile" class="w-full h-full object-cover">
+                </div>
+                <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-full">
+                    <i data-lucide="camera" class="w-6 h-6 text-white"></i>
+                </div>
+            </div>
+            <button class="text-sm text-indigo-400 font-bold">Change Photo</button>
+        </div>
+
+        <!-- Form -->
+        <div class="space-y-4">
+            <div class="input-group">
+                <label class="text-label">Full Name</label>
+                <input type="text" class="input-field" value="Sarah Jenkins">
+            </div>
+
+            <div class="input-group">
+                <label class="text-label">Username</label>
+                <input type="text" class="input-field" value="@sarahj_travels">
+            </div>
+
+            <div class="input-group">
+                <label class="text-label">Bio</label>
+                <textarea class="input-field h-24 resize-none">Digital nomad exploring the world one coffee shop at a time. ☕️✈️</textarea>
+            </div>
+
+            <div class="input-group">
+                <label class="text-label">Location</label>
+                <div class="relative">
+                    <input type="text" class="input-field pl-10" value="San Francisco, CA">
+                    <i data-lucide="map-pin" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40"></i>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="text-label">Website</label>
+                <div class="relative">
+                    <input type="text" class="input-field pl-10" value="sarah-travels.com">
+                    <i data-lucide="link" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40"></i>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

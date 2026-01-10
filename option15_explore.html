@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Explore - SoleGoes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <link rel="stylesheet" href="modern_theme.css">
+</head>
+<body class="pb-32">
+
+    <!-- Header -->
+    <header class="header-sticky">
+        <div class="text-lg font-bold text-white">Explore</div>
+        <button class="btn-icon">
+            <i data-lucide="map" class="w-5 h-5"></i>
+        </button>
+    </header>
+
+    <!-- Search -->
+    <div class="px-4 py-4">
+        <div class="relative">
+            <input type="text" class="input-field pl-10" placeholder="Search destinations, trips...">
+            <i data-lucide="search" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40"></i>
+        </div>
+    </div>
+
+    <!-- Categories -->
+    <div class="px-4 mb-6">
+        <div class="grid grid-cols-2 gap-3">
+            <div class="glass-card p-4 flex flex-col items-center justify-center gap-2 aspect-square hover:bg-white/5 transition-colors cursor-pointer">
+                <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 mb-1">
+                    <i data-lucide="waves" class="w-6 h-6"></i>
+                </div>
+                <span class="font-bold text-white">Beach</span>
+                <span class="text-xs text-white/40">24 Trips</span>
+            </div>
+            <div class="glass-card p-4 flex flex-col items-center justify-center gap-2 aspect-square hover:bg-white/5 transition-colors cursor-pointer">
+                <div class="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 mb-1">
+                    <i data-lucide="mountain" class="w-6 h-6"></i>
+                </div>
+                <span class="font-bold text-white">Mountain</span>
+                <span class="text-xs text-white/40">18 Trips</span>
+            </div>
+            <div class="glass-card p-4 flex flex-col items-center justify-center gap-2 aspect-square hover:bg-white/5 transition-colors cursor-pointer">
+                <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 mb-1">
+                    <i data-lucide="building-2" class="w-6 h-6"></i>
+                </div>
+                <span class="font-bold text-white">City</span>
+                <span class="text-xs text-white/40">12 Trips</span>
+            </div>
+            <div class="glass-card p-4 flex flex-col items-center justify-center gap-2 aspect-square hover:bg-white/5 transition-colors cursor-pointer">
+                <div class="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-400 mb-1">
+                    <i data-lucide="compass" class="w-6 h-6"></i>
+                </div>
+                <span class="font-bold text-white">Adventure</span>
+                <span class="text-xs text-white/40">30 Trips</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trending -->
+    <div class="px-4">
+        <h3 class="section-title">Trending Destinations</h3>
+        <div class="space-y-4">
+            <div class="glass-card p-0 overflow-hidden relative h-48 group cursor-pointer" onclick="window.location.href='option15_trip_detail.html'">
+                <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&q=80" alt="Bali" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-4">
+                    <h3 class="text-xl font-bold text-white">Bali, Indonesia</h3>
+                    <p class="text-sm text-white/70">Starting from ₹45,000</p>
+                </div>
+            </div>
+            <div class="glass-card p-0 overflow-hidden relative h-48 group cursor-pointer" onclick="window.location.href='option15_trip_detail.html'">
+                <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&q=80" alt="Paris" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-4">
+                    <h3 class="text-xl font-bold text-white">Paris, France</h3>
+                    <p class="text-sm text-white/70">Starting from ₹85,000</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Island -->
+    <div class="nav-island-container">
+        <nav class="nav-island">
+            <a href="option15_mobile.html" class="nav-item">
+                <i data-lucide="home" class="w-6 h-6"></i>
+            </a>
+            <a href="#" class="nav-item active">
+                <i data-lucide="compass" class="w-6 h-6"></i>
+            </a>
+            <a href="option15_create_trip.html" class="nav-fab hover-scale">
+                <i data-lucide="plus" class="w-6 h-6"></i>
+            </a>
+            <a href="option15_chat_list.html" class="nav-item">
+                <i data-lucide="message-circle" class="w-6 h-6"></i>
+            </a>
+            <a href="option15_profile_page.html" class="nav-item">
+                <i data-lucide="user" class="w-6 h-6"></i>
+            </a>
+        </nav>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

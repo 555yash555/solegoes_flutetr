@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Notifications - SoleGoes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <link rel="stylesheet" href="modern_theme.css">
+</head>
+<body class="pb-10">
+
+    <!-- Header -->
+    <header class="header-sticky">
+        <div class="flex items-center gap-3">
+            <button onclick="window.history.back()" class="btn-icon">
+                <i data-lucide="chevron-left" class="w-5 h-5"></i>
+            </button>
+            <div class="text-lg font-bold text-white">Notifications</div>
+        </div>
+        <button class="text-xs text-white/50 font-medium hover:text-white transition-colors">
+            Mark all as read
+        </button>
+    </header>
+
+    <!-- Content -->
+    <div class="px-4 py-4 space-y-4">
+        
+        <div class="text-xs text-white/30 font-bold uppercase tracking-wider">Today</div>
+
+        <!-- Notification Item -->
+        <div class="glass-card p-4 flex gap-4 relative overflow-hidden">
+            <div class="absolute top-0 left-0 bottom-0 w-1 bg-indigo-500"></div>
+            <div class="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 shrink-0">
+                <i data-lucide="zap" class="w-5 h-5"></i>
+            </div>
+            <div class="flex-1">
+                <p class="text-sm text-white leading-relaxed">
+                    <span class="font-bold">Trip Confirmed!</span> Your booking for <span class="text-indigo-400">Bali Spiritual Awakening</span> has been confirmed.
+                </p>
+                <span class="text-xs text-white/40 mt-1 block">2 hours ago</span>
+            </div>
+        </div>
+
+        <!-- Notification Item -->
+        <div class="glass-card p-4 flex gap-4">
+            <div class="w-10 h-10 rounded-full bg-pink-500/20 flex items-center justify-center text-pink-400 shrink-0">
+                <i data-lucide="heart" class="w-5 h-5"></i>
+            </div>
+            <div class="flex-1">
+                <p class="text-sm text-white leading-relaxed">
+                    <span class="font-bold">Alex Chen</span> liked your trip to Ladakh.
+                </p>
+                <span class="text-xs text-white/40 mt-1 block">5 hours ago</span>
+            </div>
+        </div>
+
+        <div class="text-xs text-white/30 font-bold uppercase tracking-wider mt-6">Yesterday</div>
+
+        <!-- Notification Item -->
+        <div class="glass-card p-4 flex gap-4">
+            <div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 shrink-0">
+                <i data-lucide="message-circle" class="w-5 h-5"></i>
+            </div>
+            <div class="flex-1">
+                <p class="text-sm text-white leading-relaxed">
+                    New message in <span class="font-bold">Bali Squad 🌴</span>
+                </p>
+                <span class="text-xs text-white/40 mt-1 block">Yesterday</span>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
