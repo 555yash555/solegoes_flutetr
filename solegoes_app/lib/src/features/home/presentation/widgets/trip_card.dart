@@ -213,7 +213,7 @@ class FeaturedTripCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => context.push('/trip/$tripId'),
       child: Container(
-        height: 420,
+        height: 380,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(AppRadius.lg),
           boxShadow: [

@@ -16,9 +16,19 @@ class ScaffoldWithNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.bgDeep,
-      body: navigationShell,
-      extendBody: true,
-      bottomNavigationBar: BottomNavIsland(navigationShell: navigationShell),
+      body: Stack(
+        children: [
+          // Main content
+          navigationShell,
+          // Bottom navigation bar - positioned at bottom
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: BottomNavIsland(navigationShell: navigationShell),
+          ),
+        ],
+      ),
     );
   }
 }

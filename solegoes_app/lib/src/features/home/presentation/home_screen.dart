@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../theme/app_theme.dart';
 import '../../authentication/data/auth_repository.dart';
+import '../../trips/data/trip_repository.dart';
 import 'widgets/trip_card.dart';
 
 /// Home screen with trip cards and search
@@ -20,7 +21,7 @@ class HomeScreen extends ConsumerWidget {
       body: SafeArea(
         bottom: false,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.only(bottom: 120),
+          padding: const EdgeInsets.only(bottom: 100),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -31,7 +32,7 @@ class HomeScreen extends ConsumerWidget {
               _buildSearchBar(context),
 
               // Featured trip
-              _buildFeaturedTrip(context),
+              _buildFeaturedTrip(context, ref),
 
               // Spin the Globe card
               _buildSpinGlobe(context),
@@ -40,7 +41,7 @@ class HomeScreen extends ConsumerWidget {
               _buildCategories(),
 
               // Popular trips section
-              _buildPopularTrips(context),
+              _buildPopularTrips(context, ref),
 
               const SizedBox(height: 24),
             ],
@@ -238,17 +239,34 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildFeaturedTrip(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      child: FeaturedTripCard(
-        tripId: 'bali-spiritual-001',
-        title: 'Bali Spiritual\nAwakening',
-        imageUrl: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80',
-        duration: '7 Days',
-        location: 'Ubud, Bali',
-        price: 45000,
-        isTrending: true,
+  Widget _buildFeaturedTrip(BuildContext context, WidgetRef ref) {
+    final featuredTripsAsync = ref.watch(featuredTripsProvider);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: featuredTripsAsync.when(
+        data: (trips) {
+          if (trips.isEmpty) return const SizedBox.shrink();
+          final trip = trips.first;
+          return FeaturedTripCard(
+            tripId: trip.tripId,
+            title: trip.title,
+            imageUrl: trip.imageUrl,
+            duration: '${trip.duration} Days',
+            location: trip.location,
+            price: trip.price,
+            isTrending: trip.isTrending,
+          );
+        },
+        loading: () => Container(
+          height: 380,
+          decoration: BoxDecoration(
+            color: AppColors.bgSurface,
+            borderRadius: BorderRadius.circular(AppRadius.lg),
+          ),
+          child: const Center(child: CircularProgressIndicator()),
+        ),
+        error: (_, __) => const SizedBox.shrink(),
       ),
     );
   }
@@ -357,7 +375,9 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildPopularTrips(BuildContext context) {
+  Widget _buildPopularTrips(BuildContext context, WidgetRef ref) {
+    final trendingTripsAsync = ref.watch(trendingTripsProvider);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -376,12 +396,15 @@ class HomeScreen extends ConsumerWidget {
                   letterSpacing: 0.5,
                 ),
               ),
-              Text(
-                'See All',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.primary,
+              GestureDetector(
+                onTap: () => context.push('/explore'),
+                child: Text(
+                  'See All',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.primary,
+                  ),
                 ),
               ),
             ],
@@ -390,43 +413,39 @@ class HomeScreen extends ConsumerWidget {
         // Horizontal trip cards
         SizedBox(
           height: 300,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            children: const [
-              TripCard(
-                tripId: 'ladakh-bike-001',
-                title: 'Ladakh Bike Trip',
-                imageUrl: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=600&q=80',
-                duration: '6 Days',
-                category: 'Adventure',
-                groupSize: 'Group of 12',
-                price: 22000,
-                rating: 4.9,
-              ),
-              SizedBox(width: 16),
-              TripCard(
-                tripId: 'goa-party-001',
-                title: 'Goa Party Week',
-                imageUrl: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=600&q=80',
-                duration: '4 Days',
-                category: 'Party',
-                groupSize: 'Group of 20',
-                price: 15000,
-                rating: 4.7,
-              ),
-              SizedBox(width: 16),
-              TripCard(
-                tripId: 'kerala-001',
-                title: 'Kerala Backwaters',
-                imageUrl: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=600&q=80',
-                duration: '5 Days',
-                category: 'Relaxation',
-                groupSize: 'Group of 8',
-                price: 28000,
-                rating: 4.8,
-              ),
-            ],
+          child: trendingTripsAsync.when(
+            data: (trips) {
+              if (trips.isEmpty) {
+                return const Center(
+                  child: Text('No trips available'),
+                );
+              }
+              return ListView.separated(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                itemCount: trips.length,
+                separatorBuilder: (_, __) => const SizedBox(width: 16),
+                itemBuilder: (context, index) {
+                  final trip = trips[index];
+                  return TripCard(
+                    tripId: trip.tripId,
+                    title: trip.title,
+                    imageUrl: trip.imageUrl,
+                    duration: '${trip.duration} Days',
+                    category: trip.categories.isNotEmpty ? trip.categories.first : '',
+                    groupSize: trip.groupSize,
+                    price: trip.price,
+                    rating: trip.rating,
+                  );
+                },
+              );
+            },
+            loading: () => const Center(
+              child: CircularProgressIndicator(),
+            ),
+            error: (_, __) => const Center(
+              child: Text('Failed to load trips'),
+            ),
           ),
         ),
       ],

@@ -24,6 +24,7 @@ import '../features/profile/presentation/edit_profile_screen.dart';
 import '../features/payments/presentation/payment_method_screen.dart';
 import '../features/payments/presentation/payment_confirmation_screen.dart';
 import '../features/demo/presentation/design_demo_screen.dart';
+import '../features/admin/presentation/seed_trips_screen.dart';
 
 part 'app_router.g.dart';
 
@@ -70,8 +71,8 @@ GoRouter goRouter(Ref ref) {
       final isLoggedIn = authRepository.currentUser != null;
       final path = state.uri.path;
 
-      // Skip auth redirect for demo screen
-      if (path == '/demo') return null;
+      // Skip auth redirect for demo and seed screens
+      if (path == '/demo' || path == '/seed-trips') return null;
 
       // Auth routes that don't require login
       final authRoutes = ['/onboarding', '/login', '/signup'];
@@ -130,6 +131,12 @@ GoRouter goRouter(Ref ref) {
         path: '/demo',
         name: AppRoute.demo.name,
         builder: (context, state) => const DesignDemoScreen(),
+      ),
+
+      // Seed trips screen (admin tool)
+      GoRoute(
+        path: '/seed-trips',
+        builder: (context, state) => const SeedTripsScreen(),
       ),
 
       // ===========================================

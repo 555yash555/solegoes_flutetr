@@ -18,63 +18,69 @@ class BottomNavIsland extends StatelessWidget {
   Widget build(BuildContext context) {
     final currentIndex = navigationShell.currentIndex;
 
-    return Container(
-      margin: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-      child: Center(
-        child: Container(
-          constraints: const BoxConstraints(maxWidth: 400),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          decoration: BoxDecoration(
-            color: const Color(0xFF18181B).withValues(alpha: 0.9),
-            borderRadius: BorderRadius.circular(AppRadius.full),
-            border: Border.all(color: AppColors.borderGlass),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.5),
-                blurRadius: 25,
-                offset: const Offset(0, 20),
-              ),
-            ],
-          ),
+    return Material(
+      elevation: 50,
+      color: Colors.transparent,
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+        child: Center(
           child: ClipRRect(
             borderRadius: BorderRadius.circular(AppRadius.full),
             child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Home
-                  _NavItem(
-                    icon: LucideIcons.home,
-                    isActive: currentIndex == 0,
-                    onTap: () => _onTap(0),
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: Container(
+                constraints: const BoxConstraints(maxWidth: 400),
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF0A0A0A).withValues(alpha: 0.95),
+                  borderRadius: BorderRadius.circular(AppRadius.full),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.1),
+                    width: 1,
                   ),
-                  // Explore
-                  _NavItem(
-                    icon: LucideIcons.compass,
-                    isActive: currentIndex == 1,
-                    onTap: () => _onTap(1),
-                  ),
-                  // Center FAB (Create Trip)
-                  _CenterFab(
-                    onTap: () {
-                      // Navigate to create trip screen
-                      context.push('/create-trip');
-                    },
-                  ),
-                  // Chat
-                  _NavItem(
-                    icon: LucideIcons.messageCircle,
-                    isActive: currentIndex == 3,
-                    onTap: () => _onTap(3),
-                  ),
-                  // Profile
-                  _NavItem(
-                    icon: LucideIcons.user,
-                    isActive: currentIndex == 4,
-                    onTap: () => _onTap(4),
-                  ),
-                ],
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.6),
+                      blurRadius: 30,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Home (Branch 0)
+                    _NavItem(
+                      icon: LucideIcons.home,
+                      isActive: currentIndex == 0,
+                      onTap: () => _onTap(0),
+                    ),
+                    // Explore (Branch 1)
+                    _NavItem(
+                      icon: LucideIcons.compass,
+                      isActive: currentIndex == 1,
+                      onTap: () => _onTap(1),
+                    ),
+                    // My Trips (Branch 2)
+                    _NavItem(
+                      icon: LucideIcons.briefcase,
+                      isActive: currentIndex == 2,
+                      onTap: () => _onTap(2),
+                    ),
+                    // Chat (Branch 3)
+                    _NavItem(
+                      icon: LucideIcons.messageCircle,
+                      isActive: currentIndex == 3,
+                      onTap: () => _onTap(3),
+                    ),
+                    // Profile (Branch 4)
+                    _NavItem(
+                      icon: LucideIcons.user,
+                      isActive: currentIndex == 4,
+                      onTap: () => _onTap(4),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -113,46 +119,6 @@ class _NavItem extends StatelessWidget {
           icon,
           size: 24,
           color: isActive ? AppColors.primary : AppColors.textTertiary,
-        ),
-      ),
-    );
-  }
-}
-
-class _CenterFab extends StatelessWidget {
-  final VoidCallback onTap;
-
-  const _CenterFab({required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Transform.translate(
-        offset: const Offset(0, -12),
-        child: Container(
-          width: 48,
-          height: 48,
-          decoration: BoxDecoration(
-            gradient: AppColors.primaryGradient,
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: AppColors.bgDeep,
-              width: 4,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.primary.withValues(alpha: 0.4),
-                blurRadius: 15,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: const Icon(
-            LucideIcons.plus,
-            color: Colors.white,
-            size: 24,
-          ),
         ),
       ),
     );
