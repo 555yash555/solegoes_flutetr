@@ -122,7 +122,7 @@ class TripRepository {
           .where('status', isEqualTo: 'live')
           .orderBy('title')
           .startAt([query])
-          .endAt([query + '\uf8ff'])
+          .endAt(['$query\uf8ff'])
           .get();
 
       return snapshot.docs

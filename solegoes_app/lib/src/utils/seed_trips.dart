@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import '../firebase_options.dart';
+import 'package:flutter/foundation.dart';
+import '../../firebase_options.dart';
 
 /// Script to seed sample trips into Firestore
 /// Run this once to populate the database with sample data
@@ -12,7 +13,7 @@ Future<void> seedTrips() async {
   final firestore = FirebaseFirestore.instance;
   final tripsCollection = firestore.collection('trips');
 
-  print('🌱 Seeding trips to Firestore...');
+  debugPrint('🌱 Seeding trips to Firestore...');
 
   final sampleTrips = [
     // Trip 1: Bali Spiritual Awakening
@@ -485,13 +486,13 @@ Future<void> seedTrips() async {
     final tripData = sampleTrips[i];
     try {
       await tripsCollection.add(tripData);
-      print('✅ Added trip ${i + 1}/${sampleTrips.length}: ${tripData['title']}');
+      debugPrint('✅ Added trip ${i + 1}/${sampleTrips.length}: ${tripData['title']}');
     } catch (e) {
-      print('❌ Failed to add trip ${tripData['title']}: $e');
+      debugPrint('❌ Failed to add trip ${tripData['title']}: $e');
     }
   }
 
-  print('🎉 Seeding complete! Added ${sampleTrips.length} trips.');
+  debugPrint('🎉 Seeding complete! Added ${sampleTrips.length} trips.');
 }
 
 // Run this script

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../features/authentication/data/auth_repository.dart';
+import '../features/onboarding/data/onboarding_repository.dart';
 
 // Placeholder screens - will be replaced with real implementations
 import '../features/onboarding/presentation/onboarding_screen.dart';
@@ -63,16 +64,30 @@ enum AppRoute {
 @riverpod
 GoRouter goRouter(Ref ref) {
   final authRepository = ref.watch(authRepositoryProvider);
+  final onboardingRepoAsync = ref.watch(onboardingRepositoryProvider);
 
   return GoRouter(
-    initialLocation: '/onboarding',
+    initialLocation: '/',
     debugLogDiagnostics: true,
     redirect: (context, state) async {
-      final isLoggedIn = authRepository.currentUser != null;
       final path = state.uri.path;
 
       // Skip auth redirect for demo and seed screens
       if (path == '/demo' || path == '/seed-trips') return null;
+
+      // Check onboarding status
+      final isOnboardingComplete = onboardingRepoAsync.when(
+        data: (repo) => repo.isOnboardingComplete,
+        loading: () => true, // Assume complete while loading to avoid flicker
+        error: (_, __) => true, // Assume complete on error
+      );
+
+      // If onboarding not complete and not on onboarding page, go to onboarding
+      if (!isOnboardingComplete && path != '/onboarding') {
+        return '/onboarding';
+      }
+
+      final isLoggedIn = authRepository.currentUser != null;
 
       // Auth routes that don't require login
       final authRoutes = ['/onboarding', '/login', '/signup'];
@@ -83,8 +98,8 @@ GoRouter goRouter(Ref ref) {
       final isOnSetupRoute = setupRoutes.contains(path);
 
       if (!isLoggedIn && !isOnAuthRoute) {
-        // Not logged in and not on auth page -> go to onboarding
-        return '/onboarding';
+        // Not logged in and not on auth page -> go to login
+        return '/login';
       }
 
       if (isLoggedIn && isOnAuthRoute) {

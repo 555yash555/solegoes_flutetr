@@ -4,7 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 import '../../../theme/app_theme.dart';
+import '../../authentication/data/auth_repository.dart';
+import '../../bookings/data/booking_repository.dart';
+import '../../bookings/domain/booking.dart';
+import '../../payments/data/razorpay_service.dart';
 import '../data/trip_repository.dart';
 import '../domain/trip.dart';
 
@@ -24,15 +29,188 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
   bool _showHeader = false;
   int? _expandedDayIndex;
 
+  // Razorpay integration
+  late RazorpayService _razorpayService;
+  bool _isProcessing = false;
+  bool _hasNavigated = false; // Prevent duplicate navigation
+  Trip? _currentTrip;
+
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+    _initRazorpay();
+  }
+
+  void _initRazorpay() {
+    _razorpayService = RazorpayService();
+
+    _razorpayService.onPaymentSuccess = (PaymentSuccessResponse response) {
+      _handlePaymentSuccess(response);
+    };
+
+    _razorpayService.onPaymentError = (PaymentFailureResponse response) {
+      _handlePaymentError(response);
+    };
+
+    _razorpayService.onExternalWallet = (ExternalWalletResponse response) {
+      debugPrint('External wallet selected: ${response.walletName}');
+    };
+  }
+
+  Future<void> _handlePaymentSuccess(PaymentSuccessResponse response) async {
+    // Prevent duplicate navigation from multiple callbacks
+    if (_hasNavigated) return;
+
+    final paymentId = response.paymentId ?? 'pay_${DateTime.now().millisecondsSinceEpoch}';
+
+    // Get payment method from Razorpay response
+    // Razorpay doesn't provide method in success callback, so we use a default
+    final paymentMethod = 'razorpay';
+
+    try {
+      final userAsync = ref.read(authStateChangesProvider);
+      final user = userAsync.value;
+      final trip = _currentTrip;
+
+      if (user != null && trip != null) {
+        final bookingRepo = ref.read(bookingRepositoryProvider);
+        final booking = await bookingRepo.createBooking(
+          tripId: trip.tripId,
+          userId: user.uid,
+          tripTitle: trip.title.replaceAll('\\n', ' '),
+          tripImageUrl: trip.imageUrl,
+          tripLocation: trip.location,
+          tripDuration: trip.duration,
+          amount: trip.price,
+          paymentId: paymentId,
+          paymentMethod: paymentMethod,
+          userEmail: user.email,
+          userName: user.displayName,
+        );
+
+        setState(() => _isProcessing = false);
+
+        // Invalidate booking provider to refresh data
+        ref.invalidate(userTripBookingProvider(trip.tripId, user.uid));
+
+        // Navigate to confirmation with booking ID
+        if (mounted && !_hasNavigated) {
+          _hasNavigated = true;
+          context.push('/payment-confirmation/${booking.bookingId}');
+        }
+      } else {
+        setState(() => _isProcessing = false);
+        if (mounted && !_hasNavigated) {
+          _hasNavigated = true;
+          context.push('/payment-confirmation/$paymentId');
+        }
+      }
+    } catch (e) {
+      debugPrint('Error saving booking: $e');
+      setState(() => _isProcessing = false);
+      if (mounted && !_hasNavigated) {
+        _hasNavigated = true;
+        context.push('/payment-confirmation/$paymentId');
+      }
+    }
+  }
+
+  Future<void> _handlePaymentError(PaymentFailureResponse response) async {
+    // Prevent duplicate handling
+    if (_hasNavigated) return;
+
+    final failureMessage = response.message ?? 'Payment failed';
+    final errorCode = response.code?.toString() ?? 'unknown';
+
+    try {
+      final userAsync = ref.read(authStateChangesProvider);
+      final user = userAsync.value;
+      final trip = _currentTrip;
+
+      if (user != null && trip != null) {
+        final bookingRepo = ref.read(bookingRepositoryProvider);
+        final booking = await bookingRepo.createBooking(
+          tripId: trip.tripId,
+          userId: user.uid,
+          tripTitle: trip.title.replaceAll('\\n', ' '),
+          tripImageUrl: trip.imageUrl,
+          tripLocation: trip.location,
+          tripDuration: trip.duration,
+          amount: trip.price,
+          paymentId: 'failed_${DateTime.now().millisecondsSinceEpoch}',
+          paymentMethod: 'razorpay',
+          status: BookingStatus.pending,
+          paymentStatus: PaymentStatus.failed,
+          failureReason: 'Error $errorCode: $failureMessage',
+          userEmail: user.email,
+          userName: user.displayName,
+        );
+
+        setState(() => _isProcessing = false);
+
+        // Invalidate booking provider to refresh data
+        ref.invalidate(userTripBookingProvider(trip.tripId, user.uid));
+
+        // Navigate to confirmation showing failed status
+        if (mounted && !_hasNavigated) {
+          _hasNavigated = true;
+          context.push('/payment-confirmation/${booking.bookingId}');
+        }
+        return;
+      }
+    } catch (e) {
+      debugPrint('Error saving failed booking: $e');
+    }
+
+    setState(() => _isProcessing = false);
+
+    // Fallback: show snackbar if couldn't save booking
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            failureMessage,
+            style: const TextStyle(color: Colors.white),
+          ),
+          backgroundColor: AppColors.accentRose,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+      );
+    }
+  }
+
+  void _proceedToPay(Trip trip) {
+    final userAsync = ref.read(authStateChangesProvider);
+    final user = userAsync.value;
+
+    if (user == null) {
+      // Redirect to login
+      context.push('/login');
+      return;
+    }
+
+    setState(() {
+      _isProcessing = true;
+      _hasNavigated = false; // Reset navigation flag for new payment
+      _currentTrip = trip;
+    });
+
+    _razorpayService.openCheckout(
+      amount: trip.price,
+      tripTitle: trip.title.replaceAll('\\n', ' '),
+      userEmail: user.email,
+      userPhone: user.phoneNumber,
+    );
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
+    _razorpayService.dispose();
     super.dispose();
   }
 
@@ -1286,6 +1464,15 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
       return '₹$priceInt';
     }
 
+    // Check if user has already booked this trip
+    final userAsync = ref.watch(authStateChangesProvider);
+    final user = userAsync.value;
+
+    // Only check booking if user is logged in
+    final existingBookingAsync = user != null
+        ? ref.watch(userTripBookingProvider(trip.tripId, user.uid))
+        : const AsyncValue<Booking?>.data(null);
+
     return Positioned(
       bottom: 0,
       left: 0,
@@ -1306,85 +1493,204 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                 top: BorderSide(color: AppColors.borderGlass),
               ),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Price section
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Total Price',
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 0.5,
-                        color: Colors.white.withValues(alpha: 0.5),
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      textBaseline: TextBaseline.alphabetic,
-                      children: [
-                        Text(
-                          '₹${trip.price.toStringAsFixed(0).replaceAllMapped(
-                                RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                                (Match m) => '${m[1]},',
-                              )}',
-                          style: const TextStyle(
-                            fontSize: 26,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
-                            height: 1.1,
-                          ),
-                        ),
-                        const SizedBox(width: 6),
-                        Text(
-                          formatPrice(trip.price * 1.2),
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.white.withValues(alpha: 0.4),
-                            decoration: TextDecoration.lineThrough,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                // Book Now button
-                GestureDetector(
-                  onTap: () => context.push('/payment-method/${trip.tripId}'),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-                    decoration: BoxDecoration(
-                      gradient: AppColors.primaryGradient,
-                      borderRadius: BorderRadius.circular(AppRadius.full),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.primary.withValues(alpha: 0.4),
-                          blurRadius: 20,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: const Text(
-                      'Book Now',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                        letterSpacing: 0.3,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            child: existingBookingAsync.when(
+              data: (existingBooking) {
+                // If already booked, show "Already Booked" button
+                if (existingBooking != null) {
+                  return _buildAlreadyBookedCTA(existingBooking);
+                }
+                // Show Book Now button
+                return _buildBookNowCTA(trip, formatPrice);
+              },
+              loading: () => _buildBookNowCTA(trip, formatPrice),
+              error: (_, __) => _buildBookNowCTA(trip, formatPrice),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildAlreadyBookedCTA(Booking booking) {
+    return Row(
+      children: [
+        // Booking status - Expanded to take remaining space
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      color: booking.status == BookingStatus.confirmed
+                          ? const Color(0xFF22C55E)
+                          : const Color(0xFFEAB308),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Flexible(
+                    child: Text(
+                      booking.status == BookingStatus.confirmed
+                          ? 'Booking Confirmed'
+                          : 'Booking Pending',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.5,
+                        color: booking.status == BookingStatus.confirmed
+                            ? const Color(0xFF22C55E)
+                            : const Color(0xFFEAB308),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'You have already booked this trip',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.white.withValues(alpha: 0.6),
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(width: 12),
+        // View Booking button
+        GestureDetector(
+          onTap: () => context.push('/payment-confirmation/${booking.bookingId}'),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(AppRadius.full),
+              border: Border.all(color: AppColors.borderGlass),
+            ),
+            child: const Text(
+              'View Booking',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+                letterSpacing: 0.3,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBookNowCTA(Trip trip, String Function(double) formatPrice) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        // Price section
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Total Price',
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w500,
+                letterSpacing: 0.5,
+                color: Colors.white.withValues(alpha: 0.5),
+              ),
+            ),
+            const SizedBox(height: 2),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
+              children: [
+                Text(
+                  '₹${trip.price.toStringAsFixed(0).replaceAllMapped(
+                        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                        (Match m) => '${m[1]},',
+                      )}',
+                  style: const TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                    height: 1.1,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  formatPrice(trip.price * 1.2),
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white.withValues(alpha: 0.4),
+                    decoration: TextDecoration.lineThrough,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        // Book Now button
+        GestureDetector(
+          onTap: _isProcessing ? null : () => _proceedToPay(trip),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+            decoration: BoxDecoration(
+              gradient: _isProcessing ? null : AppColors.primaryGradient,
+              color: _isProcessing ? AppColors.bgSurface : null,
+              borderRadius: BorderRadius.circular(AppRadius.full),
+              boxShadow: _isProcessing
+                  ? null
+                  : [
+                      BoxShadow(
+                        color: AppColors.primary.withValues(alpha: 0.4),
+                        blurRadius: 20,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+            ),
+            child: _isProcessing
+                ? const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        'Processing...',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  )
+                : const Text(
+                    'Book Now',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                      letterSpacing: 0.3,
+                    ),
+                  ),
+          ),
+        ),
+      ],
     );
   }
 }

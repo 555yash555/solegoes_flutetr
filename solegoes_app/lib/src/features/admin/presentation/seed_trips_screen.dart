@@ -477,7 +477,7 @@ class _SeedTripsScreenState extends ConsumerState<SeedTripsScreen> {
                   color: const Color(0xFF18181B),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: Colors.white.withOpacity(0.1),
+                    color: Colors.white.withValues(alpha: 0.1),
                   ),
                 ),
                 child: Text(
@@ -497,7 +497,7 @@ class _SeedTripsScreenState extends ConsumerState<SeedTripsScreen> {
                     color: const Color(0xFF0A0A0A),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: Colors.white.withOpacity(0.1),
+                      color: Colors.white.withValues(alpha: 0.1),
                     ),
                   ),
                   child: ListView.builder(
