@@ -16,29 +16,37 @@
 ## 🚀 Feature Progress
 
 ### 1. Onboarding
-**Status**: 🔴 Not Started
+**Status**: 🟡 In Progress
+- [x] **Splash Screen** (NEW)
+    - [x] Logo display with auto-navigation
+    - [x] Native splash configuration (Android/iOS)
+    - [x] Smart routing based on auth status
 - [ ] **Onboarding Flow** (`option15_onboarding.html`)
     - [ ] Intro Slides / Animation
 
 ### 2. Authentication
-**Status**: � In Progress
+**Status**: 🟢 Mostly Complete
 - [x] **Login Screen** (`option15_login.html`)
     - [x] UI Implementation (Text Fields, Buttons, Styling)
     - [x] Email/Password Logic (Connected to Firebase)
     - [ ] Google Sign-In Logic
     - [x] Error Handling & Loading States
 - [ ] **OTP Screen** (`option15_otp.html`)
-- [ ] **Sign Up Screen**
-    - [ ] UI Implementation
-    - [ ] Firestore User Creation (trigger)
+- [x] **Sign Up Screen**
+    - [x] UI Implementation
+    - [x] Firestore User Creation (trigger)
 - [ ] **Forgot Password** (`option15_forgot_password.html`)
+- [x] **Profile Setup** (UPDATED)
+    - [x] Skip functionality added
+    - [x] Removed redundant name field
 
 ### 3. Homepage (Mobile Root)
-**Status**: � In Progress
+**Status**: ✅ Complete
 - [x] **Routing Setup** (GoRouter + Auth Redirection)
-- [ ] **Home / Mobile View** (`option15_mobile.html`)
+- [x] **Home / Mobile View** (`option15_mobile.html`)
     - [x] Bottom Navigation Setup (Shell Route)
-    - [ ] Featured / Recommended Sections
+    - [x] Featured / Recommended Sections
+    - [x] App logo in header (NEW)
 
 ### 4. User Profile (Customer)
 **Status**: 🔴 Not Started
@@ -49,20 +57,34 @@
 - [ ] **Settings** (`option15_settings.html`)
 
 ### 5. Trips (Discovery & Details)
-**Status**: 🔴 Not Started
+**Status**: 🟡 In Progress
 - [ ] **Explore / Search** (`option15_explore.html`)
     - [ ] Vector Search Integration (Later)
-- [ ] **Trip Details** (`option15_trip_detail.html`)
-    - [ ] Dynamic Data from Firestore
-    - [ ] "Book Now" Flow
+- [x] **Trip Details** (`option15_trip_detail.html`) (NEW)
+    - [x] Dynamic Data from Firestore
+    - [x] "Book Now" Flow
+    - [x] **Boarding/Dropping Point Selection** (NEW)
+    - [x] Image gallery and itinerary display
 - [ ] **My Trips** (`option15_my_trips.html`)
     - [ ] List of booked/past trips
+- [x] **Trip Model** (NEW)
+    - [x] Comprehensive Trip model with all fields
+    - [x] **TripPoint model for boarding/dropping locations** (NEW)
+    - [x] Firestore serialization
 
 ### 6. Bookings & Payments
-**Status**: 🔴 Not Started
+**Status**: 🟡 In Progress
+- [x] **Booking Model** (NEW)
+    - [x] Booking model with freezed
+    - [x] **SelectedTripPoint for boarding/dropping points** (NEW)
+    - [x] Booking repository
+- [x] **Payment Confirmation** (`option15_payment_confirmation.html`) (NEW)
+    - [x] Confirmation screen with trip details
+    - [x] **Boarding/dropping point display** (NEW)
+    - [x] PDF receipt generation
+    - [x] Email/WhatsApp sharing
 - [ ] **Payment Method** (`option15_payment_method.html`)
-    - [ ] Single Verified Source Integration
-- [ ] **Payment Confirmation** (`option15_payment_confirmation.html`)
+    - [ ] Payment gateway integration
 
 ### 7. Chat & Social
 **Status**: 🔴 Not Started

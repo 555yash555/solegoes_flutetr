@@ -1,7 +1,7 @@
 # SoleGoes - Current Project Status
 
-**Last Updated:** January 10, 2026  
-**Current Phase:** Authentication Complete → Moving to Core Features  
+**Last Updated:** January 13, 2026  
+**Current Phase:** Core Features Development - Trips & Bookings  
 **Development History:** Gemini (Initial) → Claude (Auth & UI) → Current
 
 ---
@@ -110,7 +110,66 @@
 - ✅ Popular trips carousel
 - ✅ Proper safe area handling
 
-### 5. Firebase Setup (100% Complete)
+### 5. Splash Screen (100% Complete)
+**Status:** ✅ Production-ready
+
+**File:** `lib/src/features/splash/presentation/splash_screen.dart`
+
+**Features:**
+- ✅ Flutter splash screen with logo and auto-navigation
+- ✅ Native splash screens configured for Android/iOS
+- ✅ App logo integrated into assets and home screen
+- ✅ Automatic routing based on auth and onboarding status
+- ✅ Profile completion checks with proper redirects
+
+### 6. Trip Detail Screen (80% Complete)
+**Status:** 🟡 In Progress
+
+**File:** `lib/src/features/trips/presentation/trip_detail_screen.dart`
+
+**Features:**
+- ✅ Trip detail UI with image gallery
+- ✅ Itinerary display
+- ✅ Inclusions and pricing
+- ✅ **Boarding/Dropping point selection** (NEW)
+- ✅ Book now flow with point selection
+- [ ] Reviews and ratings section
+- [ ] Share functionality
+
+### 7. Booking System (70% Complete)
+**Status:** 🟡 In Progress
+
+**Files:**
+- `lib/src/features/bookings/domain/booking.dart`
+- `lib/src/features/bookings/data/booking_repository.dart`
+- `lib/src/features/payments/presentation/payment_confirmation_screen.dart`
+
+**Features:**
+- ✅ Booking model with freezed
+- ✅ **SelectedTripPoint model for boarding/dropping points** (NEW)
+- ✅ Payment confirmation screen
+- ✅ **Boarding/dropping point display in confirmation** (NEW)
+- ✅ PDF receipt generation with trip details
+- ✅ Email/WhatsApp sharing
+- [ ] Payment gateway integration
+- [ ] Booking history
+
+### 8. Trip Model & Data (90% Complete)
+**Status:** ✅ Nearly Complete
+
+**File:** `lib/src/features/trips/domain/trip.dart`
+
+**Features:**
+- ✅ Comprehensive Trip model
+- ✅ **TripPoint model for boarding/dropping locations** (NEW)
+- ✅ **boardingPoints and droppingPoints arrays** (NEW)
+- ✅ Firestore serialization/deserialization
+- ✅ Trip categories and filtering
+- ✅ Agency information
+- ✅ Rating and review count
+- [ ] Vector embeddings for AI recommendations
+
+### 9. Firebase Setup (100% Complete)
 **Status:** ✅ Configured
 
 - ✅ Firebase Project Created (`solegoes-8110c`)
@@ -124,10 +183,11 @@
 ## 🚧 What's In Progress / TODO
 
 ### Priority 1: Complete Authentication Flow
-**Status:** 🟡 Partially Complete
+**Status:** � Mostly Complete
 
+- ✅ **Splash screen with auto-navigation** (NEW)
+- ✅ **Profile setup screen** (UPDATED - skip functionality added)
 - [ ] Phone collection screen UI
-- [ ] Profile setup screen (name, bio, city, gender, birthdate, personality traits)
 - [ ] Preferences screen (interests, budget, travel style)
 - [ ] Onboarding carousel
 
@@ -138,12 +198,15 @@
 - `lib/src/features/onboarding/presentation/onboarding_screen.dart`
 
 ### Priority 2: Trip Discovery & Details
-**Status:** 🔴 Not Started
+**Status:** � In Progress
 
 - [ ] Explore screen with filters
-- [ ] Trip detail screen
-- [ ] Trip repository (Firestore)
-- [ ] Trip providers (Riverpod)
+- ✅ **Trip detail screen** (COMPLETED)
+- ✅ **Trip model with boarding/dropping points** (NEW)
+- ✅ **TripPoint model** (NEW)
+- ✅ Trip repository (Firestore)
+- ✅ Trip providers (Riverpod)
+- ✅ **Boarding/dropping point selection UI** (NEW)
 - [ ] Vector search integration (later phase)
 
 **Files to Create:**
@@ -153,11 +216,15 @@
 - `lib/src/features/trips/presentation/trip_detail_screen.dart`
 
 ### Priority 3: Booking Flow
-**Status:** 🔴 Not Started
+**Status:** � In Progress
 
-- [ ] Booking confirmation screen
+- ✅ **Booking model with SelectedTripPoint** (NEW)
+- ✅ **Booking repository** (COMPLETED)
+- ✅ **Payment confirmation screen** (COMPLETED)
+- ✅ **Boarding/dropping point display in receipts** (NEW)
+- ✅ PDF receipt generation
 - [ ] Payment gateway integration
-- [ ] Booking repository
+- [ ] Booking history screen
 - [ ] Booking management
 
 **Files to Create:**
@@ -215,17 +282,21 @@
 
 | Feature Area | Progress | Status |
 |--------------|----------|--------|
-| Authentication | 80% | ✅ Core complete, flows pending |
+| Authentication | 90% | ✅ Core complete + Splash |
 | Routing | 100% | ✅ Complete |
 | Theme System | 100% | ✅ Complete |
 | Home Screen | 100% | ✅ Complete |
-| Trip Discovery | 0% | 🔴 Not started |
-| Booking Flow | 0% | 🔴 Not started |
+| Splash Screen | 100% | ✅ Complete |
+| Trip Models | 90% | ✅ With boarding points |
+| Trip Detail Screen | 80% | 🟡 Boarding points added |
+| Booking System | 70% | � Models + Confirmation |
+| Trip Discovery | 20% | 🟡 Detail screen done |
+| Payment Flow | 60% | 🟡 Confirmation done |
 | Chat/Social | 0% | 🔴 Not started |
 | Agency Features | 0% | 🔴 Not started |
 | Admin Features | 0% | 🔴 Not started |
 
-**Overall Progress:** ~35% Complete
+**Overall Progress:** ~55% Complete
 
 ---
 
@@ -482,6 +553,30 @@ Always run `build_runner` after modifying:
 
 ---
 
-**Last Updated:** January 10, 2026  
+**Last Updated:** January 13, 2026  
 **Status:** Active Development  
-**Next Milestone:** Complete authentication flows and trip discovery
+**Next Milestone:** Complete payment integration and explore screen
+
+---
+
+## 🆕 Recent Updates (January 13, 2026)
+
+### Splash Screen Implementation
+- Added Flutter splash screen with logo and auto-navigation
+- Configured native splash screens for Android/iOS platforms
+- Integrated app logo into home screen header
+- Implemented smart routing based on auth and onboarding status
+
+### Boarding Points Feature
+- **New TripPoint Model**: Added model for boarding/dropping locations with name, address, and dateTime
+- **Trip Model Enhancement**: Added `boardingPoints` and `droppingPoints` arrays to Trip model
+- **Booking Model Update**: Added `SelectedTripPoint` to track user's selected boarding/dropping points
+- **UI Implementation**: Added boarding/dropping point selection UI in Trip Detail Screen
+- **Confirmation Display**: Updated Payment Confirmation Screen to show selected points
+- **PDF Integration**: Boarding/dropping points now appear in PDF receipts
+- **Seed Data**: Updated seed trips to include sample boarding/dropping points
+
+### Profile Flow Improvements
+- Removed redundant name field from profile setup (already captured in signup)
+- Added skip functionality to allow users to complete profile later
+- Updated auth repository and controller for better profile management
