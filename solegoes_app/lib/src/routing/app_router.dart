@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../features/authentication/data/auth_repository.dart';
 import '../features/onboarding/data/onboarding_repository.dart';
+import '../features/splash/presentation/splash_screen.dart';
 
 // Placeholder screens - will be replaced with real implementations
 import '../features/onboarding/presentation/onboarding_screen.dart';
@@ -33,6 +34,9 @@ part 'app_router.g.dart';
 enum AppRoute {
   // Demo (temporary)
   demo,
+
+  // Splash
+  splash,
 
   // Onboarding
   onboarding,
@@ -67,13 +71,13 @@ GoRouter goRouter(Ref ref) {
   final onboardingRepoAsync = ref.watch(onboardingRepositoryProvider);
 
   return GoRouter(
-    initialLocation: '/',
+    initialLocation: '/splash',
     debugLogDiagnostics: true,
     redirect: (context, state) async {
       final path = state.uri.path;
 
-      // Skip auth redirect for demo and seed screens
-      if (path == '/demo' || path == '/seed-trips') return null;
+      // Skip auth redirect for demo, seed, and splash screens
+      if (path == '/demo' || path == '/seed-trips' || path == '/splash') return null;
 
       // Check onboarding status
       final isOnboardingComplete = onboardingRepoAsync.when(
@@ -92,10 +96,6 @@ GoRouter goRouter(Ref ref) {
       // Auth routes that don't require login
       final authRoutes = ['/onboarding', '/login', '/signup'];
       final isOnAuthRoute = authRoutes.contains(path);
-
-      // Setup routes (require login but profile may be incomplete)
-      final setupRoutes = ['/phone-collection', '/profile-setup', '/preferences'];
-      final isOnSetupRoute = setupRoutes.contains(path);
 
       if (!isLoggedIn && !isOnAuthRoute) {
         // Not logged in and not on auth page -> go to login
@@ -119,26 +119,19 @@ GoRouter goRouter(Ref ref) {
         return '/';
       }
 
-      // If logged in and trying to access main app, check profile completion
-      if (isLoggedIn && !isOnAuthRoute && !isOnSetupRoute) {
-        try {
-          final user = await authRepository.getUserProfile(authRepository.currentUser!.uid);
-          if (!user.isProfileComplete) {
-            return '/profile-setup';
-          }
-          if (!user.isPreferencesComplete) {
-            return '/preferences';
-          }
-        } catch (e) {
-          // If we can't get user profile, go to profile setup
-          return '/profile-setup';
-        }
-      }
-
+      // Allow access to main app even if profile is incomplete (user can skip)
       return null;
     },
     refreshListenable: GoRouterRefreshStream(authRepository.authStateChanges()),
     routes: [
+      // ===========================================
+      // SPLASH SCREEN
+      // ===========================================
+      GoRoute(
+        path: '/splash',
+        name: AppRoute.splash.name,
+        builder: (context, state) => const SplashScreen(),
+      ),
       // ===========================================
       // DEMO ROUTE (Temporary - for design verification)
       // ===========================================

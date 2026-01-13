@@ -18,7 +18,6 @@ class ProfileSetupScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
-  final _nameController = TextEditingController();
   final _bioController = TextEditingController();
   final _cityController = TextEditingController();
   String? _selectedGender;
@@ -47,9 +46,6 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
     final user = await ref.read(authStateChangesProvider.future);
     if (user != null && mounted) {
       setState(() {
-        if (user.displayName.isNotEmpty) {
-          _nameController.text = user.displayName;
-        }
         if (user.bio != null) {
           _bioController.text = user.bio!;
         }
@@ -65,21 +61,19 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
 
   @override
   void dispose() {
-    _nameController.dispose();
     _bioController.dispose();
     _cityController.dispose();
     super.dispose();
   }
 
+  void _skipToHome() {
+    // Just go to home - next app open will show these screens again
+    context.go('/');
+  }
+
   Future<void> _handleContinue() async {
-    final name = _nameController.text.trim();
     final bio = _bioController.text.trim();
     final city = _cityController.text.trim();
-
-    if (name.isEmpty) {
-      AppSnackbar.showError(context, 'Please enter your name');
-      return;
-    }
 
     if (_birthDate == null) {
       AppSnackbar.showError(context, 'Please select your birth date');
@@ -98,7 +92,6 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
 
     // Update profile in Firebase
     final success = await ref.read(authControllerProvider.notifier).updateProfile(
-      displayName: name,
       bio: bio.isNotEmpty ? bio : null,
       city: city,
       gender: _selectedGender,
@@ -190,7 +183,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => context.go('/preferences'),
+                    onTap: () => _skipToHome(),
                     child: Text(
                       'Skip',
                       style: TextStyle(
@@ -241,15 +234,6 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
 
                   // Basic Info Section
                   _buildSectionHeader('Basic Info'),
-                  const SizedBox(height: 20),
-
-                  // Full Name
-                  _buildLabel('Full Name', required: true),
-                  const SizedBox(height: 8),
-                  _buildTextField(
-                    controller: _nameController,
-                    hint: 'Enter your name',
-                  ),
                   const SizedBox(height: 20),
 
                   // Birth Date & Gender

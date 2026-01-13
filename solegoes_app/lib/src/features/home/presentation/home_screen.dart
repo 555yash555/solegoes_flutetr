@@ -67,29 +67,19 @@ class HomeScreen extends ConsumerWidget {
           // Logo
           Row(
             children: [
-              Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  gradient: AppColors.primaryGradient,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: const Center(
-                  child: Text(
-                    'SG',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white,
-                    ),
-                  ),
+              ClipOval(
+                child: Image.asset(
+                  'assets/images/logo.png',
+                  width: 44,
+                  height: 44,
+                  fit: BoxFit.cover,
                 ),
               ),
               const SizedBox(width: 12),
               const Text(
                 'SoleGoes',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 20,
                   fontWeight: FontWeight.w700,
                   color: AppColors.textPrimary,
                   letterSpacing: -0.5,

@@ -206,7 +206,6 @@ class AuthRepository {
   }
 
   Future<void> updateProfile({
-    required String displayName,
     String? bio,
     String? city,
     String? gender,
@@ -216,12 +215,8 @@ class AuthRepository {
     final uid = currentUser?.uid;
     if (uid == null) throw Exception('Not authenticated');
 
-    // Update Firebase Auth display name
-    await currentUser!.updateDisplayName(displayName);
-
     // Use set with merge to create document if it doesn't exist
     await _firestore.collection('users').doc(uid).set({
-      'displayName': displayName,
       'bio': bio,
       'city': city,
       'gender': gender,

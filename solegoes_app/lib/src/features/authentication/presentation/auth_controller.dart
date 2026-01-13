@@ -73,7 +73,6 @@ class AuthController extends _$AuthController {
   }
 
   Future<bool> updateProfile({
-    required String displayName,
     String? bio,
     String? city,
     String? gender,
@@ -83,7 +82,6 @@ class AuthController extends _$AuthController {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       await ref.read(authRepositoryProvider).updateProfile(
-        displayName: displayName,
         bio: bio,
         city: city,
         gender: gender,

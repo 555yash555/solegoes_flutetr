@@ -108,6 +108,10 @@ Status: ${booking.status.name.toUpperCase()}
     final font = await PdfGoogleFonts.notoSansRegular();
     final fontBold = await PdfGoogleFonts.notoSansBold();
 
+    // Load the app logo
+    final logoData = await rootBundle.load('assets/images/logo.png');
+    final logoImage = pw.MemoryImage(logoData.buffer.asUint8List());
+
     final pdf = pw.Document();
 
     pdf.addPage(
@@ -122,7 +126,7 @@ Status: ${booking.status.name.toUpperCase()}
           return pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
-              // Header
+              // Header with logo
               pw.Container(
                 width: double.infinity,
                 padding: const pw.EdgeInsets.all(20),
@@ -130,23 +134,32 @@ Status: ${booking.status.name.toUpperCase()}
                   color: PdfColor.fromHex('#6366F1'),
                   borderRadius: pw.BorderRadius.circular(8),
                 ),
-                child: pw.Column(
+                child: pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.center,
                   children: [
-                    pw.Text(
-                      'SoleGoes',
-                      style: pw.TextStyle(
-                        fontSize: 28,
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColors.white,
-                      ),
+                    pw.ClipOval(
+                      child: pw.Image(logoImage, width: 50, height: 50),
                     ),
-                    pw.SizedBox(height: 4),
-                    pw.Text(
-                      'Booking Confirmation',
-                      style: const pw.TextStyle(
-                        fontSize: 14,
-                        color: PdfColors.white,
-                      ),
+                    pw.SizedBox(width: 12),
+                    pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(
+                          'SoleGoes',
+                          style: pw.TextStyle(
+                            fontSize: 28,
+                            fontWeight: pw.FontWeight.bold,
+                            color: PdfColors.white,
+                          ),
+                        ),
+                        pw.Text(
+                          'Booking Confirmation',
+                          style: const pw.TextStyle(
+                            fontSize: 14,
+                            color: PdfColors.white,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
