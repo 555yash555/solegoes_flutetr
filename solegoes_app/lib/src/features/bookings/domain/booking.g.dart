@@ -6,6 +6,20 @@ part of 'booking.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+_SelectedTripPoint _$SelectedTripPointFromJson(Map<String, dynamic> json) =>
+    _SelectedTripPoint(
+      name: json['name'] as String,
+      address: json['address'] as String,
+      dateTime: DateTime.parse(json['dateTime'] as String),
+    );
+
+Map<String, dynamic> _$SelectedTripPointToJson(_SelectedTripPoint instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+      'address': instance.address,
+      'dateTime': instance.dateTime.toIso8601String(),
+    };
+
 _Booking _$BookingFromJson(Map<String, dynamic> json) => _Booking(
   bookingId: json['bookingId'] as String,
   tripId: json['tripId'] as String,
@@ -30,6 +44,16 @@ _Booking _$BookingFromJson(Map<String, dynamic> json) => _Booking(
       : DateTime.parse(json['tripStartDate'] as String),
   userEmail: json['userEmail'] as String?,
   userName: json['userName'] as String?,
+  selectedBoardingPoint: json['selectedBoardingPoint'] == null
+      ? null
+      : SelectedTripPoint.fromJson(
+          json['selectedBoardingPoint'] as Map<String, dynamic>,
+        ),
+  selectedDroppingPoint: json['selectedDroppingPoint'] == null
+      ? null
+      : SelectedTripPoint.fromJson(
+          json['selectedDroppingPoint'] as Map<String, dynamic>,
+        ),
 );
 
 Map<String, dynamic> _$BookingToJson(_Booking instance) => <String, dynamic>{
@@ -50,6 +74,8 @@ Map<String, dynamic> _$BookingToJson(_Booking instance) => <String, dynamic>{
   'tripStartDate': instance.tripStartDate?.toIso8601String(),
   'userEmail': instance.userEmail,
   'userName': instance.userName,
+  'selectedBoardingPoint': instance.selectedBoardingPoint,
+  'selectedDroppingPoint': instance.selectedDroppingPoint,
 };
 
 const _$BookingStatusEnumMap = {

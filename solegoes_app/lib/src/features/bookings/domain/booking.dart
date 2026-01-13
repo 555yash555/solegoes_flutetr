@@ -20,6 +20,19 @@ enum PaymentStatus {
   refunded,
 }
 
+/// Selected point with date/time for booking
+@freezed
+abstract class SelectedTripPoint with _$SelectedTripPoint {
+  const factory SelectedTripPoint({
+    required String name,
+    required String address,
+    required DateTime dateTime,
+  }) = _SelectedTripPoint;
+
+  factory SelectedTripPoint.fromJson(Map<String, dynamic> json) =>
+      _$SelectedTripPointFromJson(json);
+}
+
 /// Booking model for trip bookings
 @freezed
 abstract class Booking with _$Booking {
@@ -41,9 +54,24 @@ abstract class Booking with _$Booking {
     DateTime? tripStartDate,
     String? userEmail,
     String? userName,
+    // Boarding and dropping point details
+    SelectedTripPoint? selectedBoardingPoint,
+    SelectedTripPoint? selectedDroppingPoint,
   }) = _Booking;
 
   factory Booking.fromJson(Map<String, dynamic> json) => _$BookingFromJson(json);
+}
+
+/// Helper to parse SelectedTripPoint from Firestore
+SelectedTripPoint? _parseSelectedTripPoint(Map<String, dynamic>? data) {
+  if (data == null) return null;
+  return SelectedTripPoint(
+    name: data['name'] as String? ?? '',
+    address: data['address'] as String? ?? '',
+    dateTime: data['dateTime'] is Timestamp
+        ? (data['dateTime'] as Timestamp).toDate()
+        : DateTime.tryParse(data['dateTime'] as String? ?? '') ?? DateTime.now(),
+  );
 }
 
 /// Helper to create Booking from Firestore document
@@ -75,7 +103,23 @@ Booking bookingFromFirestore(DocumentSnapshot doc) {
         : null,
     userEmail: data['userEmail'] as String?,
     userName: data['userName'] as String?,
+    selectedBoardingPoint: _parseSelectedTripPoint(
+      data['selectedBoardingPoint'] as Map<String, dynamic>?,
+    ),
+    selectedDroppingPoint: _parseSelectedTripPoint(
+      data['selectedDroppingPoint'] as Map<String, dynamic>?,
+    ),
   );
+}
+
+/// Helper to convert SelectedTripPoint to Firestore
+Map<String, dynamic>? _selectedTripPointToFirestore(SelectedTripPoint? point) {
+  if (point == null) return null;
+  return {
+    'name': point.name,
+    'address': point.address,
+    'dateTime': Timestamp.fromDate(point.dateTime),
+  };
 }
 
 /// Helper to convert Booking to Firestore document
@@ -99,5 +143,7 @@ Map<String, dynamic> bookingToFirestore(Booking booking) {
         : null,
     'userEmail': booking.userEmail,
     'userName': booking.userName,
+    'selectedBoardingPoint': _selectedTripPointToFirestore(booking.selectedBoardingPoint),
+    'selectedDroppingPoint': _selectedTripPointToFirestore(booking.selectedDroppingPoint),
   };
 }

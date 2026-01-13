@@ -8,7 +8,7 @@ import 'package:razorpay_flutter/razorpay_flutter.dart';
 import '../../../theme/app_theme.dart';
 import '../../authentication/data/auth_repository.dart';
 import '../../bookings/data/booking_repository.dart';
-import '../../bookings/domain/booking.dart';
+import '../../bookings/domain/booking.dart' show Booking, BookingStatus, PaymentStatus, SelectedTripPoint;
 import '../../payments/data/razorpay_service.dart';
 import '../data/trip_repository.dart';
 import '../domain/trip.dart';
@@ -34,6 +34,10 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
   bool _isProcessing = false;
   bool _hasNavigated = false; // Prevent duplicate navigation
   Trip? _currentTrip;
+
+  // Boarding and dropping point selection
+  TripPoint? _selectedBoardingPoint;
+  TripPoint? _selectedDroppingPoint;
 
   @override
   void initState() {
@@ -75,6 +79,26 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
 
       if (user != null && trip != null) {
         final bookingRepo = ref.read(bookingRepositoryProvider);
+
+        // Convert TripPoint to SelectedTripPoint for booking
+        SelectedTripPoint? boardingPoint;
+        if (_selectedBoardingPoint != null) {
+          boardingPoint = SelectedTripPoint(
+            name: _selectedBoardingPoint!.name,
+            address: _selectedBoardingPoint!.address,
+            dateTime: _selectedBoardingPoint!.dateTime,
+          );
+        }
+
+        SelectedTripPoint? droppingPoint;
+        if (_selectedDroppingPoint != null) {
+          droppingPoint = SelectedTripPoint(
+            name: _selectedDroppingPoint!.name,
+            address: _selectedDroppingPoint!.address,
+            dateTime: _selectedDroppingPoint!.dateTime,
+          );
+        }
+
         final booking = await bookingRepo.createBooking(
           tripId: trip.tripId,
           userId: user.uid,
@@ -87,6 +111,8 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
           paymentMethod: paymentMethod,
           userEmail: user.email,
           userName: user.displayName,
+          selectedBoardingPoint: boardingPoint,
+          selectedDroppingPoint: droppingPoint,
         );
 
         setState(() => _isProcessing = false);
@@ -513,6 +539,12 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
           // Inclusions
           _buildInclusions(trip),
           const SizedBox(height: 32),
+
+          // Boarding & Dropping Points
+          if (trip.boardingPoints.isNotEmpty || trip.droppingPoints.isNotEmpty) ...[
+            _buildBoardingDroppingPoints(trip),
+            const SizedBox(height: 32),
+          ],
 
           // Host Info
           _buildHostInfo(trip),
@@ -1208,6 +1240,246 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
         ),
       ],
     );
+  }
+
+  Widget _buildBoardingDroppingPoints(Trip trip) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Pickup & Drop',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Select your preferred boarding and dropping points',
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.white.withValues(alpha: 0.5),
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // Boarding Points Section
+          if (trip.boardingPoints.isNotEmpty) ...[
+            _buildPointSelectionCard(
+              title: 'Boarding Point',
+              icon: LucideIcons.mapPin,
+              iconColor: const Color(0xFF22C55E),
+              points: trip.boardingPoints,
+              selectedPoint: _selectedBoardingPoint,
+              onPointSelected: (point) {
+                setState(() => _selectedBoardingPoint = point);
+              },
+            ),
+            const SizedBox(height: 16),
+          ],
+
+          // Dropping Points Section
+          if (trip.droppingPoints.isNotEmpty)
+            _buildPointSelectionCard(
+              title: 'Dropping Point',
+              icon: LucideIcons.mapPinOff,
+              iconColor: const Color(0xFFEF4444),
+              points: trip.droppingPoints,
+              selectedPoint: _selectedDroppingPoint,
+              onPointSelected: (point) {
+                setState(() => _selectedDroppingPoint = point);
+              },
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPointSelectionCard({
+    required String title,
+    required IconData icon,
+    required Color iconColor,
+    required List<TripPoint> points,
+    required TripPoint? selectedPoint,
+    required void Function(TripPoint) onPointSelected,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: AppColors.borderGlass),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: iconColor.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Icon(icon, size: 18, color: iconColor),
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+                const Spacer(),
+                if (selectedPoint != null)
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: iconColor.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(AppRadius.full),
+                    ),
+                    child: Text(
+                      'Selected',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: iconColor,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          const Divider(color: AppColors.borderGlass, height: 1),
+          // Points List
+          ...points.map((point) {
+            final isSelected = selectedPoint == point;
+            return GestureDetector(
+              onTap: () => onPointSelected(point),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? iconColor.withValues(alpha: 0.08)
+                      : Colors.transparent,
+                  border: Border(
+                    bottom: point != points.last
+                        ? const BorderSide(color: AppColors.borderGlass)
+                        : BorderSide.none,
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    // Radio button
+                    Container(
+                      width: 20,
+                      height: 20,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: isSelected ? iconColor : Colors.white.withValues(alpha: 0.3),
+                          width: 2,
+                        ),
+                      ),
+                      child: isSelected
+                          ? Center(
+                              child: Container(
+                                width: 10,
+                                height: 10,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: iconColor,
+                                ),
+                              ),
+                            )
+                          : null,
+                    ),
+                    const SizedBox(width: 12),
+                    // Point details
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            point.name,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.9),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            point.address,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white.withValues(alpha: 0.5),
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    // Date & Time
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.05),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            _formatDate(point.dateTime),
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white.withValues(alpha: 0.8),
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            _formatTime(point.dateTime),
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.white.withValues(alpha: 0.5),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+
+  String _formatDate(DateTime dateTime) {
+    final months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return '${dateTime.day} ${months[dateTime.month - 1]}';
+  }
+
+  String _formatTime(DateTime dateTime) {
+    final hour = dateTime.hour;
+    final minute = dateTime.minute.toString().padLeft(2, '0');
+    final period = hour >= 12 ? 'PM' : 'AM';
+    final hour12 = hour > 12 ? hour - 12 : (hour == 0 ? 12 : hour);
+    return '$hour12:$minute $period';
   }
 
   Widget _buildHostInfo(Trip trip) {

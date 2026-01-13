@@ -54,6 +54,24 @@ class PaymentConfirmationScreen extends ConsumerWidget {
   }
 
   void _shareReceipt(BuildContext context, Booking booking) {
+    final boardingInfo = booking.selectedBoardingPoint != null
+        ? '''
+
+📍 Boarding Point:
+   ${booking.selectedBoardingPoint!.name}
+   ${booking.selectedBoardingPoint!.address}
+   ${_formatDate(booking.selectedBoardingPoint!.dateTime)}'''
+        : '';
+
+    final droppingInfo = booking.selectedDroppingPoint != null
+        ? '''
+
+📍 Dropping Point:
+   ${booking.selectedDroppingPoint!.name}
+   ${booking.selectedDroppingPoint!.address}
+   ${_formatDate(booking.selectedDroppingPoint!.dateTime)}'''
+        : '';
+
     final receiptText = '''
 🎉 SoleGoes Booking Confirmation
 
@@ -64,7 +82,7 @@ Duration: ${booking.tripDuration} Days
 💰 Amount Paid: ₹${_formatAmount(booking.amount)}
 📅 Booking Date: ${_formatDate(booking.bookingDate)}
 🔖 Booking ID: ${booking.bookingId}
-💳 Payment ID: ${booking.paymentId}
+💳 Payment ID: ${booking.paymentId}$boardingInfo$droppingInfo
 
 Thank you for booking with SoleGoes!
 Your adventure awaits! 🌍✨
@@ -74,6 +92,20 @@ Your adventure awaits! 🌍✨
   }
 
   void _copyToClipboard(BuildContext context, Booking booking) {
+    final boardingInfo = booking.selectedBoardingPoint != null
+        ? '''
+Boarding: ${booking.selectedBoardingPoint!.name}
+          ${_formatDate(booking.selectedBoardingPoint!.dateTime)}
+'''
+        : '';
+
+    final droppingInfo = booking.selectedDroppingPoint != null
+        ? '''
+Dropping: ${booking.selectedDroppingPoint!.name}
+          ${_formatDate(booking.selectedDroppingPoint!.dateTime)}
+'''
+        : '';
+
     final receiptText = '''
 SoleGoes Booking Receipt
 ------------------------
@@ -85,7 +117,7 @@ Date: ${_formatDate(booking.bookingDate)}
 Booking ID: ${booking.bookingId}
 Payment ID: ${booking.paymentId}
 Status: ${booking.status.name.toUpperCase()}
-''';
+$boardingInfo$droppingInfo''';
 
     Clipboard.setData(ClipboardData(text: receiptText));
     ScaffoldMessenger.of(context).showSnackBar(
@@ -234,6 +266,128 @@ Status: ${booking.status.name.toUpperCase()}
                 ),
               ),
               pw.SizedBox(height: 20),
+
+              // Boarding/Dropping Points Section (if available)
+              if (booking.selectedBoardingPoint != null || booking.selectedDroppingPoint != null)
+                pw.Container(
+                  width: double.infinity,
+                  padding: const pw.EdgeInsets.all(20),
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(color: PdfColors.grey300),
+                    borderRadius: pw.BorderRadius.circular(8),
+                  ),
+                  child: pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    children: [
+                      pw.Text(
+                        'PICKUP & DROP DETAILS',
+                        style: pw.TextStyle(
+                          fontSize: 12,
+                          fontWeight: pw.FontWeight.bold,
+                          color: PdfColors.grey600,
+                          letterSpacing: 1,
+                        ),
+                      ),
+                      pw.SizedBox(height: 16),
+                      if (booking.selectedBoardingPoint != null) ...[
+                        pw.Container(
+                          padding: const pw.EdgeInsets.all(12),
+                          decoration: pw.BoxDecoration(
+                            color: PdfColor.fromHex('#E8F5E9'),
+                            borderRadius: pw.BorderRadius.circular(6),
+                          ),
+                          child: pw.Column(
+                            crossAxisAlignment: pw.CrossAxisAlignment.start,
+                            children: [
+                              pw.Text(
+                                'Boarding Point',
+                                style: pw.TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: pw.FontWeight.bold,
+                                  color: PdfColor.fromHex('#2E7D32'),
+                                ),
+                              ),
+                              pw.SizedBox(height: 6),
+                              pw.Text(
+                                booking.selectedBoardingPoint!.name,
+                                style: pw.TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: pw.FontWeight.bold,
+                                ),
+                              ),
+                              pw.SizedBox(height: 2),
+                              pw.Text(
+                                booking.selectedBoardingPoint!.address,
+                                style: const pw.TextStyle(
+                                  fontSize: 10,
+                                  color: PdfColors.grey700,
+                                ),
+                              ),
+                              pw.SizedBox(height: 4),
+                              pw.Text(
+                                _formatDate(booking.selectedBoardingPoint!.dateTime),
+                                style: pw.TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: pw.FontWeight.bold,
+                                  color: PdfColor.fromHex('#2E7D32'),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        pw.SizedBox(height: 12),
+                      ],
+                      if (booking.selectedDroppingPoint != null)
+                        pw.Container(
+                          padding: const pw.EdgeInsets.all(12),
+                          decoration: pw.BoxDecoration(
+                            color: PdfColor.fromHex('#FFEBEE'),
+                            borderRadius: pw.BorderRadius.circular(6),
+                          ),
+                          child: pw.Column(
+                            crossAxisAlignment: pw.CrossAxisAlignment.start,
+                            children: [
+                              pw.Text(
+                                'Dropping Point',
+                                style: pw.TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: pw.FontWeight.bold,
+                                  color: PdfColor.fromHex('#C62828'),
+                                ),
+                              ),
+                              pw.SizedBox(height: 6),
+                              pw.Text(
+                                booking.selectedDroppingPoint!.name,
+                                style: pw.TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: pw.FontWeight.bold,
+                                ),
+                              ),
+                              pw.SizedBox(height: 2),
+                              pw.Text(
+                                booking.selectedDroppingPoint!.address,
+                                style: const pw.TextStyle(
+                                  fontSize: 10,
+                                  color: PdfColors.grey700,
+                                ),
+                              ),
+                              pw.SizedBox(height: 4),
+                              pw.Text(
+                                _formatDate(booking.selectedDroppingPoint!.dateTime),
+                                style: pw.TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: pw.FontWeight.bold,
+                                  color: PdfColor.fromHex('#C62828'),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              if (booking.selectedBoardingPoint != null || booking.selectedDroppingPoint != null)
+                pw.SizedBox(height: 20),
 
               // Payment Details Section
               pw.Container(
@@ -736,6 +890,78 @@ Status: ${booking.status.name.toUpperCase()}
 
           // Date
           _buildDetailRow('Date', formattedDate),
+
+          // Boarding Point (if selected)
+          if (booking.selectedBoardingPoint != null) ...[
+            const SizedBox(height: 16),
+            Container(
+              height: 1,
+              color: Colors.white.withValues(alpha: 0.1),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'BOARDING POINT',
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                color: Colors.white.withValues(alpha: 0.4),
+                letterSpacing: 1,
+              ),
+            ),
+            const SizedBox(height: 12),
+            _buildDetailRow('Location', booking.selectedBoardingPoint!.name),
+            const SizedBox(height: 8),
+            _buildDetailRow(
+              'Address',
+              booking.selectedBoardingPoint!.address,
+              valueStyle: TextStyle(
+                fontSize: 12,
+                color: Colors.white.withValues(alpha: 0.6),
+              ),
+            ),
+            const SizedBox(height: 8),
+            _buildDetailRow(
+              'Date & Time',
+              _formatDate(booking.selectedBoardingPoint!.dateTime),
+              valueColor: const Color(0xFF22C55E),
+            ),
+          ],
+
+          // Dropping Point (if selected)
+          if (booking.selectedDroppingPoint != null) ...[
+            const SizedBox(height: 16),
+            Container(
+              height: 1,
+              color: Colors.white.withValues(alpha: 0.1),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'DROPPING POINT',
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                color: Colors.white.withValues(alpha: 0.4),
+                letterSpacing: 1,
+              ),
+            ),
+            const SizedBox(height: 12),
+            _buildDetailRow('Location', booking.selectedDroppingPoint!.name),
+            const SizedBox(height: 8),
+            _buildDetailRow(
+              'Address',
+              booking.selectedDroppingPoint!.address,
+              valueStyle: TextStyle(
+                fontSize: 12,
+                color: Colors.white.withValues(alpha: 0.6),
+              ),
+            ),
+            const SizedBox(height: 8),
+            _buildDetailRow(
+              'Date & Time',
+              _formatDate(booking.selectedDroppingPoint!.dateTime),
+              valueColor: const Color(0xFFEF4444),
+            ),
+          ],
         ],
       ),
     );

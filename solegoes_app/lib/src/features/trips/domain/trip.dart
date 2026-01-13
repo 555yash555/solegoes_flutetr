@@ -1,5 +1,41 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+/// Boarding/Dropping point model
+class TripPoint {
+  final String name;
+  final String address;
+  final DateTime dateTime;
+
+  TripPoint({
+    required this.name,
+    required this.address,
+    required this.dateTime,
+  });
+
+  factory TripPoint.fromJson(Map<String, dynamic> json) {
+    return TripPoint(
+      name: json['name'] as String? ?? '',
+      address: json['address'] as String? ?? '',
+      dateTime: _parseTimestamp(json['dateTime']) ?? DateTime.now(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'address': address,
+      'dateTime': Timestamp.fromDate(dateTime),
+    };
+  }
+
+  static DateTime? _parseTimestamp(dynamic timestamp) {
+    if (timestamp == null) return null;
+    if (timestamp is Timestamp) return timestamp.toDate();
+    if (timestamp is String) return DateTime.tryParse(timestamp);
+    return null;
+  }
+}
+
 /// Trip model representing a travel package
 class Trip {
   final String tripId;
@@ -24,6 +60,8 @@ class Trip {
   final bool isFeatured;
   final DateTime? startDate;
   final DateTime? endDate;
+  final List<TripPoint> boardingPoints;
+  final List<TripPoint> droppingPoints;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -50,6 +88,8 @@ class Trip {
     this.isFeatured = false,
     this.startDate,
     this.endDate,
+    this.boardingPoints = const [],
+    this.droppingPoints = const [],
     this.createdAt,
     this.updatedAt,
   });
@@ -81,6 +121,14 @@ class Trip {
       isFeatured: json['isFeatured'] as bool? ?? false,
       startDate: _parseTimestamp(json['startDate']),
       endDate: _parseTimestamp(json['endDate']),
+      boardingPoints: (json['boardingPoints'] as List<dynamic>?)
+              ?.map((e) => TripPoint.fromJson(Map<String, dynamic>.from(e as Map)))
+              .toList() ??
+          [],
+      droppingPoints: (json['droppingPoints'] as List<dynamic>?)
+              ?.map((e) => TripPoint.fromJson(Map<String, dynamic>.from(e as Map)))
+              .toList() ??
+          [],
       createdAt: _parseTimestamp(json['createdAt']),
       updatedAt: _parseTimestamp(json['updatedAt']),
     );
@@ -110,6 +158,8 @@ class Trip {
       'isFeatured': isFeatured,
       'startDate': startDate != null ? Timestamp.fromDate(startDate!) : null,
       'endDate': endDate != null ? Timestamp.fromDate(endDate!) : null,
+      'boardingPoints': boardingPoints.map((e) => e.toJson()).toList(),
+      'droppingPoints': droppingPoints.map((e) => e.toJson()).toList(),
       'createdAt': createdAt != null ? Timestamp.fromDate(createdAt!) : null,
       'updatedAt': updatedAt != null ? Timestamp.fromDate(updatedAt!) : null,
     };
@@ -149,6 +199,8 @@ class Trip {
     bool? isFeatured,
     DateTime? startDate,
     DateTime? endDate,
+    List<TripPoint>? boardingPoints,
+    List<TripPoint>? droppingPoints,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -175,6 +227,8 @@ class Trip {
       isFeatured: isFeatured ?? this.isFeatured,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
+      boardingPoints: boardingPoints ?? this.boardingPoints,
+      droppingPoints: droppingPoints ?? this.droppingPoints,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );

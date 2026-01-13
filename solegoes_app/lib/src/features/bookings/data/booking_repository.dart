@@ -29,6 +29,8 @@ class BookingRepository {
     String? failureReason,
     String? userEmail,
     String? userName,
+    SelectedTripPoint? selectedBoardingPoint,
+    SelectedTripPoint? selectedDroppingPoint,
   }) async {
     final booking = Booking(
       bookingId: '', // Will be set by Firestore
@@ -47,6 +49,8 @@ class BookingRepository {
       bookingDate: DateTime.now(),
       userEmail: userEmail,
       userName: userName,
+      selectedBoardingPoint: selectedBoardingPoint,
+      selectedDroppingPoint: selectedDroppingPoint,
     );
 
     final docRef = await _bookingsRef.add(bookingToFirestore(booking));

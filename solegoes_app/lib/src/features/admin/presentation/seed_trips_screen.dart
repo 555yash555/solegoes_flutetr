@@ -223,6 +223,42 @@ class _SeedTripsScreenState extends ConsumerState<SeedTripsScreen> {
             ],
           },
         ],
+        'boardingPoints': [
+          {
+            'name': 'Mumbai Airport (BOM)',
+            'address': 'Chhatrapati Shivaji Maharaj International Airport, Terminal 2',
+            'dateTime': Timestamp.fromDate(DateTime(2025, 2, 15, 6, 0)),
+          },
+          {
+            'name': 'Delhi Airport (DEL)',
+            'address': 'Indira Gandhi International Airport, Terminal 3',
+            'dateTime': Timestamp.fromDate(DateTime(2025, 2, 15, 5, 30)),
+          },
+          {
+            'name': 'Bangalore Airport (BLR)',
+            'address': 'Kempegowda International Airport, Terminal 1',
+            'dateTime': Timestamp.fromDate(DateTime(2025, 2, 15, 7, 0)),
+          },
+        ],
+        'droppingPoints': [
+          {
+            'name': 'Mumbai Airport (BOM)',
+            'address': 'Chhatrapati Shivaji Maharaj International Airport, Terminal 2',
+            'dateTime': Timestamp.fromDate(DateTime(2025, 2, 22, 22, 0)),
+          },
+          {
+            'name': 'Delhi Airport (DEL)',
+            'address': 'Indira Gandhi International Airport, Terminal 3',
+            'dateTime': Timestamp.fromDate(DateTime(2025, 2, 22, 23, 30)),
+          },
+          {
+            'name': 'Bangalore Airport (BLR)',
+            'address': 'Kempegowda International Airport, Terminal 1',
+            'dateTime': Timestamp.fromDate(DateTime(2025, 2, 22, 21, 0)),
+          },
+        ],
+        'startDate': Timestamp.fromDate(DateTime(2025, 2, 15)),
+        'endDate': Timestamp.fromDate(DateTime(2025, 2, 22)),
         'createdAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
       },
@@ -275,6 +311,32 @@ class _SeedTripsScreenState extends ConsumerState<SeedTripsScreen> {
             ],
           },
         ],
+        'boardingPoints': [
+          {
+            'name': 'Delhi Airport (DEL)',
+            'address': 'Indira Gandhi International Airport, Terminal 3',
+            'dateTime': Timestamp.fromDate(DateTime(2025, 3, 1, 5, 0)),
+          },
+          {
+            'name': 'Mumbai Airport (BOM)',
+            'address': 'Chhatrapati Shivaji Maharaj International Airport, Terminal 2',
+            'dateTime': Timestamp.fromDate(DateTime(2025, 3, 1, 4, 30)),
+          },
+        ],
+        'droppingPoints': [
+          {
+            'name': 'Delhi Airport (DEL)',
+            'address': 'Indira Gandhi International Airport, Terminal 3',
+            'dateTime': Timestamp.fromDate(DateTime(2025, 3, 7, 20, 0)),
+          },
+          {
+            'name': 'Mumbai Airport (BOM)',
+            'address': 'Chhatrapati Shivaji Maharaj International Airport, Terminal 2',
+            'dateTime': Timestamp.fromDate(DateTime(2025, 3, 7, 22, 30)),
+          },
+        ],
+        'startDate': Timestamp.fromDate(DateTime(2025, 3, 1)),
+        'endDate': Timestamp.fromDate(DateTime(2025, 3, 7)),
         'createdAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
       },
@@ -322,6 +384,42 @@ class _SeedTripsScreenState extends ConsumerState<SeedTripsScreen> {
             'activities': ['Parasailing', 'Jet skiing', 'Club Cubana'],
           },
         ],
+        'boardingPoints': [
+          {
+            'name': 'Mumbai Central Station',
+            'address': 'Mumbai Central Railway Station, Platform 1',
+            'dateTime': Timestamp.fromDate(DateTime(2025, 3, 10, 18, 0)),
+          },
+          {
+            'name': 'Pune Junction',
+            'address': 'Pune Junction Railway Station, Main Entrance',
+            'dateTime': Timestamp.fromDate(DateTime(2025, 3, 10, 21, 0)),
+          },
+          {
+            'name': 'Bangalore Bus Stand',
+            'address': 'Majestic Bus Station, Gate 5',
+            'dateTime': Timestamp.fromDate(DateTime(2025, 3, 10, 19, 30)),
+          },
+        ],
+        'droppingPoints': [
+          {
+            'name': 'Mumbai Central Station',
+            'address': 'Mumbai Central Railway Station, Platform 1',
+            'dateTime': Timestamp.fromDate(DateTime(2025, 3, 14, 8, 0)),
+          },
+          {
+            'name': 'Pune Junction',
+            'address': 'Pune Junction Railway Station, Main Entrance',
+            'dateTime': Timestamp.fromDate(DateTime(2025, 3, 14, 5, 0)),
+          },
+          {
+            'name': 'Bangalore Bus Stand',
+            'address': 'Majestic Bus Station, Gate 5',
+            'dateTime': Timestamp.fromDate(DateTime(2025, 3, 14, 10, 30)),
+          },
+        ],
+        'startDate': Timestamp.fromDate(DateTime(2025, 3, 10)),
+        'endDate': Timestamp.fromDate(DateTime(2025, 3, 14)),
         'createdAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
       },
@@ -369,6 +467,32 @@ class _SeedTripsScreenState extends ConsumerState<SeedTripsScreen> {
             'activities': ['Drive to Alleppey', 'Houseboat cruise'],
           },
         ],
+        'boardingPoints': [
+          {
+            'name': 'Kochi Airport (COK)',
+            'address': 'Cochin International Airport, Arrivals Terminal',
+            'dateTime': Timestamp.fromDate(DateTime(2025, 3, 20, 10, 0)),
+          },
+          {
+            'name': 'Kochi Railway Station',
+            'address': 'Ernakulam Junction Railway Station',
+            'dateTime': Timestamp.fromDate(DateTime(2025, 3, 20, 11, 30)),
+          },
+        ],
+        'droppingPoints': [
+          {
+            'name': 'Kochi Airport (COK)',
+            'address': 'Cochin International Airport, Departures Terminal',
+            'dateTime': Timestamp.fromDate(DateTime(2025, 3, 25, 16, 0)),
+          },
+          {
+            'name': 'Kochi Railway Station',
+            'address': 'Ernakulam Junction Railway Station',
+            'dateTime': Timestamp.fromDate(DateTime(2025, 3, 25, 14, 30)),
+          },
+        ],
+        'startDate': Timestamp.fromDate(DateTime(2025, 3, 20)),
+        'endDate': Timestamp.fromDate(DateTime(2025, 3, 25)),
         'createdAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
       },
