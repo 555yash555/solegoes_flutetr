@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'razorpay_service.g.dart';
 
 /// Razorpay payment service for handling payments
 /// Uses test mode credentials - replace with live keys for production
@@ -91,4 +94,15 @@ extension PaymentFailureResponseExt on PaymentFailureResponse {
   static PaymentFailureResponse create(int code, String message) {
     return PaymentFailureResponse(code, message, null);
   }
+}
+
+/// Provider for RazorpayService
+/// This ensures the service is automatically disposed (cleaning up listeners)
+/// when the UI consuming it is closed.
+@riverpod
+RazorpayService razorpayService(Ref ref) {
+  final service = RazorpayService();
+  // Automatically dispose the Razorpay instance when this provider is no longer used
+  ref.onDispose(service.dispose);
+  return service;
 }
