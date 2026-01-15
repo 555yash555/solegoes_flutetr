@@ -29,6 +29,8 @@ class BookingRepository {
     String? failureReason,
     String? userEmail,
     String? userName,
+    String? selectedStyleId,
+    String? selectedStyleName,
     SelectedTripPoint? selectedBoardingPoint,
     SelectedTripPoint? selectedDroppingPoint,
   }) async {
@@ -49,6 +51,8 @@ class BookingRepository {
       bookingDate: DateTime.now(),
       userEmail: userEmail,
       userName: userName,
+      selectedStyleId: selectedStyleId,
+      selectedStyleName: selectedStyleName,
       selectedBoardingPoint: selectedBoardingPoint,
       selectedDroppingPoint: selectedDroppingPoint,
     );

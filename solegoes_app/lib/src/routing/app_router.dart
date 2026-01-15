@@ -25,6 +25,7 @@ import '../features/profile/presentation/notifications_screen.dart';
 import '../features/profile/presentation/edit_profile_screen.dart';
 import '../features/payments/presentation/payment_method_screen.dart';
 import '../features/payments/presentation/payment_confirmation_screen.dart';
+import '../features/bookings/presentation/trip_booking_screen.dart';
 import '../features/demo/presentation/design_demo_screen.dart';
 import '../features/admin/presentation/seed_trips_screen.dart';
 
@@ -57,6 +58,7 @@ enum AppRoute {
 
   // Detail screens
   tripDetail,
+  tripBooking,
   chatDetail,
   paymentMethod,
   paymentConfirmation,
@@ -255,6 +257,14 @@ GoRouter goRouter(Ref ref) {
         builder: (context, state) {
           final tripId = state.pathParameters['tripId']!;
           return TripDetailScreen(tripId: tripId);
+        },
+      ),
+      GoRoute(
+        path: '/trip/:tripId/book',
+        name: AppRoute.tripBooking.name,
+        builder: (context, state) {
+          final tripId = state.pathParameters['tripId']!;
+          return TripBookingScreen(tripId: tripId);
         },
       ),
       GoRoute(

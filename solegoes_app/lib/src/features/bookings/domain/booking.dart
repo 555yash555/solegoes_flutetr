@@ -54,6 +54,9 @@ abstract class Booking with _$Booking {
     DateTime? tripStartDate,
     String? userEmail,
     String? userName,
+    // Trip style/package selection
+    String? selectedStyleId,
+    String? selectedStyleName,
     // Boarding and dropping point details
     SelectedTripPoint? selectedBoardingPoint,
     SelectedTripPoint? selectedDroppingPoint,
@@ -103,6 +106,8 @@ Booking bookingFromFirestore(DocumentSnapshot doc) {
         : null,
     userEmail: data['userEmail'] as String?,
     userName: data['userName'] as String?,
+    selectedStyleId: data['selectedStyleId'] as String?,
+    selectedStyleName: data['selectedStyleName'] as String?,
     selectedBoardingPoint: _parseSelectedTripPoint(
       data['selectedBoardingPoint'] as Map<String, dynamic>?,
     ),
@@ -143,6 +148,8 @@ Map<String, dynamic> bookingToFirestore(Booking booking) {
         : null,
     'userEmail': booking.userEmail,
     'userName': booking.userName,
+    'selectedStyleId': booking.selectedStyleId,
+    'selectedStyleName': booking.selectedStyleName,
     'selectedBoardingPoint': _selectedTripPointToFirestore(booking.selectedBoardingPoint),
     'selectedDroppingPoint': _selectedTripPointToFirestore(booking.selectedDroppingPoint),
   };

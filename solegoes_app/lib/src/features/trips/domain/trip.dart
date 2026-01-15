@@ -1,5 +1,50 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+/// Trip style/package with different pricing
+class TripStyle {
+  final String styleId;
+  final String name;
+  final String description;
+  final double price;
+  final String accommodationType; // 'sharing-3', 'sharing-2', 'private'
+  final List<String> mealOptions; // ['veg', 'non-veg', 'alcohol']
+  final List<String> inclusions;
+
+  TripStyle({
+    required this.styleId,
+    required this.name,
+    required this.description,
+    required this.price,
+    required this.accommodationType,
+    required this.mealOptions,
+    required this.inclusions,
+  });
+
+  factory TripStyle.fromJson(Map<String, dynamic> json) {
+    return TripStyle(
+      styleId: json['styleId'] as String? ?? '',
+      name: json['name'] as String? ?? '',
+      description: json['description'] as String? ?? '',
+      price: (json['price'] as num?)?.toDouble() ?? 0.0,
+      accommodationType: json['accommodationType'] as String? ?? 'sharing-3',
+      mealOptions: (json['mealOptions'] as List<dynamic>?)?.cast<String>() ?? [],
+      inclusions: (json['inclusions'] as List<dynamic>?)?.cast<String>() ?? [],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'styleId': styleId,
+      'name': name,
+      'description': description,
+      'price': price,
+      'accommodationType': accommodationType,
+      'mealOptions': mealOptions,
+      'inclusions': inclusions,
+    };
+  }
+}
+
 /// Boarding/Dropping point model
 class TripPoint {
   final String name;
@@ -45,7 +90,8 @@ class Trip {
   final List<String> imageUrls;
   final String location;
   final int duration; // in days
-  final double price;
+  final double price; // Base/starting price
+  final List<TripStyle> pricingStyles; // Different package options
   final List<String> categories;
   final String groupSize;
   final double rating;
@@ -74,6 +120,7 @@ class Trip {
     required this.location,
     required this.duration,
     required this.price,
+    this.pricingStyles = const [],
     required this.categories,
     required this.groupSize,
     required this.rating,
@@ -104,6 +151,10 @@ class Trip {
       location: json['location'] as String? ?? '',
       duration: json['duration'] as int? ?? 0,
       price: (json['price'] as num?)?.toDouble() ?? 0.0,
+      pricingStyles: (json['pricingStyles'] as List<dynamic>?)
+              ?.map((e) => TripStyle.fromJson(Map<String, dynamic>.from(e as Map)))
+              .toList() ??
+          [],
       categories: (json['categories'] as List<dynamic>?)?.cast<String>() ?? [],
       groupSize: json['groupSize'] as String? ?? '',
       rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
@@ -144,6 +195,7 @@ class Trip {
       'location': location,
       'duration': duration,
       'price': price,
+      'pricingStyles': pricingStyles.map((e) => e.toJson()).toList(),
       'categories': categories,
       'groupSize': groupSize,
       'rating': rating,
@@ -185,6 +237,7 @@ class Trip {
     String? location,
     int? duration,
     double? price,
+    List<TripStyle>? pricingStyles,
     List<String>? categories,
     String? groupSize,
     double? rating,
@@ -213,6 +266,7 @@ class Trip {
       location: location ?? this.location,
       duration: duration ?? this.duration,
       price: price ?? this.price,
+      pricingStyles: pricingStyles ?? this.pricingStyles,
       categories: categories ?? this.categories,
       groupSize: groupSize ?? this.groupSize,
       rating: rating ?? this.rating,

@@ -284,7 +284,8 @@ as DateTime,
 /// @nodoc
 mixin _$Booking {
 
- String get bookingId; String get tripId; String get userId; String get tripTitle; String get tripImageUrl; String get tripLocation; int get tripDuration; double get amount; String get paymentId; String get paymentMethod; BookingStatus get status; PaymentStatus get paymentStatus; String? get failureReason; DateTime get bookingDate; DateTime? get tripStartDate; String? get userEmail; String? get userName;// Boarding and dropping point details
+ String get bookingId; String get tripId; String get userId; String get tripTitle; String get tripImageUrl; String get tripLocation; int get tripDuration; double get amount; String get paymentId; String get paymentMethod; BookingStatus get status; PaymentStatus get paymentStatus; String? get failureReason; DateTime get bookingDate; DateTime? get tripStartDate; String? get userEmail; String? get userName;// Trip style/package selection
+ String? get selectedStyleId; String? get selectedStyleName;// Boarding and dropping point details
  SelectedTripPoint? get selectedBoardingPoint; SelectedTripPoint? get selectedDroppingPoint;
 /// Create a copy of Booking
 /// with the given fields replaced by the non-null parameter values.
@@ -298,16 +299,16 @@ $BookingCopyWith<Booking> get copyWith => _$BookingCopyWithImpl<Booking>(this as
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Booking&&(identical(other.bookingId, bookingId) || other.bookingId == bookingId)&&(identical(other.tripId, tripId) || other.tripId == tripId)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.tripTitle, tripTitle) || other.tripTitle == tripTitle)&&(identical(other.tripImageUrl, tripImageUrl) || other.tripImageUrl == tripImageUrl)&&(identical(other.tripLocation, tripLocation) || other.tripLocation == tripLocation)&&(identical(other.tripDuration, tripDuration) || other.tripDuration == tripDuration)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.paymentId, paymentId) || other.paymentId == paymentId)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.status, status) || other.status == status)&&(identical(other.paymentStatus, paymentStatus) || other.paymentStatus == paymentStatus)&&(identical(other.failureReason, failureReason) || other.failureReason == failureReason)&&(identical(other.bookingDate, bookingDate) || other.bookingDate == bookingDate)&&(identical(other.tripStartDate, tripStartDate) || other.tripStartDate == tripStartDate)&&(identical(other.userEmail, userEmail) || other.userEmail == userEmail)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.selectedBoardingPoint, selectedBoardingPoint) || other.selectedBoardingPoint == selectedBoardingPoint)&&(identical(other.selectedDroppingPoint, selectedDroppingPoint) || other.selectedDroppingPoint == selectedDroppingPoint));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Booking&&(identical(other.bookingId, bookingId) || other.bookingId == bookingId)&&(identical(other.tripId, tripId) || other.tripId == tripId)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.tripTitle, tripTitle) || other.tripTitle == tripTitle)&&(identical(other.tripImageUrl, tripImageUrl) || other.tripImageUrl == tripImageUrl)&&(identical(other.tripLocation, tripLocation) || other.tripLocation == tripLocation)&&(identical(other.tripDuration, tripDuration) || other.tripDuration == tripDuration)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.paymentId, paymentId) || other.paymentId == paymentId)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.status, status) || other.status == status)&&(identical(other.paymentStatus, paymentStatus) || other.paymentStatus == paymentStatus)&&(identical(other.failureReason, failureReason) || other.failureReason == failureReason)&&(identical(other.bookingDate, bookingDate) || other.bookingDate == bookingDate)&&(identical(other.tripStartDate, tripStartDate) || other.tripStartDate == tripStartDate)&&(identical(other.userEmail, userEmail) || other.userEmail == userEmail)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.selectedStyleId, selectedStyleId) || other.selectedStyleId == selectedStyleId)&&(identical(other.selectedStyleName, selectedStyleName) || other.selectedStyleName == selectedStyleName)&&(identical(other.selectedBoardingPoint, selectedBoardingPoint) || other.selectedBoardingPoint == selectedBoardingPoint)&&(identical(other.selectedDroppingPoint, selectedDroppingPoint) || other.selectedDroppingPoint == selectedDroppingPoint));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,bookingId,tripId,userId,tripTitle,tripImageUrl,tripLocation,tripDuration,amount,paymentId,paymentMethod,status,paymentStatus,failureReason,bookingDate,tripStartDate,userEmail,userName,selectedBoardingPoint,selectedDroppingPoint]);
+int get hashCode => Object.hashAll([runtimeType,bookingId,tripId,userId,tripTitle,tripImageUrl,tripLocation,tripDuration,amount,paymentId,paymentMethod,status,paymentStatus,failureReason,bookingDate,tripStartDate,userEmail,userName,selectedStyleId,selectedStyleName,selectedBoardingPoint,selectedDroppingPoint]);
 
 @override
 String toString() {
-  return 'Booking(bookingId: $bookingId, tripId: $tripId, userId: $userId, tripTitle: $tripTitle, tripImageUrl: $tripImageUrl, tripLocation: $tripLocation, tripDuration: $tripDuration, amount: $amount, paymentId: $paymentId, paymentMethod: $paymentMethod, status: $status, paymentStatus: $paymentStatus, failureReason: $failureReason, bookingDate: $bookingDate, tripStartDate: $tripStartDate, userEmail: $userEmail, userName: $userName, selectedBoardingPoint: $selectedBoardingPoint, selectedDroppingPoint: $selectedDroppingPoint)';
+  return 'Booking(bookingId: $bookingId, tripId: $tripId, userId: $userId, tripTitle: $tripTitle, tripImageUrl: $tripImageUrl, tripLocation: $tripLocation, tripDuration: $tripDuration, amount: $amount, paymentId: $paymentId, paymentMethod: $paymentMethod, status: $status, paymentStatus: $paymentStatus, failureReason: $failureReason, bookingDate: $bookingDate, tripStartDate: $tripStartDate, userEmail: $userEmail, userName: $userName, selectedStyleId: $selectedStyleId, selectedStyleName: $selectedStyleName, selectedBoardingPoint: $selectedBoardingPoint, selectedDroppingPoint: $selectedDroppingPoint)';
 }
 
 
@@ -318,7 +319,7 @@ abstract mixin class $BookingCopyWith<$Res>  {
   factory $BookingCopyWith(Booking value, $Res Function(Booking) _then) = _$BookingCopyWithImpl;
 @useResult
 $Res call({
- String bookingId, String tripId, String userId, String tripTitle, String tripImageUrl, String tripLocation, int tripDuration, double amount, String paymentId, String paymentMethod, BookingStatus status, PaymentStatus paymentStatus, String? failureReason, DateTime bookingDate, DateTime? tripStartDate, String? userEmail, String? userName, SelectedTripPoint? selectedBoardingPoint, SelectedTripPoint? selectedDroppingPoint
+ String bookingId, String tripId, String userId, String tripTitle, String tripImageUrl, String tripLocation, int tripDuration, double amount, String paymentId, String paymentMethod, BookingStatus status, PaymentStatus paymentStatus, String? failureReason, DateTime bookingDate, DateTime? tripStartDate, String? userEmail, String? userName, String? selectedStyleId, String? selectedStyleName, SelectedTripPoint? selectedBoardingPoint, SelectedTripPoint? selectedDroppingPoint
 });
 
 
@@ -335,7 +336,7 @@ class _$BookingCopyWithImpl<$Res>
 
 /// Create a copy of Booking
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? bookingId = null,Object? tripId = null,Object? userId = null,Object? tripTitle = null,Object? tripImageUrl = null,Object? tripLocation = null,Object? tripDuration = null,Object? amount = null,Object? paymentId = null,Object? paymentMethod = null,Object? status = null,Object? paymentStatus = null,Object? failureReason = freezed,Object? bookingDate = null,Object? tripStartDate = freezed,Object? userEmail = freezed,Object? userName = freezed,Object? selectedBoardingPoint = freezed,Object? selectedDroppingPoint = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? bookingId = null,Object? tripId = null,Object? userId = null,Object? tripTitle = null,Object? tripImageUrl = null,Object? tripLocation = null,Object? tripDuration = null,Object? amount = null,Object? paymentId = null,Object? paymentMethod = null,Object? status = null,Object? paymentStatus = null,Object? failureReason = freezed,Object? bookingDate = null,Object? tripStartDate = freezed,Object? userEmail = freezed,Object? userName = freezed,Object? selectedStyleId = freezed,Object? selectedStyleName = freezed,Object? selectedBoardingPoint = freezed,Object? selectedDroppingPoint = freezed,}) {
   return _then(_self.copyWith(
 bookingId: null == bookingId ? _self.bookingId : bookingId // ignore: cast_nullable_to_non_nullable
 as String,tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
@@ -354,6 +355,8 @@ as String?,bookingDate: null == bookingDate ? _self.bookingDate : bookingDate //
 as DateTime,tripStartDate: freezed == tripStartDate ? _self.tripStartDate : tripStartDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,userEmail: freezed == userEmail ? _self.userEmail : userEmail // ignore: cast_nullable_to_non_nullable
 as String?,userName: freezed == userName ? _self.userName : userName // ignore: cast_nullable_to_non_nullable
+as String?,selectedStyleId: freezed == selectedStyleId ? _self.selectedStyleId : selectedStyleId // ignore: cast_nullable_to_non_nullable
+as String?,selectedStyleName: freezed == selectedStyleName ? _self.selectedStyleName : selectedStyleName // ignore: cast_nullable_to_non_nullable
 as String?,selectedBoardingPoint: freezed == selectedBoardingPoint ? _self.selectedBoardingPoint : selectedBoardingPoint // ignore: cast_nullable_to_non_nullable
 as SelectedTripPoint?,selectedDroppingPoint: freezed == selectedDroppingPoint ? _self.selectedDroppingPoint : selectedDroppingPoint // ignore: cast_nullable_to_non_nullable
 as SelectedTripPoint?,
@@ -465,10 +468,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String bookingId,  String tripId,  String userId,  String tripTitle,  String tripImageUrl,  String tripLocation,  int tripDuration,  double amount,  String paymentId,  String paymentMethod,  BookingStatus status,  PaymentStatus paymentStatus,  String? failureReason,  DateTime bookingDate,  DateTime? tripStartDate,  String? userEmail,  String? userName,  SelectedTripPoint? selectedBoardingPoint,  SelectedTripPoint? selectedDroppingPoint)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String bookingId,  String tripId,  String userId,  String tripTitle,  String tripImageUrl,  String tripLocation,  int tripDuration,  double amount,  String paymentId,  String paymentMethod,  BookingStatus status,  PaymentStatus paymentStatus,  String? failureReason,  DateTime bookingDate,  DateTime? tripStartDate,  String? userEmail,  String? userName,  String? selectedStyleId,  String? selectedStyleName,  SelectedTripPoint? selectedBoardingPoint,  SelectedTripPoint? selectedDroppingPoint)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Booking() when $default != null:
-return $default(_that.bookingId,_that.tripId,_that.userId,_that.tripTitle,_that.tripImageUrl,_that.tripLocation,_that.tripDuration,_that.amount,_that.paymentId,_that.paymentMethod,_that.status,_that.paymentStatus,_that.failureReason,_that.bookingDate,_that.tripStartDate,_that.userEmail,_that.userName,_that.selectedBoardingPoint,_that.selectedDroppingPoint);case _:
+return $default(_that.bookingId,_that.tripId,_that.userId,_that.tripTitle,_that.tripImageUrl,_that.tripLocation,_that.tripDuration,_that.amount,_that.paymentId,_that.paymentMethod,_that.status,_that.paymentStatus,_that.failureReason,_that.bookingDate,_that.tripStartDate,_that.userEmail,_that.userName,_that.selectedStyleId,_that.selectedStyleName,_that.selectedBoardingPoint,_that.selectedDroppingPoint);case _:
   return orElse();
 
 }
@@ -486,10 +489,10 @@ return $default(_that.bookingId,_that.tripId,_that.userId,_that.tripTitle,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String bookingId,  String tripId,  String userId,  String tripTitle,  String tripImageUrl,  String tripLocation,  int tripDuration,  double amount,  String paymentId,  String paymentMethod,  BookingStatus status,  PaymentStatus paymentStatus,  String? failureReason,  DateTime bookingDate,  DateTime? tripStartDate,  String? userEmail,  String? userName,  SelectedTripPoint? selectedBoardingPoint,  SelectedTripPoint? selectedDroppingPoint)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String bookingId,  String tripId,  String userId,  String tripTitle,  String tripImageUrl,  String tripLocation,  int tripDuration,  double amount,  String paymentId,  String paymentMethod,  BookingStatus status,  PaymentStatus paymentStatus,  String? failureReason,  DateTime bookingDate,  DateTime? tripStartDate,  String? userEmail,  String? userName,  String? selectedStyleId,  String? selectedStyleName,  SelectedTripPoint? selectedBoardingPoint,  SelectedTripPoint? selectedDroppingPoint)  $default,) {final _that = this;
 switch (_that) {
 case _Booking():
-return $default(_that.bookingId,_that.tripId,_that.userId,_that.tripTitle,_that.tripImageUrl,_that.tripLocation,_that.tripDuration,_that.amount,_that.paymentId,_that.paymentMethod,_that.status,_that.paymentStatus,_that.failureReason,_that.bookingDate,_that.tripStartDate,_that.userEmail,_that.userName,_that.selectedBoardingPoint,_that.selectedDroppingPoint);case _:
+return $default(_that.bookingId,_that.tripId,_that.userId,_that.tripTitle,_that.tripImageUrl,_that.tripLocation,_that.tripDuration,_that.amount,_that.paymentId,_that.paymentMethod,_that.status,_that.paymentStatus,_that.failureReason,_that.bookingDate,_that.tripStartDate,_that.userEmail,_that.userName,_that.selectedStyleId,_that.selectedStyleName,_that.selectedBoardingPoint,_that.selectedDroppingPoint);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -506,10 +509,10 @@ return $default(_that.bookingId,_that.tripId,_that.userId,_that.tripTitle,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String bookingId,  String tripId,  String userId,  String tripTitle,  String tripImageUrl,  String tripLocation,  int tripDuration,  double amount,  String paymentId,  String paymentMethod,  BookingStatus status,  PaymentStatus paymentStatus,  String? failureReason,  DateTime bookingDate,  DateTime? tripStartDate,  String? userEmail,  String? userName,  SelectedTripPoint? selectedBoardingPoint,  SelectedTripPoint? selectedDroppingPoint)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String bookingId,  String tripId,  String userId,  String tripTitle,  String tripImageUrl,  String tripLocation,  int tripDuration,  double amount,  String paymentId,  String paymentMethod,  BookingStatus status,  PaymentStatus paymentStatus,  String? failureReason,  DateTime bookingDate,  DateTime? tripStartDate,  String? userEmail,  String? userName,  String? selectedStyleId,  String? selectedStyleName,  SelectedTripPoint? selectedBoardingPoint,  SelectedTripPoint? selectedDroppingPoint)?  $default,) {final _that = this;
 switch (_that) {
 case _Booking() when $default != null:
-return $default(_that.bookingId,_that.tripId,_that.userId,_that.tripTitle,_that.tripImageUrl,_that.tripLocation,_that.tripDuration,_that.amount,_that.paymentId,_that.paymentMethod,_that.status,_that.paymentStatus,_that.failureReason,_that.bookingDate,_that.tripStartDate,_that.userEmail,_that.userName,_that.selectedBoardingPoint,_that.selectedDroppingPoint);case _:
+return $default(_that.bookingId,_that.tripId,_that.userId,_that.tripTitle,_that.tripImageUrl,_that.tripLocation,_that.tripDuration,_that.amount,_that.paymentId,_that.paymentMethod,_that.status,_that.paymentStatus,_that.failureReason,_that.bookingDate,_that.tripStartDate,_that.userEmail,_that.userName,_that.selectedStyleId,_that.selectedStyleName,_that.selectedBoardingPoint,_that.selectedDroppingPoint);case _:
   return null;
 
 }
@@ -521,7 +524,7 @@ return $default(_that.bookingId,_that.tripId,_that.userId,_that.tripTitle,_that.
 @JsonSerializable()
 
 class _Booking implements Booking {
-  const _Booking({required this.bookingId, required this.tripId, required this.userId, required this.tripTitle, required this.tripImageUrl, required this.tripLocation, required this.tripDuration, required this.amount, required this.paymentId, required this.paymentMethod, this.status = BookingStatus.confirmed, this.paymentStatus = PaymentStatus.success, this.failureReason, required this.bookingDate, this.tripStartDate, this.userEmail, this.userName, this.selectedBoardingPoint, this.selectedDroppingPoint});
+  const _Booking({required this.bookingId, required this.tripId, required this.userId, required this.tripTitle, required this.tripImageUrl, required this.tripLocation, required this.tripDuration, required this.amount, required this.paymentId, required this.paymentMethod, this.status = BookingStatus.confirmed, this.paymentStatus = PaymentStatus.success, this.failureReason, required this.bookingDate, this.tripStartDate, this.userEmail, this.userName, this.selectedStyleId, this.selectedStyleName, this.selectedBoardingPoint, this.selectedDroppingPoint});
   factory _Booking.fromJson(Map<String, dynamic> json) => _$BookingFromJson(json);
 
 @override final  String bookingId;
@@ -541,6 +544,9 @@ class _Booking implements Booking {
 @override final  DateTime? tripStartDate;
 @override final  String? userEmail;
 @override final  String? userName;
+// Trip style/package selection
+@override final  String? selectedStyleId;
+@override final  String? selectedStyleName;
 // Boarding and dropping point details
 @override final  SelectedTripPoint? selectedBoardingPoint;
 @override final  SelectedTripPoint? selectedDroppingPoint;
@@ -558,16 +564,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Booking&&(identical(other.bookingId, bookingId) || other.bookingId == bookingId)&&(identical(other.tripId, tripId) || other.tripId == tripId)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.tripTitle, tripTitle) || other.tripTitle == tripTitle)&&(identical(other.tripImageUrl, tripImageUrl) || other.tripImageUrl == tripImageUrl)&&(identical(other.tripLocation, tripLocation) || other.tripLocation == tripLocation)&&(identical(other.tripDuration, tripDuration) || other.tripDuration == tripDuration)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.paymentId, paymentId) || other.paymentId == paymentId)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.status, status) || other.status == status)&&(identical(other.paymentStatus, paymentStatus) || other.paymentStatus == paymentStatus)&&(identical(other.failureReason, failureReason) || other.failureReason == failureReason)&&(identical(other.bookingDate, bookingDate) || other.bookingDate == bookingDate)&&(identical(other.tripStartDate, tripStartDate) || other.tripStartDate == tripStartDate)&&(identical(other.userEmail, userEmail) || other.userEmail == userEmail)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.selectedBoardingPoint, selectedBoardingPoint) || other.selectedBoardingPoint == selectedBoardingPoint)&&(identical(other.selectedDroppingPoint, selectedDroppingPoint) || other.selectedDroppingPoint == selectedDroppingPoint));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Booking&&(identical(other.bookingId, bookingId) || other.bookingId == bookingId)&&(identical(other.tripId, tripId) || other.tripId == tripId)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.tripTitle, tripTitle) || other.tripTitle == tripTitle)&&(identical(other.tripImageUrl, tripImageUrl) || other.tripImageUrl == tripImageUrl)&&(identical(other.tripLocation, tripLocation) || other.tripLocation == tripLocation)&&(identical(other.tripDuration, tripDuration) || other.tripDuration == tripDuration)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.paymentId, paymentId) || other.paymentId == paymentId)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.status, status) || other.status == status)&&(identical(other.paymentStatus, paymentStatus) || other.paymentStatus == paymentStatus)&&(identical(other.failureReason, failureReason) || other.failureReason == failureReason)&&(identical(other.bookingDate, bookingDate) || other.bookingDate == bookingDate)&&(identical(other.tripStartDate, tripStartDate) || other.tripStartDate == tripStartDate)&&(identical(other.userEmail, userEmail) || other.userEmail == userEmail)&&(identical(other.userName, userName) || other.userName == userName)&&(identical(other.selectedStyleId, selectedStyleId) || other.selectedStyleId == selectedStyleId)&&(identical(other.selectedStyleName, selectedStyleName) || other.selectedStyleName == selectedStyleName)&&(identical(other.selectedBoardingPoint, selectedBoardingPoint) || other.selectedBoardingPoint == selectedBoardingPoint)&&(identical(other.selectedDroppingPoint, selectedDroppingPoint) || other.selectedDroppingPoint == selectedDroppingPoint));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,bookingId,tripId,userId,tripTitle,tripImageUrl,tripLocation,tripDuration,amount,paymentId,paymentMethod,status,paymentStatus,failureReason,bookingDate,tripStartDate,userEmail,userName,selectedBoardingPoint,selectedDroppingPoint]);
+int get hashCode => Object.hashAll([runtimeType,bookingId,tripId,userId,tripTitle,tripImageUrl,tripLocation,tripDuration,amount,paymentId,paymentMethod,status,paymentStatus,failureReason,bookingDate,tripStartDate,userEmail,userName,selectedStyleId,selectedStyleName,selectedBoardingPoint,selectedDroppingPoint]);
 
 @override
 String toString() {
-  return 'Booking(bookingId: $bookingId, tripId: $tripId, userId: $userId, tripTitle: $tripTitle, tripImageUrl: $tripImageUrl, tripLocation: $tripLocation, tripDuration: $tripDuration, amount: $amount, paymentId: $paymentId, paymentMethod: $paymentMethod, status: $status, paymentStatus: $paymentStatus, failureReason: $failureReason, bookingDate: $bookingDate, tripStartDate: $tripStartDate, userEmail: $userEmail, userName: $userName, selectedBoardingPoint: $selectedBoardingPoint, selectedDroppingPoint: $selectedDroppingPoint)';
+  return 'Booking(bookingId: $bookingId, tripId: $tripId, userId: $userId, tripTitle: $tripTitle, tripImageUrl: $tripImageUrl, tripLocation: $tripLocation, tripDuration: $tripDuration, amount: $amount, paymentId: $paymentId, paymentMethod: $paymentMethod, status: $status, paymentStatus: $paymentStatus, failureReason: $failureReason, bookingDate: $bookingDate, tripStartDate: $tripStartDate, userEmail: $userEmail, userName: $userName, selectedStyleId: $selectedStyleId, selectedStyleName: $selectedStyleName, selectedBoardingPoint: $selectedBoardingPoint, selectedDroppingPoint: $selectedDroppingPoint)';
 }
 
 
@@ -578,7 +584,7 @@ abstract mixin class _$BookingCopyWith<$Res> implements $BookingCopyWith<$Res> {
   factory _$BookingCopyWith(_Booking value, $Res Function(_Booking) _then) = __$BookingCopyWithImpl;
 @override @useResult
 $Res call({
- String bookingId, String tripId, String userId, String tripTitle, String tripImageUrl, String tripLocation, int tripDuration, double amount, String paymentId, String paymentMethod, BookingStatus status, PaymentStatus paymentStatus, String? failureReason, DateTime bookingDate, DateTime? tripStartDate, String? userEmail, String? userName, SelectedTripPoint? selectedBoardingPoint, SelectedTripPoint? selectedDroppingPoint
+ String bookingId, String tripId, String userId, String tripTitle, String tripImageUrl, String tripLocation, int tripDuration, double amount, String paymentId, String paymentMethod, BookingStatus status, PaymentStatus paymentStatus, String? failureReason, DateTime bookingDate, DateTime? tripStartDate, String? userEmail, String? userName, String? selectedStyleId, String? selectedStyleName, SelectedTripPoint? selectedBoardingPoint, SelectedTripPoint? selectedDroppingPoint
 });
 
 
@@ -595,7 +601,7 @@ class __$BookingCopyWithImpl<$Res>
 
 /// Create a copy of Booking
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? bookingId = null,Object? tripId = null,Object? userId = null,Object? tripTitle = null,Object? tripImageUrl = null,Object? tripLocation = null,Object? tripDuration = null,Object? amount = null,Object? paymentId = null,Object? paymentMethod = null,Object? status = null,Object? paymentStatus = null,Object? failureReason = freezed,Object? bookingDate = null,Object? tripStartDate = freezed,Object? userEmail = freezed,Object? userName = freezed,Object? selectedBoardingPoint = freezed,Object? selectedDroppingPoint = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? bookingId = null,Object? tripId = null,Object? userId = null,Object? tripTitle = null,Object? tripImageUrl = null,Object? tripLocation = null,Object? tripDuration = null,Object? amount = null,Object? paymentId = null,Object? paymentMethod = null,Object? status = null,Object? paymentStatus = null,Object? failureReason = freezed,Object? bookingDate = null,Object? tripStartDate = freezed,Object? userEmail = freezed,Object? userName = freezed,Object? selectedStyleId = freezed,Object? selectedStyleName = freezed,Object? selectedBoardingPoint = freezed,Object? selectedDroppingPoint = freezed,}) {
   return _then(_Booking(
 bookingId: null == bookingId ? _self.bookingId : bookingId // ignore: cast_nullable_to_non_nullable
 as String,tripId: null == tripId ? _self.tripId : tripId // ignore: cast_nullable_to_non_nullable
@@ -614,6 +620,8 @@ as String?,bookingDate: null == bookingDate ? _self.bookingDate : bookingDate //
 as DateTime,tripStartDate: freezed == tripStartDate ? _self.tripStartDate : tripStartDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,userEmail: freezed == userEmail ? _self.userEmail : userEmail // ignore: cast_nullable_to_non_nullable
 as String?,userName: freezed == userName ? _self.userName : userName // ignore: cast_nullable_to_non_nullable
+as String?,selectedStyleId: freezed == selectedStyleId ? _self.selectedStyleId : selectedStyleId // ignore: cast_nullable_to_non_nullable
+as String?,selectedStyleName: freezed == selectedStyleName ? _self.selectedStyleName : selectedStyleName // ignore: cast_nullable_to_non_nullable
 as String?,selectedBoardingPoint: freezed == selectedBoardingPoint ? _self.selectedBoardingPoint : selectedBoardingPoint // ignore: cast_nullable_to_non_nullable
 as SelectedTripPoint?,selectedDroppingPoint: freezed == selectedDroppingPoint ? _self.selectedDroppingPoint : selectedDroppingPoint // ignore: cast_nullable_to_non_nullable
 as SelectedTripPoint?,

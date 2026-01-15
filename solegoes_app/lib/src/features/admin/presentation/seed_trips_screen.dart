@@ -27,10 +27,37 @@ class _SeedTripsScreenState extends ConsumerState<SeedTripsScreen> {
 
     try {
       // ============================================
+      // STEP 0: Clear Existing Data
+      // ============================================
+      setState(() {
+        _status = 'Step 0/3: Clearing existing data...';
+      });
+
+      // Delete all existing trips
+      final existingTrips = await firestore.collection('trips').get();
+      for (var doc in existingTrips.docs) {
+        await doc.reference.delete();
+      }
+      setState(() {
+        _logs.add('🗑️ Cleared ${existingTrips.docs.length} existing trips');
+      });
+
+      // Delete all existing agencies
+      final existingAgencies = await firestore.collection('agencies').get();
+      for (var doc in existingAgencies.docs) {
+        await doc.reference.delete();
+      }
+      setState(() {
+        _logs.add('🗑️ Cleared ${existingAgencies.docs.length} existing agencies');
+      });
+
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      // ============================================
       // STEP 1: Seed Agencies
       // ============================================
       setState(() {
-        _status = 'Step 1/2: Seeding agencies...';
+        _status = 'Step 1/3: Seeding agencies...';
       });
 
       final sampleAgencies = [
@@ -163,7 +190,7 @@ class _SeedTripsScreenState extends ConsumerState<SeedTripsScreen> {
       // STEP 2: Seed Trips
       // ============================================
       setState(() {
-        _status = 'Step 2/2: Seeding trips...';
+        _status = 'Step 2/3: Seeding trips...';
       });
 
       final sampleTrips = [
@@ -259,6 +286,54 @@ class _SeedTripsScreenState extends ConsumerState<SeedTripsScreen> {
         ],
         'startDate': Timestamp.fromDate(DateTime(2025, 2, 15)),
         'endDate': Timestamp.fromDate(DateTime(2025, 2, 22)),
+        'pricingStyles': [
+          {
+            'styleId': 'budget',
+            'name': 'Budget Explorer',
+            'description': '3-person sharing room with vegetarian meals',
+            'price': 38000.0,
+            'accommodationType': 'sharing-3',
+            'mealOptions': ['veg'],
+            'inclusions': [
+              '3-person sharing accommodation',
+              'Vegetarian meals only',
+              'Shared bathroom',
+              'All activities included',
+            ],
+          },
+          {
+            'styleId': 'standard',
+            'name': 'Standard Comfort',
+            'description': '2-person sharing room with veg/non-veg meals',
+            'price': 45000.0,
+            'accommodationType': 'sharing-2',
+            'mealOptions': ['veg', 'non-veg'],
+            'inclusions': [
+              '2-person sharing accommodation',
+              'Veg & Non-veg meal options',
+              'Attached bathroom',
+              'All activities included',
+              'Welcome drink',
+            ],
+          },
+          {
+            'styleId': 'premium',
+            'name': 'Premium Solo',
+            'description': 'Private room with all meal options including alcohol',
+            'price': 58000.0,
+            'accommodationType': 'private',
+            'mealOptions': ['veg', 'non-veg', 'alcohol'],
+            'inclusions': [
+              'Private room',
+              'All meal options (veg/non-veg)',
+              'Complimentary alcohol with dinner',
+              'Premium bathroom amenities',
+              'All activities included',
+              'Airport lounge access',
+              'Priority booking for activities',
+            ],
+          },
+        ],
         'createdAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
       },
@@ -337,6 +412,52 @@ class _SeedTripsScreenState extends ConsumerState<SeedTripsScreen> {
         ],
         'startDate': Timestamp.fromDate(DateTime(2025, 3, 1)),
         'endDate': Timestamp.fromDate(DateTime(2025, 3, 7)),
+        'pricingStyles': [
+          {
+            'styleId': 'budget',
+            'name': 'Budget Rider',
+            'description': 'Shared accommodation with vegetarian meals',
+            'price': 18000.0,
+            'accommodationType': 'sharing-3',
+            'mealOptions': ['veg'],
+            'inclusions': [
+              'Royal Enfield 350cc',
+              'Shared accommodation',
+              'Vegetarian meals',
+              'Ride captain',
+            ],
+          },
+          {
+            'styleId': 'standard',
+            'name': 'Standard Rider',
+            'description': '2-person sharing with all meals',
+            'price': 22000.0,
+            'accommodationType': 'sharing-2',
+            'mealOptions': ['veg', 'non-veg'],
+            'inclusions': [
+              'Royal Enfield 350cc',
+              '2-person sharing',
+              'All meal options',
+              'Ride captain',
+              'Backup vehicle',
+            ],
+          },
+          {
+            'styleId': 'premium',
+            'name': 'Premium Rider',
+            'description': 'Private room with premium bike',
+            'price': 28000.0,
+            'accommodationType': 'private',
+            'mealOptions': ['veg', 'non-veg', 'alcohol'],
+            'inclusions': [
+              'Royal Enfield Himalayan 411cc',
+              'Private room',
+              'All meals + alcohol',
+              'Personal ride captain',
+              'GoPro camera rental',
+            ],
+          },
+        ],
         'createdAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
       },
@@ -420,6 +541,52 @@ class _SeedTripsScreenState extends ConsumerState<SeedTripsScreen> {
         ],
         'startDate': Timestamp.fromDate(DateTime(2025, 3, 10)),
         'endDate': Timestamp.fromDate(DateTime(2025, 3, 14)),
+        'pricingStyles': [
+          {
+            'styleId': 'budget',
+            'name': 'Beach Bum',
+            'description': 'Shared dorm with breakfast only',
+            'price': 12000.0,
+            'accommodationType': 'sharing-3',
+            'mealOptions': ['veg'],
+            'inclusions': [
+              'Shared dorm (6-8 people)',
+              'Breakfast only',
+              'Beach access',
+              'Basic club entries',
+            ],
+          },
+          {
+            'styleId': 'standard',
+            'name': 'Party Starter',
+            'description': 'Shared room with breakfast',
+            'price': 15000.0,
+            'accommodationType': 'sharing-2',
+            'mealOptions': ['veg', 'non-veg'],
+            'inclusions': [
+              '2-person sharing',
+              'Breakfast daily',
+              'Premium club entries',
+              'Water sports package',
+            ],
+          },
+          {
+            'styleId': 'premium',
+            'name': 'VIP Experience',
+            'description': 'Private room with all-inclusive package',
+            'price': 22000.0,
+            'accommodationType': 'private',
+            'mealOptions': ['veg', 'non-veg', 'alcohol'],
+            'inclusions': [
+              'Private AC room',
+              'All meals included',
+              'Unlimited alcohol package',
+              'VIP club access',
+              'Private yacht party',
+              'Sunset cruise',
+            ],
+          },
+        ],
         'createdAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
       },
@@ -493,6 +660,53 @@ class _SeedTripsScreenState extends ConsumerState<SeedTripsScreen> {
         ],
         'startDate': Timestamp.fromDate(DateTime(2025, 3, 20)),
         'endDate': Timestamp.fromDate(DateTime(2025, 3, 25)),
+        'pricingStyles': [
+          {
+            'styleId': 'budget',
+            'name': 'Backwater Basic',
+            'description': 'Shared houseboat with vegetarian meals',
+            'price': 22000.0,
+            'accommodationType': 'sharing-3',
+            'mealOptions': ['veg'],
+            'inclusions': [
+              'Shared houseboat cabin',
+              'Vegetarian Kerala meals',
+              'Basic Ayurvedic massage',
+              'Group tours',
+            ],
+          },
+          {
+            'styleId': 'standard',
+            'name': 'Backwater Comfort',
+            'description': '2-person houseboat with all meals',
+            'price': 28000.0,
+            'accommodationType': 'sharing-2',
+            'mealOptions': ['veg', 'non-veg'],
+            'inclusions': [
+              '2-person houseboat cabin',
+              'All meal options',
+              'Ayurvedic massage (1 hour)',
+              'Spice plantation tour',
+              'Kathakali performance',
+            ],
+          },
+          {
+            'styleId': 'premium',
+            'name': 'Luxury Backwater',
+            'description': 'Private houseboat with premium amenities',
+            'price': 38000.0,
+            'accommodationType': 'private',
+            'mealOptions': ['veg', 'non-veg', 'alcohol'],
+            'inclusions': [
+              'Private luxury houseboat',
+              'Personal chef',
+              'Premium alcohol selection',
+              'Full-day Ayurvedic spa',
+              'Private cultural performances',
+              'Wildlife sanctuary VIP access',
+            ],
+          },
+        ],
         'createdAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
       },

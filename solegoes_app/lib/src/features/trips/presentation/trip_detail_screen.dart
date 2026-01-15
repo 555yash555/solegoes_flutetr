@@ -12,6 +12,7 @@ import '../../bookings/domain/booking.dart' show Booking, BookingStatus, Payment
 import '../../payments/data/razorpay_service.dart';
 import '../data/trip_repository.dart';
 import '../domain/trip.dart';
+import '../../../common_widgets/image_gallery_screen.dart';
 
 /// Trip detail screen showing full trip information
 /// Reference: designs/option15_trip_detail.html
@@ -34,10 +35,6 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
   bool _isProcessing = false;
   bool _hasNavigated = false; // Prevent duplicate navigation
   Trip? _currentTrip;
-
-  // Boarding and dropping point selection
-  TripPoint? _selectedBoardingPoint;
-  TripPoint? _selectedDroppingPoint;
 
   @override
   void initState() {
@@ -62,84 +59,15 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
     };
   }
 
+
   Future<void> _handlePaymentSuccess(PaymentSuccessResponse response) async {
-    // Prevent duplicate navigation from multiple callbacks
-    if (_hasNavigated) return;
-
-    final paymentId = response.paymentId ?? 'pay_${DateTime.now().millisecondsSinceEpoch}';
-
-    // Get payment method from Razorpay response
-    // Razorpay doesn't provide method in success callback, so we use a default
-    final paymentMethod = 'razorpay';
-
-    try {
-      final userAsync = ref.read(authStateChangesProvider);
-      final user = userAsync.value;
-      final trip = _currentTrip;
-
-      if (user != null && trip != null) {
-        final bookingRepo = ref.read(bookingRepositoryProvider);
-
-        // Convert TripPoint to SelectedTripPoint for booking
-        SelectedTripPoint? boardingPoint;
-        if (_selectedBoardingPoint != null) {
-          boardingPoint = SelectedTripPoint(
-            name: _selectedBoardingPoint!.name,
-            address: _selectedBoardingPoint!.address,
-            dateTime: _selectedBoardingPoint!.dateTime,
-          );
-        }
-
-        SelectedTripPoint? droppingPoint;
-        if (_selectedDroppingPoint != null) {
-          droppingPoint = SelectedTripPoint(
-            name: _selectedDroppingPoint!.name,
-            address: _selectedDroppingPoint!.address,
-            dateTime: _selectedDroppingPoint!.dateTime,
-          );
-        }
-
-        final booking = await bookingRepo.createBooking(
-          tripId: trip.tripId,
-          userId: user.uid,
-          tripTitle: trip.title.replaceAll('\\n', ' '),
-          tripImageUrl: trip.imageUrl,
-          tripLocation: trip.location,
-          tripDuration: trip.duration,
-          amount: trip.price,
-          paymentId: paymentId,
-          paymentMethod: paymentMethod,
-          userEmail: user.email,
-          userName: user.displayName,
-          selectedBoardingPoint: boardingPoint,
-          selectedDroppingPoint: droppingPoint,
-        );
-
-        setState(() => _isProcessing = false);
-
-        // Invalidate booking provider to refresh data
-        ref.invalidate(userTripBookingProvider(trip.tripId, user.uid));
-
-        // Navigate to confirmation with booking ID
-        if (mounted && !_hasNavigated) {
-          _hasNavigated = true;
-          context.push('/payment-confirmation/${booking.bookingId}');
-        }
-      } else {
-        setState(() => _isProcessing = false);
-        if (mounted && !_hasNavigated) {
-          _hasNavigated = true;
-          context.push('/payment-confirmation/$paymentId');
-        }
-      }
-    } catch (e) {
-      debugPrint('Error saving booking: $e');
-      setState(() => _isProcessing = false);
-      if (mounted && !_hasNavigated) {
-        _hasNavigated = true;
-        context.push('/payment-confirmation/$paymentId');
-      }
-    }
+    // This handler is kept for backward compatibility but shouldn't be called
+    // since we now use the booking screen flow
+    debugPrint('Payment success: ${response.paymentId}');
+    
+    setState(() {
+      _isProcessing = false;
+    });
   }
 
   Future<void> _handlePaymentError(PaymentFailureResponse response) async {
@@ -219,18 +147,8 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
       return;
     }
 
-    setState(() {
-      _isProcessing = true;
-      _hasNavigated = false; // Reset navigation flag for new payment
-      _currentTrip = trip;
-    });
-
-    _razorpayService.openCheckout(
-      amount: trip.price,
-      tripTitle: trip.title.replaceAll('\\n', ' '),
-      userEmail: user.email,
-      userPhone: user.phoneNumber,
-    );
+    // Navigate to booking screen
+    context.push('/trip/${trip.tripId}/book');
   }
 
   @override
@@ -310,115 +228,131 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
       backgroundColor: Colors.transparent,
       automaticallyImplyLeading: false,
       flexibleSpace: FlexibleSpaceBar(
-        background: Stack(
-          fit: StackFit.expand,
-          children: [
-            // Hero Image
-            Image.network(
-              trip.imageUrl,
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Container(
-                color: AppColors.bgSurface,
-                child: const Icon(LucideIcons.image, color: AppColors.textTertiary, size: 60),
-              ),
-            ),
-            // Gradient overlay
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.black.withValues(alpha: 0.2),
-                    Colors.black.withValues(alpha: 0.6),
-                    AppColors.bgDeep,
-                  ],
-                  stops: const [0.0, 0.6, 1.0],
+        background: GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => ImageGalleryScreen(
+                  imageUrls: [trip.imageUrl],
+                  initialIndex: 0,
                 ),
               ),
-            ),
-            // Content overlay
-            Positioned(
-              bottom: 24,
-              left: 16,
-              right: 16,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Trending badge
-                  if (trip.isTrending)
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(AppRadius.full),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+            );
+          },
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              // Hero Image
+              Image.network(
+                trip.imageUrl,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => Container(
+                  color: AppColors.bgSurface,
+                  child: const Icon(LucideIcons.image, color: AppColors.textTertiary, size: 60),
+                ),
+              ),
+              // Gradient overlay - ignore pointer
+              IgnorePointer(
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.black.withValues(alpha: 0.2),
+                        Colors.black.withValues(alpha: 0.6),
+                        AppColors.bgDeep,
+                      ],
+                      stops: const [0.0, 0.6, 1.0],
+                    ),
+                  ),
+                ),
+              ),
+              // Content overlay - ignore pointer
+              Positioned(
+                bottom: 24,
+                left: 16,
+                right: 16,
+                child: IgnorePointer(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Trending badge
+                      if (trip.isTrending)
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(AppRadius.full),
+                            border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                width: 8,
+                                height: 8,
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFF4ADE80),
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              const Text(
+                                'Filling Fast',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      const SizedBox(height: 12),
+                      // Title
+                      Text(
+                        trip.title.replaceAll('\\n', '\n'),
+                        style: const TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                          height: 1.1,
+                        ),
                       ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
+                      const SizedBox(height: 12),
+                      // Location & Duration
+                      Row(
                         children: [
-                          Container(
-                            width: 8,
-                            height: 8,
-                            decoration: const BoxDecoration(
-                              color: Color(0xFF4ADE80),
-                              shape: BoxShape.circle,
+                          Icon(LucideIcons.mapPin, size: 16, color: AppColors.primary),
+                          const SizedBox(width: 4),
+                          Text(
+                            trip.location,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white.withValues(alpha: 0.8),
                             ),
                           ),
-                          const SizedBox(width: 8),
-                          const Text(
-                            'Filling Fast',
+                          const SizedBox(width: 16),
+                          Icon(LucideIcons.calendar, size: 16, color: const Color(0xFFEC4899)),
+                          const SizedBox(width: 4),
+                          Text(
+                            '${trip.duration} Days',
                             style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white.withValues(alpha: 0.8),
                             ),
                           ),
                         ],
                       ),
-                    ),
-                  const SizedBox(height: 12),
-                  // Title
-                  Text(
-                    trip.title.replaceAll('\\n', '\n'),
-                    style: const TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                      height: 1.1,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  // Location & Duration
-                  Row(
-                    children: [
-                      Icon(LucideIcons.mapPin, size: 16, color: AppColors.primary),
-                      const SizedBox(width: 4),
-                      Text(
-                        trip.location,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white.withValues(alpha: 0.8),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Icon(LucideIcons.calendar, size: 16, color: const Color(0xFFEC4899)),
-                      const SizedBox(width: 4),
-                      Text(
-                        '${trip.duration} Days',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white.withValues(alpha: 0.8),
-                        ),
-                      ),
                     ],
                   ),
-                ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -539,12 +473,6 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
           // Inclusions
           _buildInclusions(trip),
           const SizedBox(height: 32),
-
-          // Boarding & Dropping Points
-          if (trip.boardingPoints.isNotEmpty || trip.droppingPoints.isNotEmpty) ...[
-            _buildBoardingDroppingPoints(trip),
-            const SizedBox(height: 32),
-          ],
 
           // Host Info
           _buildHostInfo(trip),
@@ -1092,9 +1020,9 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
               Expanded(
                 child: Column(
                   children: [
-                    _buildGalleryImage(galleryImages.length > 1 ? galleryImages[1] : galleryImages[0]),
+                    _buildGalleryImage(galleryImages.length > 1 ? galleryImages[1] : galleryImages[0], 1, galleryImages),
                     const SizedBox(height: 12),
-                    _buildGalleryImage(galleryImages.length > 3 ? galleryImages[3] : galleryImages[0]),
+                    _buildGalleryImage(galleryImages.length > 3 ? galleryImages[3] : galleryImages[0], 3, galleryImages),
                   ],
                 ),
               ),
@@ -1102,9 +1030,9 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
               Expanded(
                 child: Column(
                   children: [
-                    _buildGalleryImage(galleryImages.length > 2 ? galleryImages[2] : galleryImages[0]),
+                    _buildGalleryImage(galleryImages.length > 2 ? galleryImages[2] : galleryImages[0], 2, galleryImages),
                     const SizedBox(height: 12),
-                    _buildGalleryImage(galleryImages.length > 4 ? galleryImages[4] : galleryImages[0]),
+                    _buildGalleryImage(galleryImages.length > 4 ? galleryImages[4] : galleryImages[0], 4, galleryImages),
                   ],
                 ),
               ),
@@ -1115,17 +1043,29 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
     );
   }
 
-  Widget _buildGalleryImage(String imageUrl) {
-    return AspectRatio(
-      aspectRatio: 4 / 5,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(AppRadius.md),
-        child: Image.network(
-          imageUrl,
-          fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => Container(
-            color: AppColors.bgSurface,
-            child: const Icon(LucideIcons.image, color: AppColors.textTertiary),
+  Widget _buildGalleryImage(String imageUrl, int index, List<String> allImages) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => ImageGalleryScreen(
+              imageUrls: allImages,
+              initialIndex: index,
+            ),
+          ),
+        );
+      },
+      child: AspectRatio(
+        aspectRatio: 4 / 5,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(AppRadius.md),
+          child: Image.network(
+            imageUrl,
+            fit: BoxFit.cover,
+            errorBuilder: (_, __, ___) => Container(
+              color: AppColors.bgSurface,
+              child: const Icon(LucideIcons.image, color: AppColors.textTertiary),
+            ),
           ),
         ),
       ),
@@ -1242,245 +1182,6 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
     );
   }
 
-  Widget _buildBoardingDroppingPoints(Trip trip) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Pickup & Drop',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Select your preferred boarding and dropping points',
-            style: TextStyle(
-              fontSize: 13,
-              color: Colors.white.withValues(alpha: 0.5),
-            ),
-          ),
-          const SizedBox(height: 16),
-
-          // Boarding Points Section
-          if (trip.boardingPoints.isNotEmpty) ...[
-            _buildPointSelectionCard(
-              title: 'Boarding Point',
-              icon: LucideIcons.mapPin,
-              iconColor: const Color(0xFF22C55E),
-              points: trip.boardingPoints,
-              selectedPoint: _selectedBoardingPoint,
-              onPointSelected: (point) {
-                setState(() => _selectedBoardingPoint = point);
-              },
-            ),
-            const SizedBox(height: 16),
-          ],
-
-          // Dropping Points Section
-          if (trip.droppingPoints.isNotEmpty)
-            _buildPointSelectionCard(
-              title: 'Dropping Point',
-              icon: LucideIcons.mapPinOff,
-              iconColor: const Color(0xFFEF4444),
-              points: trip.droppingPoints,
-              selectedPoint: _selectedDroppingPoint,
-              onPointSelected: (point) {
-                setState(() => _selectedDroppingPoint = point);
-              },
-            ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPointSelectionCard({
-    required String title,
-    required IconData icon,
-    required Color iconColor,
-    required List<TripPoint> points,
-    required TripPoint? selectedPoint,
-    required void Function(TripPoint) onPointSelected,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(AppRadius.lg),
-        border: Border.all(color: AppColors.borderGlass),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Header
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    color: iconColor.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Icon(icon, size: 18, color: iconColor),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
-                ),
-                const Spacer(),
-                if (selectedPoint != null)
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: iconColor.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(AppRadius.full),
-                    ),
-                    child: Text(
-                      'Selected',
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: iconColor,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-          const Divider(color: AppColors.borderGlass, height: 1),
-          // Points List
-          ...points.map((point) {
-            final isSelected = selectedPoint == point;
-            return GestureDetector(
-              onTap: () => onPointSelected(point),
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? iconColor.withValues(alpha: 0.08)
-                      : Colors.transparent,
-                  border: Border(
-                    bottom: point != points.last
-                        ? const BorderSide(color: AppColors.borderGlass)
-                        : BorderSide.none,
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    // Radio button
-                    Container(
-                      width: 20,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: isSelected ? iconColor : Colors.white.withValues(alpha: 0.3),
-                          width: 2,
-                        ),
-                      ),
-                      child: isSelected
-                          ? Center(
-                              child: Container(
-                                width: 10,
-                                height: 10,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: iconColor,
-                                ),
-                              ),
-                            )
-                          : null,
-                    ),
-                    const SizedBox(width: 12),
-                    // Point details
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            point.name,
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.9),
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            point.address,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.white.withValues(alpha: 0.5),
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    // Date & Time
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.05),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            _formatDate(point.dateTime),
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white.withValues(alpha: 0.8),
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            _formatTime(point.dateTime),
-                            style: TextStyle(
-                              fontSize: 11,
-                              color: Colors.white.withValues(alpha: 0.5),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }),
-        ],
-      ),
-    );
-  }
-
-  String _formatDate(DateTime dateTime) {
-    final months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    return '${dateTime.day} ${months[dateTime.month - 1]}';
-  }
-
-  String _formatTime(DateTime dateTime) {
-    final hour = dateTime.hour;
-    final minute = dateTime.minute.toString().padLeft(2, '0');
-    final period = hour >= 12 ? 'PM' : 'AM';
-    final hour12 = hour > 12 ? hour - 12 : (hour == 0 ? 12 : hour);
-    return '$hour12:$minute $period';
-  }
 
   Widget _buildHostInfo(Trip trip) {
     return Padding(

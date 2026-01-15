@@ -44,6 +44,8 @@ _Booking _$BookingFromJson(Map<String, dynamic> json) => _Booking(
       : DateTime.parse(json['tripStartDate'] as String),
   userEmail: json['userEmail'] as String?,
   userName: json['userName'] as String?,
+  selectedStyleId: json['selectedStyleId'] as String?,
+  selectedStyleName: json['selectedStyleName'] as String?,
   selectedBoardingPoint: json['selectedBoardingPoint'] == null
       ? null
       : SelectedTripPoint.fromJson(
@@ -74,6 +76,8 @@ Map<String, dynamic> _$BookingToJson(_Booking instance) => <String, dynamic>{
   'tripStartDate': instance.tripStartDate?.toIso8601String(),
   'userEmail': instance.userEmail,
   'userName': instance.userName,
+  'selectedStyleId': instance.selectedStyleId,
+  'selectedStyleName': instance.selectedStyleName,
   'selectedBoardingPoint': instance.selectedBoardingPoint,
   'selectedDroppingPoint': instance.selectedDroppingPoint,
 };
