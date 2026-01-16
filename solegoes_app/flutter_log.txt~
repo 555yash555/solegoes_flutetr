@@ -205,3 +205,27 @@ lib/src/features/bookings/presentation/trip_booking_screen.dart:1009:40: Error: 
             backgroundColor: AppColors.bgCard,
                                        ^^^^^^
 Try again after fixing the above error(s).
+
+Performing hot reload...                                        
+Reloaded 3 of 2771 libraries in 492ms (compile: 32 ms, reload: 194 ms, reassemble: 236 ms).
+D/InsetsController( 7126): hide(ime(), fromIme=false)
+I/ImeTracker( 7126): com.solegoes.solegoes_app:94b42d60: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+E/com.razorpay.checkout( 7126): Webview JS Error: Refused to get unsafe header "x-rtb-fingerprint-id"
+I/chromium( 7126): [INFO:CONSOLE:1] "Refused to get unsafe header "x-rtb-fingerprint-id"", source: https://checkout.razorpay.com/v1/v2-entry.modern.js (1)
+W/cr_VibrationManager( 7126): Failed to use vibrate API, requires VIBRATE permission.
+I/flutter ( 7126): Payment Error: 2 - undefined
+D/VRI[CheckoutActivity]( 7126): visibilityChanged oldVisibility=true newVisibility=false
+W/WindowOnBackDispatcher( 7126): sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda13@8b91e45
+D/ViewRootImpl( 7126): Skipping stats log for color mode
+D/InsetsController( 7126): hide(ime(), fromIme=false)
+I/ImeTracker( 7126): com.solegoes.solegoes_app:51707a87: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+I/es.solegoes_app( 7126): AssetManager2(0xb4000078cd35ad38) locale list changing from [] to [en-US]
+W/WindowOnBackDispatcher( 7126): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher( 7126): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+W/WindowOnBackDispatcher( 7126): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher( 7126): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+W/es.solegoes_app( 7126): Cleared Reference was only reachable from finalizer (only reported once)
+W/WindowOnBackDispatcher( 7126): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher( 7126): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+W/WindowOnBackDispatcher( 7126): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher( 7126): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.

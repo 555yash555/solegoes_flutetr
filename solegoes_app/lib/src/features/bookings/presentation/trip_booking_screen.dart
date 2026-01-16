@@ -925,6 +925,9 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
     final errorCode = response.code;
     final errorMessage = response.message ?? 'Unknown error';
     
+    // Debug: Log the actual error details
+    debugPrint('Razorpay Error - Code: $errorCode, Message: $errorMessage');
+    
     // Razorpay error codes:
     // 0 = User cancelled
     // 1 = Payment failed (card declined, insufficient funds, etc.)
@@ -932,8 +935,13 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
     // 3 = Invalid payment details
     
     if (mounted) {
-      // User cancelled - don't create booking, just show message
-      if (errorCode == 0) {
+      // User cancelled - check both code and message
+      // Razorpay might return code 0, 2, or have "cancel" in the message
+      final isCancelled = errorCode == 0 || 
+                         errorMessage.toLowerCase().contains('cancel') ||
+                         errorMessage.toLowerCase().contains('user') && errorMessage.toLowerCase().contains('abort');
+      
+      if (isCancelled) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Payment cancelled. You can try again anytime.'),
