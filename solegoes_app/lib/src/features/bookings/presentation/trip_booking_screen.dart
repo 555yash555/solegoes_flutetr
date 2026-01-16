@@ -117,32 +117,8 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
             return const Center(child: Text('Trip not found'));
           }
           
-          // If no customization needed, go straight to payment
-          final availableSteps = _getAvailableSteps(trip);
-          if (availableSteps.length == 1 && availableSteps.first == 3) {
-            // Only review step - skip to payment immediately
-            if (!_isProcessing) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                if (!_isProcessing) {
-                  _navigateToPayment(trip);
-                }
-              });
-            }
-            return const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(color: AppColors.primary),
-                  SizedBox(height: 16),
-                  Text(
-                    'Proceeding to payment...',
-                    style: TextStyle(color: AppColors.textSecondary),
-                  ),
-                ],
-              ),
-            );
-          }
-          
+          // Always show the booking flow - even if only the review step
+          // This ensures users see the confirmation page before payment
           return _buildBookingFlow(trip);
         },
         loading: () => const Center(child: CircularProgressIndicator()),
