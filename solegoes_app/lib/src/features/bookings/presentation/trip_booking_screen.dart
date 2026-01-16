@@ -918,16 +918,171 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
     }
   }
   
+  
   Future<void> _handlePaymentError(PaymentFailureResponse response) async {
     setState(() => _isProcessing = false);
     
+    final errorCode = response.code;
+    final errorMessage = response.message ?? 'Unknown error';
+    
+    // Razorpay error codes:
+    // 0 = User cancelled
+    // 1 = Payment failed (card declined, insufficient funds, etc.)
+    // 2 = Network error
+    // 3 = Invalid payment details
+    
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Payment failed: ${response.message ?? "Unknown error"}'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      // User cancelled - don't create booking, just show message
+      if (errorCode == 0) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Payment cancelled. You can try again anytime.'),
+            backgroundColor: AppColors.textSecondary,
+            duration: Duration(seconds: 3),
+          ),
+        );
+        return;
+      }
+      
+      // For all other errors, create a pending booking for retry
+      try {
+        final trip = _currentTrip;
+        if (trip == null) return;
+        
+        final userAsync = ref.read(authStateChangesProvider);
+        final user = userAsync.value;
+        if (user == null) return;
+        
+        final bookingRepo = ref.read(bookingRepositoryProvider);
+        
+        final selectedStyle = trip.pricingStyles.isNotEmpty && _selectedStyleId != null
+            ? trip.pricingStyles.firstWhere((s) => s.styleId == _selectedStyleId)
+            : null;
+        
+        final price = selectedStyle?.price ?? trip.price;
+        
+        SelectedTripPoint? boardingPoint;
+        if (_selectedBoardingPoint != null) {
+          boardingPoint = SelectedTripPoint(
+            name: _selectedBoardingPoint!.name,
+            address: _selectedBoardingPoint!.address,
+            dateTime: _selectedBoardingPoint!.dateTime,
+          );
+        }
+        
+        SelectedTripPoint? droppingPoint;
+        if (_selectedDroppingPoint != null) {
+          droppingPoint = SelectedTripPoint(
+            name: _selectedDroppingPoint!.name,
+            address: _selectedDroppingPoint!.address,
+            dateTime: _selectedDroppingPoint!.dateTime,
+          );
+        }
+        
+        // Create pending booking with error details
+        final booking = await bookingRepo.createBooking(
+          tripId: trip.tripId,
+          userId: user.uid,
+          tripTitle: trip.title,
+          tripImageUrl: trip.imageUrl,
+          tripLocation: trip.location,
+          tripDuration: trip.duration,
+          amount: price,
+          paymentId: 'pending_${DateTime.now().millisecondsSinceEpoch}',
+          paymentMethod: 'razorpay',
+          userEmail: user.email,
+          userName: user.displayName,
+          selectedStyleId: selectedStyle?.styleId,
+          selectedStyleName: selectedStyle?.name,
+          selectedBoardingPoint: boardingPoint,
+          selectedDroppingPoint: droppingPoint,
+          status: BookingStatus.pending, // Mark as pending for retry
+          paymentStatus: PaymentStatus.failed,
+          failureReason: _getErrorMessage(errorCode, errorMessage),
+        );
+        
+        // Show error with retry option
+        final shouldRetry = await showDialog<bool>(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            backgroundColor: AppColors.bgCard,
+            title: const Text(
+              'Payment Failed',
+              style: TextStyle(color: AppColors.textPrimary),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _getErrorMessage(errorCode, errorMessage),
+                  style: const TextStyle(color: AppColors.textSecondary),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'We\'ve saved your booking. You can retry payment anytime from your bookings page.',
+                  style: TextStyle(
+                    color: AppColors.textSecondary.withValues(alpha: 0.7),
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text('View Bookings', style: TextStyle(color: AppColors.textSecondary)),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                ),
+                child: const Text('Retry Payment', style: TextStyle(color: Colors.white)),
+              ),
+            ],
+          ),
+        );
+        
+        if (shouldRetry == true && mounted) {
+          // Retry payment
+          setState(() => _isProcessing = true);
+          _razorpayService.openCheckout(
+            amount: price,
+            tripTitle: trip.title.replaceAll('\n', ' ').trim(),
+            userEmail: user.email ?? 'guest@solegoes.com',
+            userPhone: user.phoneNumber,
+          );
+        } else if (mounted) {
+          // Go to bookings page
+          context.go('/bookings');
+        }
+      } catch (e) {
+        debugPrint('Error creating pending booking: $e');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Payment failed: $errorMessage'),
+              backgroundColor: AppColors.error,
+              duration: const Duration(seconds: 5),
+            ),
+          );
+        }
+      }
+    }
+  }
+  
+  String _getErrorMessage(int? errorCode, String errorMessage) {
+    switch (errorCode) {
+      case 1:
+        return 'Payment failed. This could be due to insufficient funds, card declined, or invalid card details.';
+      case 2:
+        return 'Network error. Please check your internet connection and try again.';
+      case 3:
+        return 'Invalid payment details. Please check your card information.';
+      default:
+        return errorMessage;
     }
   }
 

@@ -162,3 +162,27 @@ W/WindowOnBackDispatcher( 7126): OnBackInvokedCallback is not enabled for the ap
 W/WindowOnBackDispatcher( 7126): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
 W/WindowOnBackDispatcher( 7126): OnBackInvokedCallback is not enabled for the application.
 W/WindowOnBackDispatcher( 7126): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+
+Performing hot reload...                                        
+Reloaded 1 of 2771 libraries in 595ms (compile: 28 ms, reload: 259 ms, reassemble: 263 ms).
+W/cr_media( 7126): BLUETOOTH_CONNECT permission is missing.
+W/cr_media( 7126): getBluetoothAdapter() requires BLUETOOTH permission
+W/cr_media( 7126): registerBluetoothIntentsIfNeeded: Requires BLUETOOTH permission
+W/libc    ( 7126): Access denied finding property "vendor.mesa.log"
+W/libc    ( 7126): Access denied finding property "vendor.mesa.log.file"
+E/MESA    ( 7126): Failed to open rendernode: No such file or directory
+D/vulkan  ( 7126): searching for layers in '/data/app/~~b1OFK-xy6GP_zxnSATIyNQ==/com.solegoes.solegoes_app-vNZnxBHYZWXS0VmiQqNAIA==/lib/arm64'
+D/vulkan  ( 7126): searching for layers in '/data/app/~~b1OFK-xy6GP_zxnSATIyNQ==/com.solegoes.solegoes_app-vNZnxBHYZWXS0VmiQqNAIA==/base.apk!/lib/arm64-v8a'
+W/es.solegoes_app( 7126): Deferring native library unloading due to contention
+D/vulkan  ( 7126): added global layer 'VK_LAYER_KHRONOS_validation' from library '/data/app/~~b1OFK-xy6GP_zxnSATIyNQ==/com.solegoes.solegoes_app-vNZnxBHYZWXS0VmiQqNAIA==/base.apk!/lib/arm64-v8a/libVkLayer_khronos_validation.so'
+W/libc    ( 7126): Access denied finding property "vendor.mesa.vk.trace.per.submit"
+W/libc    ( 7126): Access denied finding property "vendor.mesa.gallium.print.optio"
+W/libc    ( 7126): Access denied finding property "vendor.mesa.vk.trace.frame"
+W/libc    ( 7126): Access denied finding property "vendor.mesa.vk.wsi.headless.swa"
+W/VideoCapabilities( 7126): Unsupported mime video/apv
+W/VideoCapabilities( 7126): Unsupported mime video/apv
+D/InsetsController( 7126): hide(ime(), fromIme=false)
+I/ImeTracker( 7126): com.solegoes.solegoes_app:5bc5cab9: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+E/com.razorpay.checkout( 7126): Webview JS Error: Refused to get unsafe header "x-rtb-fingerprint-id"
+I/chromium( 7126): [INFO:CONSOLE:1] "Refused to get unsafe header "x-rtb-fingerprint-id"", source: https://checkout.razorpay.com/v1/v2-entry.modern.js (1)
+W/cr_media( 7126): Requires MODIFY_AUDIO_SETTINGS and RECORD_AUDIO. No audio device will be available for recording
