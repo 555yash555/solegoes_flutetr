@@ -121,10 +121,26 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
           final availableSteps = _getAvailableSteps(trip);
           if (availableSteps.length == 1 && availableSteps.first == 3) {
             // Only review step - skip to payment immediately
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              _navigateToPayment(trip);
-            });
-            return const Center(child: CircularProgressIndicator());
+            if (!_isProcessing) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (!_isProcessing) {
+                  _navigateToPayment(trip);
+                }
+              });
+            }
+            return const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(color: AppColors.primary),
+                  SizedBox(height: 16),
+                  Text(
+                    'Proceeding to payment...',
+                    style: TextStyle(color: AppColors.textSecondary),
+                  ),
+                ],
+              ),
+            );
           }
           
           return _buildBookingFlow(trip);
