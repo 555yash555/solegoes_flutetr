@@ -929,15 +929,9 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
     debugPrint('Razorpay Error - Code: $errorCode, Message: $errorMessage');
     
     if (mounted) {
-      // User cancelled - check for PAYMENT_CANCELLED error code
+      // User cancelled - just return, don't create booking
+      // The universal error handler will show appropriate message
       if (errorCode == Razorpay.PAYMENT_CANCELLED) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Payment cancelled. You can try again anytime.'),
-            backgroundColor: AppColors.textSecondary,
-            duration: Duration(seconds: 3),
-          ),
-        );
         return;
       }
       
