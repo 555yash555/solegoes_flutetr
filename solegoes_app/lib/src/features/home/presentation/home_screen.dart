@@ -76,12 +76,9 @@ class HomeScreen extends ConsumerWidget {
                 ),
               ),
               const SizedBox(width: 12),
-              const Text(
+              Text(
                 'SoleGoes',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.textPrimary,
+                style: AppTextStyles.h3.copyWith(
                   letterSpacing: -0.5,
                 ),
               ),
@@ -171,9 +168,8 @@ class HomeScreen extends ConsumerWidget {
       child: Center(
         child: Text(
           initial,
-          style: const TextStyle(
+          style: AppTextStyles.h3.copyWith(
             color: Colors.white,
-            fontWeight: FontWeight.w700,
           ),
         ),
       ),
@@ -201,9 +197,7 @@ class HomeScreen extends ConsumerWidget {
             Expanded(
               child: Text(
                 'Where to next?',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
+                style: AppTextStyles.body.copyWith(
                   color: AppColors.textHint,
                 ),
               ),
@@ -309,8 +303,7 @@ class HomeScreen extends ConsumerWidget {
                   const SizedBox(height: 4),
                   Text(
                     'Feeling adventurous? Let fate decide.',
-                    style: TextStyle(
-                      fontSize: 14,
+                    style: AppTextStyles.bodySmall.copyWith(
                       color: AppColors.textMuted,
                     ),
                   ),
@@ -352,9 +345,7 @@ class HomeScreen extends ConsumerWidget {
               ),
               child: Text(
                 categories[index],
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
+                style: AppTextStyles.labelLarge.copyWith(
                   color: isActive ? Colors.white : AppColors.textSecondary,
                 ),
               ),
@@ -379,20 +370,13 @@ class HomeScreen extends ConsumerWidget {
             children: [
               Text(
                 'POPULAR NEAR YOU',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.textTertiary,
-                  letterSpacing: 0.5,
-                ),
+                style: AppTextStyles.sectionTitle,
               ),
               GestureDetector(
                 onTap: () => context.go('/explore'), // Use go instead of push to switch tabs
                 child: Text(
                   'See All',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
+                  style: AppTextStyles.labelLarge.copyWith(
                     color: AppColors.primary,
                   ),
                 ),
