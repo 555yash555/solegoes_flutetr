@@ -14,7 +14,6 @@ import '../features/authentication/presentation/profile_setup_screen.dart';
 import '../features/authentication/presentation/preferences_screen.dart';
 import '../features/home/presentation/home_screen.dart';
 import '../features/home/presentation/scaffold_with_nav_bar.dart';
-import '../features/trips/presentation/explore_screen.dart';
 import '../features/trips/presentation/trip_detail_screen.dart';
 import '../features/trips/presentation/my_trips_screen.dart';
 import '../features/chat/presentation/chat_list_screen.dart';
@@ -26,6 +25,7 @@ import '../features/profile/presentation/edit_profile_screen.dart';
 import '../features/payments/presentation/payment_method_screen.dart';
 import '../features/payments/presentation/payment_confirmation_screen.dart';
 import '../features/bookings/presentation/trip_booking_screen.dart';
+import '../features/explore/presentation/explore_screen.dart';
 import '../features/demo/presentation/design_demo_screen.dart';
 import '../features/admin/presentation/seed_trips_screen.dart';
 

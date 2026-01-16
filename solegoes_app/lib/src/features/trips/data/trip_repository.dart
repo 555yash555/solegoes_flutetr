@@ -10,12 +10,11 @@ class TripRepository {
 
   TripRepository(this._firestore);
 
-  /// Get all live trips
+  /// Get all trips (simplified query without status filter to avoid index requirement)
   Future<List<Trip>> getAllTrips() async {
     try {
       final snapshot = await _firestore
           .collection('trips')
-          .where('status', isEqualTo: 'live')
           .orderBy('createdAt', descending: true)
           .get();
 

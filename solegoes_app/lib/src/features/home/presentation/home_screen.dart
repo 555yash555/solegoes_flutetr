@@ -387,7 +387,7 @@ class HomeScreen extends ConsumerWidget {
                 ),
               ),
               GestureDetector(
-                onTap: () => context.push('/explore'),
+                onTap: () => context.go('/explore'), // Use go instead of push to switch tabs
                 child: Text(
                   'See All',
                   style: TextStyle(
