@@ -1006,7 +1006,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
           context: context,
           barrierDismissible: false,
           builder: (context) => AlertDialog(
-            backgroundColor: AppColors.bgCard,
+            backgroundColor: AppColors.bgSurface,
             title: const Text(
               'Payment Failed',
               style: TextStyle(color: AppColors.textPrimary),
