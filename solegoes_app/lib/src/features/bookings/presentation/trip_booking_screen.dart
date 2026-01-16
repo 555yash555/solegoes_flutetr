@@ -928,20 +928,9 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
     // Debug: Log the actual error details
     debugPrint('Razorpay Error - Code: $errorCode, Message: $errorMessage');
     
-    // Razorpay error codes:
-    // 0 = User cancelled
-    // 1 = Payment failed (card declined, insufficient funds, etc.)
-    // 2 = Network error
-    // 3 = Invalid payment details
-    
     if (mounted) {
-      // User cancelled - check both code and message
-      // Razorpay might return code 0, 2, or have "cancel" in the message
-      final isCancelled = errorCode == 0 || 
-                         errorMessage.toLowerCase().contains('cancel') ||
-                         errorMessage.toLowerCase().contains('user') && errorMessage.toLowerCase().contains('abort');
-      
-      if (isCancelled) {
+      // User cancelled - check for PAYMENT_CANCELLED error code
+      if (errorCode == Razorpay.PAYMENT_CANCELLED) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Payment cancelled. You can try again anytime.'),
@@ -952,7 +941,8 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
         return;
       }
       
-      // For all other errors, create a pending booking for retry
+      // For all other errors (NETWORK_ERROR, INVALID_OPTIONS, TLS_ERROR, UNKNOWN_ERROR),
+      // create a pending booking for retry
       try {
         final trip = _currentTrip;
         if (trip == null) return;
@@ -1082,15 +1072,16 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
   }
   
   String _getErrorMessage(int? errorCode, String errorMessage) {
-    switch (errorCode) {
-      case 1:
-        return 'Payment failed. This could be due to insufficient funds, card declined, or invalid card details.';
-      case 2:
-        return 'Network error. Please check your internet connection and try again.';
-      case 3:
-        return 'Invalid payment details. Please check your card information.';
-      default:
-        return errorMessage;
+    if (errorCode == Razorpay.NETWORK_ERROR) {
+      return 'Network error. Please check your internet connection and try again.';
+    } else if (errorCode == Razorpay.INVALID_OPTIONS) {
+      return 'Payment configuration error. Please contact support.';
+    } else if (errorCode == Razorpay.TLS_ERROR) {
+      return 'Your device does not support secure payment. Please update your device.';
+    } else if (errorCode == Razorpay.UNKNOWN_ERROR) {
+      return 'An unexpected error occurred. Please try again.';
+    } else {
+      return errorMessage;
     }
   }
 
