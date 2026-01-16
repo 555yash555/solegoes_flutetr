@@ -97,7 +97,7 @@ class HomeScreen extends ConsumerWidget {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.05),
+                    color: AppColors.surfaceHover,
                     shape: BoxShape.circle,
                     border: Border.all(color: AppColors.borderSubtle),
                   ),
@@ -139,7 +139,7 @@ class HomeScreen extends ConsumerWidget {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.05),
+                      color: AppColors.surfaceHover,
                       shape: BoxShape.circle,
                       border: Border.all(color: AppColors.borderSubtle),
                     ),
@@ -186,7 +186,7 @@ class HomeScreen extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.08),
+          color: AppColors.surfaceOverlay,
           borderRadius: BorderRadius.circular(AppRadius.full),
           border: Border.all(color: AppColors.borderSubtle),
         ),
@@ -195,7 +195,7 @@ class HomeScreen extends ConsumerWidget {
             Icon(
               LucideIcons.search,
               size: 20,
-              color: Colors.white.withValues(alpha: 0.4),
+              color: AppColors.textHint,
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -204,7 +204,7 @@ class HomeScreen extends ConsumerWidget {
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
-                  color: Colors.white.withValues(alpha: 0.4),
+                  color: AppColors.textHint,
                 ),
               ),
             ),
@@ -213,13 +213,13 @@ class HomeScreen extends ConsumerWidget {
               child: Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.1),
+                  color: AppColors.surfacePressed,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
                   LucideIcons.slidersHorizontal,
                   size: 16,
-                  color: Colors.white.withValues(alpha: 0.8),
+                  color: AppColors.textPrimary,
                 ),
               ),
             ),
@@ -311,7 +311,7 @@ class HomeScreen extends ConsumerWidget {
                     'Feeling adventurous? Let fate decide.',
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.white.withValues(alpha: 0.6),
+                      color: AppColors.textMuted,
                     ),
                   ),
                 ],
@@ -343,8 +343,8 @@ class HomeScreen extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               decoration: BoxDecoration(
                 color: isActive
-                    ? AppColors.primary.withValues(alpha: 0.15)
-                    : Colors.white.withValues(alpha: 0.03),
+                    ? AppColors.pillActiveBg
+                    : AppColors.pillInactiveBg,
                 borderRadius: BorderRadius.circular(AppRadius.full),
                 border: Border.all(
                   color: isActive ? AppColors.primary : AppColors.borderSubtle,
