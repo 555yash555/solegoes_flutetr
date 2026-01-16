@@ -92,7 +92,7 @@ class TripCard extends StatelessWidget {
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.6),
+                        color: AppColors.scrim,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(
@@ -165,7 +165,7 @@ class TripCard extends StatelessWidget {
                         width: 28,
                         height: 28,
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.05),
+                          color: AppColors.surfaceHover,
                           shape: BoxShape.circle,
                           border: Border.all(color: AppColors.borderSubtle),
                         ),
@@ -218,7 +218,7 @@ class FeaturedTripCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppRadius.lg),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.5),
+              color: AppColors.overlay,
               blurRadius: 40,
               offset: const Offset(0, 10),
             ),
@@ -254,7 +254,7 @@ class FeaturedTripCard extends StatelessWidget {
                     end: Alignment.bottomCenter,
                     colors: [
                       Colors.transparent,
-                      Colors.black.withValues(alpha: 0.2),
+                      AppColors.shimmer,
                       Colors.black.withValues(alpha: 0.9),
                     ],
                   ),
@@ -271,10 +271,10 @@ class FeaturedTripCard extends StatelessWidget {
                       vertical: 6,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.2),
+                      color: AppColors.shimmer,
                       borderRadius: BorderRadius.circular(AppRadius.full),
                       border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.2),
+                        color: AppColors.shimmer,
                       ),
                     ),
                     child: Row(
@@ -309,10 +309,10 @@ class FeaturedTripCard extends StatelessWidget {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.2),
+                    color: AppColors.shimmer,
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.2),
+                      color: AppColors.shimmer,
                     ),
                   ),
                   child: const Icon(
@@ -386,7 +386,7 @@ class FeaturedTripCard extends StatelessWidget {
                                   fontSize: 10,
                                   fontWeight: FontWeight.w700,
                                   letterSpacing: 1,
-                                  color: Colors.white.withValues(alpha: 0.6),
+                                  color: AppColors.textMuted,
                                 ),
                               ),
                               const SizedBox(height: 2),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../theme/app_theme.dart';
 
 /// Admin screen to seed sample trips to Firestore
 /// This is a one-time use screen to populate the database
@@ -1029,7 +1030,7 @@ class _SeedTripsScreenState extends ConsumerState<SeedTripsScreen> {
                   color: const Color(0xFF18181B),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.1),
+                    color: AppColors.surfacePressed,
                   ),
                 ),
                 child: Text(
@@ -1049,7 +1050,7 @@ class _SeedTripsScreenState extends ConsumerState<SeedTripsScreen> {
                     color: const Color(0xFF0A0A0A),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.1),
+                      color: AppColors.surfacePressed,
                     ),
                   ),
                   child: ListView.builder(

@@ -130,7 +130,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.05),
+                color: AppColors.surfaceHover,
                 shape: BoxShape.circle,
                 border: Border.all(color: AppColors.borderSubtle),
               ),
@@ -161,17 +161,17 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
       child: Container(
         padding: const EdgeInsets.all(4),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.05),
+          color: AppColors.surfaceHover,
           borderRadius: BorderRadius.circular(AppRadius.full),
         ),
         child: TabBar(
           controller: _tabController,
           indicator: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.1),
+            color: AppColors.surfacePressed,
             borderRadius: BorderRadius.circular(AppRadius.full),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.2),
+                color: AppColors.shimmer,
                 blurRadius: 4,
               ),
             ],
@@ -179,7 +179,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
           indicatorSize: TabBarIndicatorSize.tab,
           dividerColor: Colors.transparent,
           labelColor: Colors.white,
-          unselectedLabelColor: Colors.white.withValues(alpha: 0.5),
+          unselectedLabelColor: AppColors.textMuted,
           labelStyle: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w700,
@@ -287,7 +287,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.03),
+          color: AppColors.surfaceOverlay,
           borderRadius: BorderRadius.circular(AppRadius.md),
           border: Border.all(color: AppColors.borderSubtle),
         ),
@@ -376,7 +376,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
                         '${booking.tripDuration} Days',
                         style: TextStyle(
                           fontSize: 14,
-                          color: Colors.white.withValues(alpha: 0.6),
+                          color: AppColors.textMuted,
                         ),
                       ),
                     ],
@@ -388,21 +388,21 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
                       Icon(
                         LucideIcons.calendar,
                         size: 16,
-                        color: Colors.white.withValues(alpha: 0.6),
+                        color: AppColors.textMuted,
                       ),
                       const SizedBox(width: 6),
                       Text(
                         _formatDate(booking.bookingDate),
                         style: TextStyle(
                           fontSize: 14,
-                          color: Colors.white.withValues(alpha: 0.6),
+                          color: AppColors.textMuted,
                         ),
                       ),
                       const SizedBox(width: 16),
                       Icon(
                         LucideIcons.mapPin,
                         size: 16,
-                        color: Colors.white.withValues(alpha: 0.6),
+                        color: AppColors.textMuted,
                       ),
                       const SizedBox(width: 6),
                       Expanded(
@@ -410,7 +410,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
                           booking.tripLocation,
                           style: TextStyle(
                             fontSize: 14,
-                            color: Colors.white.withValues(alpha: 0.6),
+                            color: AppColors.textMuted,
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -439,7 +439,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 12),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.05),
+                color: AppColors.surfaceHover,
                 borderRadius: BorderRadius.circular(AppRadius.full),
                 border: Border.all(color: AppColors.borderSubtle),
               ),
@@ -502,7 +502,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 12),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.05),
+                color: AppColors.surfaceHover,
                 borderRadius: BorderRadius.circular(AppRadius.full),
                 border: Border.all(color: AppColors.borderSubtle),
               ),
@@ -590,7 +590,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.white.withValues(alpha: 0.5),
+                color: AppColors.textMuted,
               ),
             ),
             if (actionText != null && onAction != null) ...[
@@ -648,7 +648,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.white.withValues(alpha: 0.5),
+                color: AppColors.textMuted,
               ),
             ),
           ],

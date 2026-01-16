@@ -60,7 +60,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.05),
+                color: AppColors.surfaceHover,
                 shape: BoxShape.circle,
                 border: Border.all(color: AppColors.borderSubtle),
               ),
@@ -183,7 +183,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           'Version 1.0.0 • SoleGoes Inc.',
           style: TextStyle(
             fontSize: 12,
-            color: Colors.white.withValues(alpha: 0.3),
+            color: AppColors.iconMuted,
           ),
         ),
       ),
@@ -196,7 +196,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       style: TextStyle(
         fontSize: 12,
         fontWeight: FontWeight.w700,
-        color: Colors.white.withValues(alpha: 0.4),
+        color: AppColors.textHint,
         letterSpacing: 0.5,
       ),
     );
@@ -205,7 +205,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   Widget _buildListGroup(List<Widget> children) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.03),
+        color: AppColors.surfaceOverlay,
         borderRadius: BorderRadius.circular(AppRadius.md),
         border: Border.all(color: AppColors.borderSubtle),
       ),
@@ -235,7 +235,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.1),
+                color: AppColors.surfacePressed,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
@@ -258,7 +258,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             Icon(
               LucideIcons.chevronRight,
               size: 20,
-              color: Colors.white.withValues(alpha: 0.2),
+              color: AppColors.shimmer,
             ),
           ],
         ),
@@ -284,7 +284,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.1),
+              color: AppColors.surfacePressed,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
@@ -308,7 +308,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             value,
             style: TextStyle(
               fontSize: 14,
-              color: Colors.white.withValues(alpha: 0.5),
+              color: AppColors.textMuted,
             ),
           ),
         ],
@@ -335,7 +335,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.1),
+              color: AppColors.surfacePressed,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
@@ -363,7 +363,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               width: 44,
               height: 26,
               decoration: BoxDecoration(
-                color: value ? AppColors.primary : Colors.white.withValues(alpha: 0.1),
+                color: value ? AppColors.primary : AppColors.surfacePressed,
                 borderRadius: BorderRadius.circular(13),
               ),
               child: AnimatedAlign(
@@ -449,7 +449,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             child: Text(
               'Cancel',
               style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.6),
+                color: AppColors.textMuted,
               ),
             ),
           ),

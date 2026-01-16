@@ -270,7 +270,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
         border: Border.all(color: AppColors.borderGlass),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.5),
+            color: AppColors.overlay,
             blurRadius: 50,
             offset: const Offset(0, 25),
           ),
@@ -320,10 +320,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                     padding:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.1),
+                      color: AppColors.surfacePressed,
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.2),
+                        color: AppColors.shimmer,
                       ),
                     ),
                     child: Text(

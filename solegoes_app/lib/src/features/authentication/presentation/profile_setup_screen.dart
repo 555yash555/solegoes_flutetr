@@ -161,10 +161,10 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.05),
+                        color: AppColors.surfaceHover,
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: Colors.white.withValues(alpha: 0.1),
+                          color: AppColors.surfacePressed,
                         ),
                       ),
                       child: const Icon(
@@ -253,7 +253,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
                                   vertical: 16,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withValues(alpha: 0.03),
+                                  color: AppColors.surfaceOverlay,
                                   borderRadius: BorderRadius.circular(16),
                                   border: Border.all(color: AppColors.borderSubtle),
                                 ),
@@ -265,7 +265,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
                                     fontSize: 15,
                                     color: _birthDate != null
                                         ? AppColors.textPrimary
-                                        : Colors.white.withValues(alpha: 0.3),
+                                        : AppColors.iconMuted,
                                   ),
                                 ),
                               ),
@@ -391,7 +391,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
         width: 120,
         height: 120,
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.03),
+          color: AppColors.surfaceOverlay,
           shape: BoxShape.circle,
           border: Border.all(
             color: AppColors.borderGlass,
@@ -399,7 +399,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.2),
+              color: AppColors.shimmer,
               blurRadius: 20,
             ),
           ],
@@ -410,7 +410,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
               child: Icon(
                 LucideIcons.user,
                 size: 48,
-                color: Colors.white.withValues(alpha: 0.3),
+                color: AppColors.iconMuted,
               ),
             ),
             Positioned(
@@ -428,7 +428,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.3),
+                      color: AppColors.iconMuted,
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
@@ -453,7 +453,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
         Expanded(
           child: Container(
             height: 1,
-            color: Colors.white.withValues(alpha: 0.1),
+            color: AppColors.surfacePressed,
           ),
         ),
         Padding(
@@ -463,7 +463,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w700,
-              color: Colors.white.withValues(alpha: 0.4),
+              color: AppColors.textHint,
               letterSpacing: 0.5,
             ),
           ),
@@ -471,7 +471,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
         Expanded(
           child: Container(
             height: 1,
-            color: Colors.white.withValues(alpha: 0.1),
+            color: AppColors.surfacePressed,
           ),
         ),
       ],
@@ -509,7 +509,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.03),
+        color: AppColors.surfaceOverlay,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.borderSubtle),
       ),
@@ -523,14 +523,14 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: TextStyle(
-            color: Colors.white.withValues(alpha: 0.3),
+            color: AppColors.iconMuted,
             fontWeight: FontWeight.w500,
           ),
           prefixIcon: prefixIcon != null
               ? Icon(
                   prefixIcon,
                   size: 20,
-                  color: Colors.white.withValues(alpha: 0.3),
+                  color: AppColors.iconMuted,
                 )
               : null,
           border: InputBorder.none,
@@ -547,7 +547,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.03),
+        color: AppColors.surfaceOverlay,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.borderSubtle),
       ),
@@ -557,14 +557,14 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
           hint: Text(
             'Select',
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.3),
+              color: AppColors.iconMuted,
               fontSize: 15,
             ),
           ),
           icon: Icon(
             LucideIcons.chevronDown,
             size: 16,
-            color: Colors.white.withValues(alpha: 0.3),
+            color: AppColors.iconMuted,
           ),
           dropdownColor: AppColors.bgSurface,
           isExpanded: true,
@@ -606,8 +606,8 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             decoration: BoxDecoration(
               color: isSelected
-                  ? AppColors.primary.withValues(alpha: 0.15)
-                  : Colors.white.withValues(alpha: 0.03),
+                  ? AppColors.pillActiveBg
+                  : AppColors.surfaceOverlay,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: isSelected
@@ -642,7 +642,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
   Widget _buildTextArea() {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.03),
+        color: AppColors.surfaceOverlay,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.borderSubtle),
       ),
@@ -657,7 +657,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
         decoration: InputDecoration(
           hintText: 'Tell us a bit about yourself...',
           hintStyle: TextStyle(
-            color: Colors.white.withValues(alpha: 0.3),
+            color: AppColors.iconMuted,
             fontWeight: FontWeight.w500,
           ),
           border: InputBorder.none,

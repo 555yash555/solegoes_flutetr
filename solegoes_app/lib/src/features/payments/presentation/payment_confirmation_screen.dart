@@ -569,7 +569,7 @@ $boardingInfo$droppingInfo''';
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.05),
+                          color: AppColors.surfaceHover,
                           shape: BoxShape.circle,
                           border: Border.all(color: AppColors.borderSubtle),
                         ),
@@ -616,7 +616,7 @@ $boardingInfo$droppingInfo''';
                           : 'Your booking has been confirmed',
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.white.withValues(alpha: 0.5),
+                    color: AppColors.textMuted,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -671,7 +671,7 @@ $boardingInfo$droppingInfo''';
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.05),
+                          color: AppColors.surfaceHover,
                           shape: BoxShape.circle,
                           border: Border.all(color: AppColors.borderSubtle),
                         ),
@@ -704,7 +704,7 @@ $boardingInfo$droppingInfo''';
                   'Your booking has been confirmed',
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.white.withValues(alpha: 0.5),
+                    color: AppColors.textMuted,
                   ),
                 ),
 
@@ -714,7 +714,7 @@ $boardingInfo$droppingInfo''';
                 Container(
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.03),
+                    color: AppColors.surfaceOverlay,
                     borderRadius: BorderRadius.circular(AppRadius.md),
                     border: Border.all(color: AppColors.borderSubtle),
                   ),
@@ -726,7 +726,7 @@ $boardingInfo$droppingInfo''';
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w700,
-                          color: Colors.white.withValues(alpha: 0.4),
+                          color: AppColors.textHint,
                           letterSpacing: 1,
                         ),
                       ),
@@ -817,7 +817,7 @@ $boardingInfo$droppingInfo''';
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.03),
+        color: AppColors.surfaceOverlay,
         borderRadius: BorderRadius.circular(AppRadius.md),
         border: Border.all(color: AppColors.borderSubtle),
       ),
@@ -829,7 +829,7 @@ $boardingInfo$droppingInfo''';
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w700,
-              color: Colors.white.withValues(alpha: 0.4),
+              color: AppColors.textHint,
               letterSpacing: 1,
             ),
           ),
@@ -857,7 +857,7 @@ $boardingInfo$droppingInfo''';
           // Divider
           Container(
             height: 1,
-            color: Colors.white.withValues(alpha: 0.1),
+            color: AppColors.surfacePressed,
           ),
 
           const SizedBox(height: 16),
@@ -896,7 +896,7 @@ $boardingInfo$droppingInfo''';
             const SizedBox(height: 16),
             Container(
               height: 1,
-              color: Colors.white.withValues(alpha: 0.1),
+              color: AppColors.surfacePressed,
             ),
             const SizedBox(height: 16),
             Text(
@@ -904,7 +904,7 @@ $boardingInfo$droppingInfo''';
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
-                color: Colors.white.withValues(alpha: 0.4),
+                color: AppColors.textHint,
                 letterSpacing: 1,
               ),
             ),
@@ -916,7 +916,7 @@ $boardingInfo$droppingInfo''';
               booking.selectedBoardingPoint!.address,
               valueStyle: TextStyle(
                 fontSize: 12,
-                color: Colors.white.withValues(alpha: 0.6),
+                color: AppColors.textMuted,
               ),
             ),
             const SizedBox(height: 8),
@@ -932,7 +932,7 @@ $boardingInfo$droppingInfo''';
             const SizedBox(height: 16),
             Container(
               height: 1,
-              color: Colors.white.withValues(alpha: 0.1),
+              color: AppColors.surfacePressed,
             ),
             const SizedBox(height: 16),
             Text(
@@ -940,7 +940,7 @@ $boardingInfo$droppingInfo''';
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
-                color: Colors.white.withValues(alpha: 0.4),
+                color: AppColors.textHint,
                 letterSpacing: 1,
               ),
             ),
@@ -952,7 +952,7 @@ $boardingInfo$droppingInfo''';
               booking.selectedDroppingPoint!.address,
               valueStyle: TextStyle(
                 fontSize: 12,
-                color: Colors.white.withValues(alpha: 0.6),
+                color: AppColors.textMuted,
               ),
             ),
             const SizedBox(height: 8),
@@ -981,7 +981,7 @@ $boardingInfo$droppingInfo''';
           label,
           style: TextStyle(
             fontSize: 14,
-            color: Colors.white.withValues(alpha: 0.6),
+            color: AppColors.textMuted,
           ),
         ),
         const SizedBox(width: 16),
@@ -1021,7 +1021,7 @@ $boardingInfo$droppingInfo''';
                     width: 40,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.2),
+                      color: AppColors.shimmer,
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -1059,7 +1059,7 @@ $boardingInfo$droppingInfo''';
                     subtitle: Text(
                       'Save or share as PDF document',
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.5),
+                        color: AppColors.textMuted,
                         fontSize: 12,
                       ),
                     ),
@@ -1075,7 +1075,7 @@ $boardingInfo$droppingInfo''';
                       width: 44,
                       height: 44,
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.05),
+                        color: AppColors.surfaceHover,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: const Icon(
@@ -1093,7 +1093,7 @@ $boardingInfo$droppingInfo''';
                     subtitle: Text(
                       'Share via WhatsApp, Email, etc.',
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.5),
+                        color: AppColors.textMuted,
                         fontSize: 12,
                       ),
                     ),
@@ -1109,7 +1109,7 @@ $boardingInfo$droppingInfo''';
                       width: 44,
                       height: 44,
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.05),
+                        color: AppColors.surfaceHover,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: const Icon(
@@ -1127,7 +1127,7 @@ $boardingInfo$droppingInfo''';
                     subtitle: Text(
                       'Copy receipt details as text',
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.5),
+                        color: AppColors.textMuted,
                         fontSize: 12,
                       ),
                     ),
@@ -1147,7 +1147,7 @@ $boardingInfo$droppingInfo''';
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 14),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.05),
+          color: AppColors.surfaceHover,
           borderRadius: BorderRadius.circular(AppRadius.full),
           border: Border.all(color: AppColors.borderSubtle),
         ),
@@ -1220,7 +1220,7 @@ $boardingInfo$droppingInfo''';
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: Colors.white.withValues(alpha: 0.5),
+            color: AppColors.textMuted,
           ),
         ),
       ),

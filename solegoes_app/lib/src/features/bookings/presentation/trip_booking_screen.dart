@@ -217,7 +217,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
                 ? AppColors.primary
                 : isActive
                     ? AppColors.primary.withValues(alpha: 0.2)
-                    : Colors.white.withValues(alpha: 0.05),
+                    : AppColors.surfaceHover,
             shape: BoxShape.circle,
             border: Border.all(
               color: isActive || isCompleted
@@ -424,7 +424,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.05),
+        color: AppColors.surfaceHover,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: AppColors.borderSubtle),
       ),
@@ -545,7 +545,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
               decoration: BoxDecoration(
                 color: isSelected
                     ? AppColors.primary
-                    : Colors.white.withValues(alpha: 0.05),
+                    : AppColors.surfaceHover,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(

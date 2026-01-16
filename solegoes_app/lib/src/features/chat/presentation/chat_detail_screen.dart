@@ -234,7 +234,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                           '$_onlineCount online',
                           style: TextStyle(
                             fontSize: 12,
-                            color: Colors.white.withValues(alpha: 0.5),
+                            color: AppColors.textMuted,
                           ),
                         ),
                       ],
@@ -256,7 +256,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                   child: Icon(
                     LucideIcons.moreVertical,
                     size: 20,
-                    color: Colors.white.withValues(alpha: 0.8),
+                    color: AppColors.textPrimary,
                   ),
                 ),
               ),
@@ -288,16 +288,16 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
         margin: const EdgeInsets.only(bottom: 24),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.05),
+          color: AppColors.surfaceHover,
           borderRadius: BorderRadius.circular(AppRadius.full),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+          border: Border.all(color: AppColors.surfaceHover),
         ),
         child: Text(
           date,
           style: TextStyle(
             fontSize: 10,
             fontWeight: FontWeight.w500,
-            color: Colors.white.withValues(alpha: 0.4),
+            color: AppColors.textHint,
           ),
         ),
       ),
@@ -325,7 +325,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
             margin: const EdgeInsets.only(bottom: 4),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+              border: Border.all(color: AppColors.surfacePressed),
             ),
             child: ClipOval(
               child: message.senderAvatarUrl != null
@@ -483,14 +483,14 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                   height: 40,
                   margin: const EdgeInsets.only(bottom: 2),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.05),
+                    color: AppColors.surfaceHover,
                     shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                    border: Border.all(color: AppColors.surfacePressed),
                   ),
                   child: Icon(
                     LucideIcons.plus,
                     size: 20,
-                    color: Colors.white.withValues(alpha: 0.6),
+                    color: AppColors.textMuted,
                   ),
                 ),
               ),
@@ -500,9 +500,9 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                 child: Container(
                   constraints: const BoxConstraints(maxHeight: 100),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.05),
+                    color: AppColors.surfaceHover,
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                    border: Border.all(color: AppColors.surfacePressed),
                   ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -519,7 +519,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                             hintText: 'Message $_chatName...',
                             hintStyle: TextStyle(
                               fontSize: 15,
-                              color: Colors.white.withValues(alpha: 0.4),
+                              color: AppColors.textHint,
                             ),
                             border: InputBorder.none,
                             contentPadding: const EdgeInsets.symmetric(
@@ -540,7 +540,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                           child: Icon(
                             LucideIcons.smile,
                             size: 20,
-                            color: Colors.white.withValues(alpha: 0.4),
+                            color: AppColors.textHint,
                           ),
                         ),
                       ),

@@ -70,10 +70,10 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                   style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     hintText: 'Search destinations, trips...',
-                    hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.4)),
+                    hintStyle: TextStyle(color: AppColors.textHint),
                     prefixIcon: Icon(
                       LucideIcons.search,
-                      color: Colors.white.withValues(alpha: 0.4),
+                      color: AppColors.textHint,
                       size: 20,
                     ),
                     border: InputBorder.none,
@@ -325,7 +325,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                     end: Alignment.bottomCenter,
                     colors: [
                       Colors.transparent,
-                      Colors.black.withValues(alpha: 0.7),
+                      AppColors.scrim,
                     ],
                   ),
                 ),
@@ -351,7 +351,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                       '${trip.duration} Days • ${trip.location}',
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.white.withValues(alpha: 0.8),
+                        color: AppColors.textPrimary,
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -365,7 +365,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                               'STARTING FROM',
                               style: TextStyle(
                                 fontSize: 10,
-                                color: Colors.white.withValues(alpha: 0.6),
+                                color: AppColors.textMuted,
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 0.5,
                               ),
@@ -410,7 +410,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.6),
+                    color: AppColors.scrim,
                     borderRadius: BorderRadius.circular(AppRadius.full),
                   ),
                   child: Row(
@@ -480,7 +480,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                   end: Alignment.bottomCenter,
                   colors: [
                     Colors.transparent,
-                    Colors.black.withValues(alpha: 0.8),
+                    AppColors.scrim,
                   ],
                 ),
               ),
@@ -507,7 +507,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                     '${trip.duration} Days',
                     style: TextStyle(
                       fontSize: 12,
-                      color: Colors.white.withValues(alpha: 0.7),
+                      color: AppColors.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -525,7 +525,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                       Container(
                         padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.2),
+                          color: AppColors.shimmer,
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
@@ -590,7 +590,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                   end: Alignment.bottomCenter,
                   colors: [
                     Colors.transparent,
-                    Colors.black.withValues(alpha: 0.8),
+                    AppColors.scrim,
                   ],
                 ),
               ),

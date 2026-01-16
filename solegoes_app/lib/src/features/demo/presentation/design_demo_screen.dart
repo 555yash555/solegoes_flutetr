@@ -470,7 +470,7 @@ class _DesignDemoScreenState extends State<DesignDemoScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         decoration: BoxDecoration(
           color: selected
-              ? AppColors.primary.withValues(alpha: 0.15)
+              ? AppColors.pillActiveBg
               : AppColors.bgGlassLight,
           borderRadius: AppRadius.mdAll,
           border: Border.all(
@@ -690,7 +690,7 @@ class _DesignDemoScreenState extends State<DesignDemoScreen> {
         width: 44,
         height: 36,
         decoration: BoxDecoration(
-          color: AppColors.primary.withValues(alpha: 0.15),
+          color: AppColors.pillActiveBg,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: AppColors.primary.withValues(alpha: 0.3),

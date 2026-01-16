@@ -35,12 +35,12 @@ class BottomNavIsland extends StatelessWidget {
                   color: const Color(0xFF0A0A0A).withValues(alpha: 0.95),
                   borderRadius: BorderRadius.circular(AppRadius.full),
                   border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.1),
+                    color: AppColors.surfacePressed,
                     width: 1,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.6),
+                      color: AppColors.scrim,
                       blurRadius: 30,
                       offset: const Offset(0, 10),
                     ),

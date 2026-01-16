@@ -84,10 +84,10 @@ class _PhoneCollectionScreenState extends ConsumerState<PhoneCollectionScreen> {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.05),
+                        color: AppColors.surfaceHover,
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: Colors.white.withValues(alpha: 0.1),
+                          color: AppColors.surfacePressed,
                         ),
                       ),
                       child: const Icon(
@@ -254,7 +254,7 @@ class _PhoneCollectionScreenState extends ConsumerState<PhoneCollectionScreen> {
   Widget _buildPhoneField() {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.03),
+        color: AppColors.surfaceOverlay,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.borderSubtle),
       ),
@@ -309,7 +309,7 @@ class _PhoneCollectionScreenState extends ConsumerState<PhoneCollectionScreen> {
               decoration: InputDecoration(
                 hintText: '98765 43210',
                 hintStyle: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.3),
+                  color: AppColors.iconMuted,
                   fontWeight: FontWeight.w500,
                   letterSpacing: 1,
                 ),
@@ -378,7 +378,7 @@ class _CountryPickerSheet extends StatelessWidget {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.2),
+                color: AppColors.shimmer,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -404,7 +404,7 @@ class _CountryPickerSheet extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
                     margin: const EdgeInsets.only(bottom: 8),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.03),
+                      color: AppColors.surfaceOverlay,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(color: AppColors.borderSubtle),
                     ),

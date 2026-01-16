@@ -259,8 +259,8 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        Colors.black.withValues(alpha: 0.2),
-                        Colors.black.withValues(alpha: 0.6),
+                        AppColors.shimmer,
+                        AppColors.scrim,
                         AppColors.bgDeep,
                       ],
                       stops: const [0.0, 0.6, 1.0],
@@ -282,9 +282,9 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.15),
+                            color: AppColors.surfaceSelected,
                             borderRadius: BorderRadius.circular(AppRadius.full),
-                            border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+                            border: Border.all(color: AppColors.shimmer),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -331,7 +331,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
-                              color: Colors.white.withValues(alpha: 0.8),
+                              color: AppColors.textPrimary,
                             ),
                           ),
                           const SizedBox(width: 16),
@@ -342,7 +342,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
-                              color: Colors.white.withValues(alpha: 0.8),
+                              color: AppColors.textPrimary,
                             ),
                           ),
                         ],
@@ -390,9 +390,9 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.3),
+                  color: AppColors.iconMuted,
                   shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                  border: Border.all(color: AppColors.surfacePressed),
                 ),
                 child: const Icon(LucideIcons.arrowLeft, size: 20, color: Colors.white),
               ),
@@ -434,9 +434,9 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
       width: 40,
       height: 40,
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.3),
+        color: AppColors.iconMuted,
         shape: BoxShape.circle,
-        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+        border: Border.all(color: AppColors.surfacePressed),
       ),
       child: Icon(icon, size: 20, color: Colors.white),
     );
@@ -499,7 +499,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.05),
+          color: AppColors.surfaceHover,
           borderRadius: BorderRadius.circular(AppRadius.lg),
           border: Border.all(color: AppColors.borderGlass),
         ),
@@ -522,7 +522,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                     'Rating',
                     style: TextStyle(
                       fontSize: 12,
-                      color: Colors.white.withValues(alpha: 0.5),
+                      color: AppColors.textMuted,
                     ),
                   ),
                 ],
@@ -531,7 +531,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
             Container(
               width: 1,
               height: 40,
-              color: Colors.white.withValues(alpha: 0.1),
+              color: AppColors.surfacePressed,
             ),
             // Spots
             Expanded(
@@ -550,7 +550,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                     'Spots',
                     style: TextStyle(
                       fontSize: 12,
-                      color: Colors.white.withValues(alpha: 0.5),
+                      color: AppColors.textMuted,
                     ),
                   ),
                 ],
@@ -559,7 +559,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
             Container(
               width: 1,
               height: 40,
-              color: Colors.white.withValues(alpha: 0.1),
+              color: AppColors.surfacePressed,
             ),
             // Level
             Expanded(
@@ -578,7 +578,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                     'Level',
                     style: TextStyle(
                       fontSize: 12,
-                      color: Colors.white.withValues(alpha: 0.5),
+                      color: AppColors.textMuted,
                     ),
                   ),
                 ],
@@ -622,7 +622,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.05),
+              color: AppColors.surfaceHover,
               borderRadius: BorderRadius.circular(AppRadius.lg),
               border: Border.all(color: AppColors.borderGlass),
             ),
@@ -657,7 +657,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                           width: 40,
                           height: 40,
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.1),
+                            color: AppColors.surfacePressed,
                             shape: BoxShape.circle,
                             border: Border.all(color: AppColors.bgDeep, width: 2),
                           ),
@@ -684,7 +684,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.08),
+                      color: AppColors.surfaceOverlay,
                       borderRadius: BorderRadius.circular(AppRadius.full),
                       border: Border.all(color: AppColors.borderGlass),
                     ),
@@ -727,7 +727,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
             style: TextStyle(
               fontSize: 14,
               height: 1.6,
-              color: Colors.white.withValues(alpha: 0.7),
+              color: AppColors.textPrimary,
             ),
           ),
         ],
@@ -781,7 +781,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.05),
+                    color: AppColors.surfaceHover,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(color: AppColors.borderGlass),
                   ),
@@ -828,7 +828,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                               child: Icon(
                                 LucideIcons.chevronDown,
                                 size: 20,
-                                color: Colors.white.withValues(alpha: 0.4),
+                                color: AppColors.textHint,
                               ),
                             ),
                           ],
@@ -845,7 +845,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                           width: double.infinity,
                           padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.03),
+                            color: AppColors.surfaceOverlay,
                             borderRadius: const BorderRadius.vertical(
                               bottom: Radius.circular(AppRadius.lg),
                             ),
@@ -860,7 +860,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                                 style: TextStyle(
                                   fontSize: 14,
                                   height: 1.6,
-                                  color: Colors.white.withValues(alpha: 0.7),
+                                  color: AppColors.textPrimary,
                                 ),
                               ),
                               if (day['activities'] != null) ...[
@@ -872,14 +872,14 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                                     return Container(
                                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                                       decoration: BoxDecoration(
-                                        color: Colors.white.withValues(alpha: 0.05),
+                                        color: AppColors.surfaceHover,
                                         borderRadius: BorderRadius.circular(AppRadius.full),
                                       ),
                                       child: Text(
                                         activity.toString(),
                                         style: TextStyle(
                                           fontSize: 12,
-                                          color: Colors.white.withValues(alpha: 0.7),
+                                          color: AppColors.textPrimary,
                                         ),
                                       ),
                                     );
@@ -890,13 +890,13 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                                 const SizedBox(height: 12),
                                 Row(
                                   children: [
-                                    Icon(LucideIcons.utensils, size: 14, color: Colors.white.withValues(alpha: 0.5)),
+                                    Icon(LucideIcons.utensils, size: 14, color: AppColors.textMuted),
                                     const SizedBox(width: 8),
                                     Text(
                                       day['meals'].toString(),
                                       style: TextStyle(
                                         fontSize: 12,
-                                        color: Colors.white.withValues(alpha: 0.5),
+                                        color: AppColors.textMuted,
                                       ),
                                     ),
                                   ],
@@ -977,9 +977,9 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                       width: 56,
                       height: 56,
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
+                        color: AppColors.shimmer,
                         shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
+                        border: Border.all(color: AppColors.iconMuted),
                       ),
                       child: const Icon(
                         LucideIcons.play,
@@ -995,9 +995,9 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.6),
+                        color: AppColors.scrim,
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                        border: Border.all(color: AppColors.surfacePressed),
                       ),
                       child: const Text(
                         'Watch Experience',
@@ -1112,7 +1112,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.05),
+              color: AppColors.surfaceHover,
               borderRadius: BorderRadius.circular(AppRadius.lg),
               border: Border.all(color: AppColors.borderGlass),
             ),
@@ -1201,7 +1201,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.05),
+              color: AppColors.surfaceHover,
               borderRadius: BorderRadius.circular(AppRadius.lg),
               border: Border.all(color: AppColors.borderGlass),
             ),
@@ -1250,7 +1250,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                                 '${trip.rating} Rating',
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: Colors.white.withValues(alpha: 0.6),
+                                  color: AppColors.textMuted,
                                 ),
                               ),
                             ],
@@ -1266,7 +1266,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                   style: TextStyle(
                     fontSize: 14,
                     height: 1.5,
-                    color: Colors.white.withValues(alpha: 0.7),
+                    color: AppColors.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -1274,7 +1274,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.08),
+                    color: AppColors.surfaceOverlay,
                     borderRadius: BorderRadius.circular(AppRadius.full),
                     border: Border.all(color: AppColors.borderGlass),
                   ),
@@ -1332,7 +1332,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                 ),
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.3),
+                    color: AppColors.iconMuted,
                     borderRadius: BorderRadius.circular(AppRadius.lg),
                   ),
                 ),
@@ -1340,14 +1340,14 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                     decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.6),
+                      color: AppColors.scrim,
                       borderRadius: BorderRadius.circular(AppRadius.full),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+                      border: Border.all(color: AppColors.shimmer),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(LucideIcons.map, size: 16, color: Colors.white.withValues(alpha: 0.8)),
+                        Icon(LucideIcons.map, size: 16, color: AppColors.textPrimary),
                         const SizedBox(width: 8),
                         const Text(
                           'View on Map',
@@ -1367,14 +1367,14 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
           const SizedBox(height: 12),
           Row(
             children: [
-              Icon(LucideIcons.mapPin, size: 14, color: Colors.white.withValues(alpha: 0.4)),
+              Icon(LucideIcons.mapPin, size: 14, color: AppColors.textHint),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   '${trip.location} (Exact location provided after booking)',
                   style: TextStyle(
                     fontSize: 13,
-                    color: Colors.white.withValues(alpha: 0.6),
+                    color: AppColors.textMuted,
                   ),
                 ),
               ),
@@ -1391,7 +1391,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.05),
+          color: AppColors.surfaceHover,
           borderRadius: BorderRadius.circular(AppRadius.lg),
           border: Border.all(color: AppColors.borderGlass),
         ),
@@ -1407,7 +1407,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white.withValues(alpha: 0.8),
+                    color: AppColors.textPrimary,
                   ),
                 ),
               ],
@@ -1418,7 +1418,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
               style: TextStyle(
                 fontSize: 12,
                 height: 1.5,
-                color: Colors.white.withValues(alpha: 0.5),
+                color: AppColors.textMuted,
               ),
             ),
           ],
@@ -1529,7 +1529,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                 'You have already booked this trip',
                 style: TextStyle(
                   fontSize: 14,
-                  color: Colors.white.withValues(alpha: 0.6),
+                  color: AppColors.textMuted,
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
@@ -1543,7 +1543,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.1),
+              color: AppColors.surfacePressed,
               borderRadius: BorderRadius.circular(AppRadius.full),
               border: Border.all(color: AppColors.borderGlass),
             ),
@@ -1577,7 +1577,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                 fontSize: 11,
                 fontWeight: FontWeight.w500,
                 letterSpacing: 0.5,
-                color: Colors.white.withValues(alpha: 0.5),
+                color: AppColors.textMuted,
               ),
             ),
             const SizedBox(height: 2),
@@ -1602,7 +1602,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                   formatPrice(trip.price * 1.2),
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.white.withValues(alpha: 0.4),
+                    color: AppColors.textHint,
                     decoration: TextDecoration.lineThrough,
                   ),
                 ),

@@ -156,7 +156,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.05),
+                    color: AppColors.surfaceHover,
                     shape: BoxShape.circle,
                     border: Border.all(color: AppColors.borderSubtle),
                   ),
@@ -226,7 +226,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                   gradient: AppColors.primaryGradient,
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.1),
+                    color: AppColors.surfacePressed,
                     width: 2,
                   ),
                 ),
@@ -262,7 +262,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               Positioned.fill(
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.4),
+                    color: AppColors.scrimLight,
                     shape: BoxShape.circle,
                   ),
                   child: const Center(
@@ -312,14 +312,14 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w700,
-            color: Colors.white.withValues(alpha: 0.5),
+            color: AppColors.textMuted,
             letterSpacing: 0.5,
           ),
         ),
         const SizedBox(height: 8),
         Container(
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.05),
+            color: AppColors.surfaceHover,
             borderRadius: BorderRadius.circular(AppRadius.md),
             border: Border.all(color: AppColors.borderSubtle),
           ),
@@ -334,7 +334,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               hintText: hint,
               hintStyle: TextStyle(
                 fontSize: 16,
-                color: Colors.white.withValues(alpha: 0.3),
+                color: AppColors.iconMuted,
               ),
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(
@@ -349,7 +349,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       child: Icon(
                         icon,
                         size: 20,
-                        color: Colors.white.withValues(alpha: 0.4),
+                        color: AppColors.textHint,
                       ),
                     )
                   : prefix != null
@@ -359,7 +359,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                             prefix,
                             style: TextStyle(
                               fontSize: 16,
-                              color: Colors.white.withValues(alpha: 0.4),
+                              color: AppColors.textHint,
                             ),
                           ),
                         )

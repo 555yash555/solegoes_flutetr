@@ -136,10 +136,10 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.05),
+                        color: AppColors.surfaceHover,
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: Colors.white.withValues(alpha: 0.1),
+                          color: AppColors.surfacePressed,
                         ),
                       ),
                       child: const Icon(
@@ -208,7 +208,7 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
                         'Select at least 3',
                         style: TextStyle(
                           fontSize: 12,
-                          color: Colors.white.withValues(alpha: 0.3),
+                          color: AppColors.iconMuted,
                         ),
                       ),
                     ],
@@ -329,8 +329,8 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             decoration: BoxDecoration(
               color: isSelected
-                  ? AppColors.primary.withValues(alpha: 0.15)
-                  : Colors.white.withValues(alpha: 0.03),
+                  ? AppColors.pillActiveBg
+                  : AppColors.surfaceOverlay,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: isSelected
@@ -376,7 +376,7 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
             decoration: BoxDecoration(
               color: isSelected
                   ? AppColors.primary.withValues(alpha: 0.1)
-                  : Colors.white.withValues(alpha: 0.03),
+                  : AppColors.surfaceOverlay,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: isSelected
@@ -392,7 +392,7 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
                   decoration: BoxDecoration(
                     color: isSelected
                         ? AppColors.primary
-                        : Colors.white.withValues(alpha: 0.05),
+                        : AppColors.surfaceHover,
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
@@ -436,8 +436,8 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             decoration: BoxDecoration(
               color: isSelected
-                  ? AppColors.primary.withValues(alpha: 0.15)
-                  : Colors.white.withValues(alpha: 0.03),
+                  ? AppColors.pillActiveBg
+                  : AppColors.surfaceOverlay,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: isSelected

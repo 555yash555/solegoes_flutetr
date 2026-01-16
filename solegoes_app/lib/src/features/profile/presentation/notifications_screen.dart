@@ -111,7 +111,7 @@ class NotificationsScreen extends ConsumerWidget {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.05),
+                    color: AppColors.surfaceHover,
                     shape: BoxShape.circle,
                     border: Border.all(color: AppColors.borderSubtle),
                   ),
@@ -143,7 +143,7 @@ class NotificationsScreen extends ConsumerWidget {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
-                color: Colors.white.withValues(alpha: 0.5),
+                color: AppColors.textMuted,
               ),
             ),
           ),
@@ -158,7 +158,7 @@ class NotificationsScreen extends ConsumerWidget {
       style: TextStyle(
         fontSize: 12,
         fontWeight: FontWeight.w700,
-        color: Colors.white.withValues(alpha: 0.3),
+        color: AppColors.iconMuted,
         letterSpacing: 0.5,
       ),
     );
@@ -172,7 +172,7 @@ class NotificationsScreen extends ConsumerWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.03),
+        color: AppColors.surfaceOverlay,
         borderRadius: BorderRadius.circular(AppRadius.md),
         border: Border.all(color: AppColors.borderSubtle),
       ),
@@ -219,7 +219,7 @@ class NotificationsScreen extends ConsumerWidget {
                   notification.time,
                   style: TextStyle(
                     fontSize: 12,
-                    color: Colors.white.withValues(alpha: 0.4),
+                    color: AppColors.textHint,
                   ),
                 ),
               ],

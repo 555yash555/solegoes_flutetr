@@ -75,7 +75,7 @@ class ProfileScreen extends ConsumerWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.05),
+                color: AppColors.surfaceHover,
                 shape: BoxShape.circle,
                 border: Border.all(color: AppColors.borderSubtle),
               ),
@@ -104,7 +104,7 @@ class ProfileScreen extends ConsumerWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            Colors.white.withValues(alpha: 0.03),
+            AppColors.surfaceOverlay,
             Colors.transparent,
           ],
         ),
@@ -184,7 +184,7 @@ class ProfileScreen extends ConsumerWidget {
             email ?? '',
             style: TextStyle(
               fontSize: 14,
-              color: Colors.white.withValues(alpha: 0.5),
+              color: AppColors.textMuted,
             ),
           ),
         ],
@@ -216,7 +216,7 @@ class ProfileScreen extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.03),
+        color: AppColors.surfaceOverlay,
         borderRadius: BorderRadius.circular(AppRadius.md),
         border: Border.all(color: AppColors.borderSubtle),
       ),
@@ -236,7 +236,7 @@ class ProfileScreen extends ConsumerWidget {
             style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w700,
-              color: Colors.white.withValues(alpha: 0.4),
+              color: AppColors.textHint,
               letterSpacing: 1,
             ),
           ),
@@ -327,7 +327,7 @@ class ProfileScreen extends ConsumerWidget {
       style: TextStyle(
         fontSize: 12,
         fontWeight: FontWeight.w700,
-        color: Colors.white.withValues(alpha: 0.4),
+        color: AppColors.textHint,
         letterSpacing: 0.5,
       ),
     );
@@ -336,7 +336,7 @@ class ProfileScreen extends ConsumerWidget {
   Widget _buildListGroup(List<Widget> children) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.03),
+        color: AppColors.surfaceOverlay,
         borderRadius: BorderRadius.circular(AppRadius.md),
         border: Border.all(color: AppColors.borderSubtle),
       ),
@@ -394,7 +394,7 @@ class ProfileScreen extends ConsumerWidget {
               Icon(
                 LucideIcons.chevronRight,
                 size: 20,
-                color: Colors.white.withValues(alpha: 0.2),
+                color: AppColors.shimmer,
               ),
           ],
         ),
@@ -424,7 +424,7 @@ class ProfileScreen extends ConsumerWidget {
             child: Text(
               'Cancel',
               style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.6),
+                color: AppColors.textMuted,
               ),
             ),
           ),

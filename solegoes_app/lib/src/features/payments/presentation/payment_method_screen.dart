@@ -326,7 +326,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.05),
+                color: AppColors.surfaceHover,
                 shape: BoxShape.circle,
                 border: Border.all(color: AppColors.borderSubtle),
               ),
@@ -360,7 +360,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
       style: TextStyle(
         fontSize: 12,
         fontWeight: FontWeight.w700,
-        color: Colors.white.withValues(alpha: 0.4),
+        color: AppColors.textHint,
         letterSpacing: 0.5,
       ),
     );
@@ -382,7 +382,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
         decoration: BoxDecoration(
           color: isSelected
               ? AppColors.primary.withValues(alpha: 0.1)
-              : Colors.white.withValues(alpha: 0.03),
+              : AppColors.surfaceOverlay,
           borderRadius: BorderRadius.circular(AppRadius.md),
           border: Border.all(
             color: isSelected ? AppColors.primary : AppColors.borderSubtle,
@@ -398,7 +398,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
               decoration: BoxDecoration(
                 color: isSelected
                     ? AppColors.primary
-                    : Colors.white.withValues(alpha: 0.05),
+                    : AppColors.surfaceHover,
                 shape: BoxShape.circle,
               ),
               child: Icon(
@@ -484,7 +484,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white.withValues(alpha: 0.6),
+                    color: AppColors.textMuted,
                   ),
                 ),
                 Text(

@@ -115,7 +115,7 @@ class ChatListScreen extends ConsumerWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.05),
+                color: AppColors.surfaceHover,
                 shape: BoxShape.circle,
                 border: Border.all(color: AppColors.borderSubtle),
               ),
@@ -137,7 +137,7 @@ class ChatListScreen extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.05),
+          color: AppColors.surfaceHover,
           borderRadius: BorderRadius.circular(AppRadius.full),
           border: Border.all(color: AppColors.borderSubtle),
         ),
@@ -146,14 +146,14 @@ class ChatListScreen extends ConsumerWidget {
             Icon(
               LucideIcons.search,
               size: 20,
-              color: Colors.white.withValues(alpha: 0.4),
+              color: AppColors.textHint,
             ),
             const SizedBox(width: 12),
             Text(
               'Search messages...',
               style: TextStyle(
                 fontSize: 15,
-                color: Colors.white.withValues(alpha: 0.4),
+                color: AppColors.textHint,
               ),
             ),
           ],
@@ -180,7 +180,7 @@ class ChatListScreen extends ConsumerWidget {
         margin: const EdgeInsets.only(bottom: 8),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.03),
+          color: AppColors.surfaceOverlay,
           borderRadius: BorderRadius.circular(AppRadius.md),
           border: Border.all(color: AppColors.borderSubtle),
         ),
@@ -212,7 +212,7 @@ class ChatListScreen extends ConsumerWidget {
                         chat.lastMessageTime,
                         style: TextStyle(
                           fontSize: 12,
-                          color: Colors.white.withValues(alpha: 0.4),
+                          color: AppColors.textHint,
                         ),
                       ),
                     ],
@@ -222,7 +222,7 @@ class ChatListScreen extends ConsumerWidget {
                     chat.lastMessage,
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.white.withValues(alpha: 0.6),
+                      color: AppColors.textMuted,
                     ),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,

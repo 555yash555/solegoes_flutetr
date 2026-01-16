@@ -336,10 +336,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.05),
+                  color: AppColors.surfaceHover,
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.1),
+                    color: AppColors.surfacePressed,
                   ),
                 ),
                 child: const Icon(
@@ -410,7 +410,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.03),
+        color: AppColors.surfaceOverlay,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.borderSubtle),
       ),
@@ -426,7 +426,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: TextStyle(
-            color: Colors.white.withValues(alpha: 0.3),
+            color: AppColors.iconMuted,
             fontWeight: FontWeight.w500,
           ),
           prefixIcon: Icon(
@@ -453,7 +453,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   Widget _buildPhoneField() {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.03),
+        color: AppColors.surfaceOverlay,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.borderSubtle),
       ),
@@ -504,7 +504,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               decoration: InputDecoration(
                 hintText: 'Enter phone number',
                 hintStyle: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.3),
+                  color: AppColors.iconMuted,
                   fontWeight: FontWeight.w500,
                 ),
                 border: InputBorder.none,
@@ -532,7 +532,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             decoration: BoxDecoration(
               color: _agreeToTerms
                   ? AppColors.primary
-                  : Colors.white.withValues(alpha: 0.03),
+                  : AppColors.surfaceOverlay,
               borderRadius: BorderRadius.circular(6),
               border: Border.all(
                 color: _agreeToTerms ? AppColors.primary : AppColors.borderSubtle,
@@ -636,7 +636,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         Expanded(
           child: Container(
             height: 1,
-            color: Colors.white.withValues(alpha: 0.1),
+            color: AppColors.surfacePressed,
           ),
         ),
         Padding(
@@ -646,14 +646,14 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w500,
-              color: Colors.white.withValues(alpha: 0.4),
+              color: AppColors.textHint,
             ),
           ),
         ),
         Expanded(
           child: Container(
             height: 1,
-            color: Colors.white.withValues(alpha: 0.1),
+            color: AppColors.surfacePressed,
           ),
         ),
       ],
@@ -666,7 +666,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 14),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.03),
+          color: AppColors.surfaceOverlay,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: AppColors.borderSubtle),
         ),

@@ -288,10 +288,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.05),
+                  color: AppColors.surfaceHover,
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.1),
+                    color: AppColors.surfacePressed,
                   ),
                 ),
                 child: const Icon(
@@ -339,7 +339,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
-                    color: Colors.white.withValues(alpha: 0.7),
+                    color: AppColors.textPrimary,
                   ),
                 ),
               ],
@@ -371,7 +371,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.03),
+        color: AppColors.surfaceOverlay,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.borderSubtle),
       ),
@@ -387,7 +387,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: TextStyle(
-            color: Colors.white.withValues(alpha: 0.3),
+            color: AppColors.iconMuted,
             fontWeight: FontWeight.w500,
           ),
           prefixIcon: Icon(
@@ -465,7 +465,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         Expanded(
           child: Container(
             height: 1,
-            color: Colors.white.withValues(alpha: 0.1),
+            color: AppColors.surfacePressed,
           ),
         ),
         Padding(
@@ -475,14 +475,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w500,
-              color: Colors.white.withValues(alpha: 0.4),
+              color: AppColors.textHint,
             ),
           ),
         ),
         Expanded(
           child: Container(
             height: 1,
-            color: Colors.white.withValues(alpha: 0.1),
+            color: AppColors.surfacePressed,
           ),
         ),
       ],
@@ -495,7 +495,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 14),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.03),
+          color: AppColors.surfaceOverlay,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: AppColors.borderSubtle),
         ),
