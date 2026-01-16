@@ -836,8 +836,8 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
     // Open Razorpay payment
     _razorpayService.openCheckout(
       amount: price,
-      tripTitle: trip.title,
-      userEmail: user.email,
+      tripTitle: trip.title.replaceAll('\n', ' ').trim(),
+      userEmail: user.email ?? 'guest@solegoes.com',
       userPhone: user.phoneNumber,
     );
   }
