@@ -117,6 +117,16 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
             return const Center(child: Text('Trip not found'));
           }
           
+          // Initialize current step to first available step
+          final availableSteps = _getAvailableSteps(trip);
+          if (availableSteps.isNotEmpty && !availableSteps.contains(_currentStep)) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              setState(() {
+                _currentStep = availableSteps.first;
+              });
+            });
+          }
+          
           // Always show the booking flow - even if only the review step
           // This ensures users see the confirmation page before payment
           return _buildBookingFlow(trip);

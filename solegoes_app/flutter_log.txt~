@@ -136,3 +136,29 @@ E/GoogleApiManager( 7126): 	at cjgu.dispatchMessage(:com.google.android.gms@2529
 E/GoogleApiManager( 7126): 	at android.os.Looper.loopOnce(Looper.java:248)
 E/GoogleApiManager( 7126): 	at android.os.Looper.loop(Looper.java:338)
 E/GoogleApiManager( 7126): 	at android.os.HandlerThread.run(HandlerThread.java:85)
+
+Performing hot restart...                                       
+Restarted application in 1,126ms.
+E/flutter ( 7126): [ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Bad state: The provider authStateChangesProvider was disposed during loading state, yet no value could be emitted.
+E/flutter ( 7126): #0      ElementWithFuture.dispose (package:riverpod/src/core/element.dart:329:70)
+E/flutter ( 7126): #1      $StreamProviderElement.dispose (package:riverpod/src/providers/stream_provider.dart:163:11)
+E/flutter ( 7126): #2      ProviderContainer._disposeProvider (package:riverpod/src/core/provider_container.dart:1023:22)
+E/flutter ( 7126): #3      ProviderScheduler._performDispose (package:riverpod/src/core/scheduler.dart:172:27)
+E/flutter ( 7126): #4      ProviderScheduler._task (package:riverpod/src/core/scheduler.dart:107:5)
+E/flutter ( 7126): #5      Task.call (package:riverpod/src/core/scheduler.dart:14:16)
+E/flutter ( 7126): #6      _UncontrolledProviderScopeState._callTask (package:flutter_riverpod/src/core/provider_scope.dart:292:11)
+E/flutter ( 7126): #7      _UncontrolledProviderScopeState._flutterVsync.<anonymous closure>.<anonymous closure> (package:flutter_riverpod/src/core/provider_scope.dart:324:9)
+E/flutter ( 7126): #8      Timer._createTimer.<anonymous closure> (dart:async-patch/timer_patch.dart:18:15)
+E/flutter ( 7126): #9      _Timer._runTimers (dart:isolate-patch/timer_impl.dart:410:19)
+E/flutter ( 7126): #10     _Timer._handleMessage (dart:isolate-patch/timer_impl.dart:441:5)
+E/flutter ( 7126): #11     _RawReceivePort._handleMessage (dart:isolate-patch/isolate_patch.dart:193:12)
+E/flutter ( 7126): 
+I/es.solegoes_app( 7126): AssetManager2(0xb4000078cd385358) locale list changing from [] to [en-US]
+W/WindowOnBackDispatcher( 7126): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher( 7126): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+W/WindowOnBackDispatcher( 7126): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher( 7126): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+W/WindowOnBackDispatcher( 7126): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher( 7126): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+W/WindowOnBackDispatcher( 7126): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher( 7126): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
