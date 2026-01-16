@@ -23,8 +23,8 @@ class CategoryPill extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         decoration: BoxDecoration(
           color: isSelected
-              ? AppColors.primary.withValues(alpha: 0.15)
-              : Colors.white.withValues(alpha: 0.03),
+              ? AppColors.pillActiveBg
+              : AppColors.pillInactiveBg,
           borderRadius: BorderRadius.circular(AppRadius.full),
           border: Border.all(
             color: isSelected ? AppColors.primary : AppColors.borderSubtle,
@@ -32,9 +32,7 @@ class CategoryPill extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
+          style: AppTextStyles.labelLarge.copyWith(
             color: isSelected ? Colors.white : AppColors.textSecondary,
           ),
         ),

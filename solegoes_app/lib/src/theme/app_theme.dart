@@ -44,6 +44,38 @@ class AppColors {
   static const Color borderGlass = Color(0x1AFFFFFF);   // 10% white
   static const Color borderFocus = Color(0x4DFFFFFF);   // 30% white
 
+  // Surface Overlays (for hover, pressed states)
+  static const Color surfaceOverlay = Color(0x08FFFFFF);    // 3% white - Cards, containers
+  static const Color surfaceHover = Color(0x0DFFFFFF);      // 5% white - Hover state
+  static const Color surfacePressed = Color(0x1AFFFFFF);    // 10% white - Pressed state
+  static const Color surfaceSelected = Color(0x26FFFFFF);   // 15% white - Selected state
+  
+  // Dividers & Separators
+  static const Color divider = Color(0x1AFFFFFF);           // 10% white
+  static const Color dividerLight = Color(0x0DFFFFFF);      // 5% white
+  
+  // Overlays & Scrims
+  static const Color overlay = Color(0x80000000);           // 50% black - Modal overlay
+  static const Color scrim = Color(0xB3000000);             // 70% black - Image scrim
+  static const Color scrimLight = Color(0x66000000);        // 40% black - Light scrim
+  
+  // Shimmer & Loading
+  static const Color shimmer = Color(0x33FFFFFF);           // 20% white - Shimmer effect
+  static const Color shimmerHighlight = Color(0x4DFFFFFF);  // 30% white - Shimmer highlight
+  
+  // Text Variations (additional alpha values)
+  static const Color textMuted = Color(0x80FFFFFF);         // 50% white - Muted text
+  static const Color textHint = Color(0x66FFFFFF);          // 40% white - Hint text
+  static const Color textDisabled = Color(0x4DFFFFFF);      // 30% white - Disabled text
+  
+  // Icon Variations
+  static const Color iconMuted = Color(0x4DFFFFFF);         // 30% white - Muted icons
+  static const Color iconDisabled = Color(0x33FFFFFF);      // 20% white - Disabled icons
+  
+  // Category Pills (specific to design)
+  static final Color pillActiveBg = primary.withValues(alpha: 0.15);  // 15% primary
+  static const Color pillInactiveBg = Color(0x08FFFFFF);    // 3% white
+
   // Gradient
   static const LinearGradient primaryGradient = LinearGradient(
     colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
@@ -225,6 +257,84 @@ class AppTextStyles {
     fontSize: 12,
     fontWeight: FontWeight.w400,
     color: AppColors.textTertiary,
+  );
+
+  // Additional heading sizes
+  static const TextStyle h4 = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
+    height: 1.4,
+  );
+
+  static const TextStyle h5 = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
+    height: 1.4,
+  );
+
+  // Body variations with different weights
+  static const TextStyle bodyMedium = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textPrimary,
+    height: 1.5,
+  );
+
+  static const TextStyle bodyRegular = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: AppColors.textPrimary,
+    height: 1.5,
+  );
+
+  // Label variations
+  static const TextStyle labelLarge = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
+  );
+
+  static const TextStyle labelMedium = TextStyle(
+    fontSize: 13,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textPrimary,
+  );
+
+  // Overline (for category labels, etc)
+  static const TextStyle overline = TextStyle(
+    fontSize: 10,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textTertiary,
+    letterSpacing: 1.5,
+  );
+
+  // Price text
+  static const TextStyle price = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w700,
+    color: AppColors.textPrimary,
+  );
+
+  static const TextStyle priceSmall = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
+  );
+
+  // Link text
+  static const TextStyle link = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    color: AppColors.primary,
+    decoration: TextDecoration.underline,
+  );
+
+  static const TextStyle linkSmall = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+    color: AppColors.primary,
   );
 }
 
