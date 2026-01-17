@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import '../../../common_widgets/app_button.dart';
+import '../../../common_widgets/app_header.dart';
 import '../../../theme/app_theme.dart';
 import '../../authentication/data/auth_repository.dart';
 import '../../bookings/data/booking_repository.dart';
@@ -120,38 +122,8 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
   }
 
   Widget _buildHeader(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-      child: Row(
-        children: [
-          GestureDetector(
-            onTap: () => context.pop(),
-            child: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: AppColors.surfaceHover,
-                shape: BoxShape.circle,
-                border: Border.all(color: AppColors.borderSubtle),
-              ),
-              child: const Icon(
-                LucideIcons.chevronLeft,
-                size: 20,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Text(
-            'My Trips',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
+    return AppHeader(
+      title: 'My Trips',
     );
   }
 
@@ -431,27 +403,20 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
     return Row(
       children: [
         Expanded(
-          child: GestureDetector(
-            onTap: () => context.push('/trip/${booking.tripId}'),
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              decoration: BoxDecoration(
-                color: AppColors.surfaceHover,
-                borderRadius: BorderRadius.circular(AppRadius.full),
-                border: Border.all(color: AppColors.borderSubtle),
-              ),
-              child: Text(
-                'View Details',
-                textAlign: TextAlign.center,
-                style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
-              ),
-            ),
+          child: AppButton(
+            text: 'View Details',
+            onPressed: () => context.push('/trip/${booking.tripId}'),
+            variant: AppButtonVariant.secondary,
+            shape: AppButtonShape.pill,
+            size: AppButtonSize.small,
+            isFullWidth: true,
           ),
         ),
         const SizedBox(width: 12),
         Expanded(
-          child: GestureDetector(
-            onTap: () {
+          child: AppButton(
+            text: 'Chat',
+            onPressed: () {
               // TODO: Navigate to trip chat
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -464,18 +429,10 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
                 ),
               );
             },
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              decoration: BoxDecoration(
-                gradient: AppColors.primaryGradient,
-                borderRadius: BorderRadius.circular(AppRadius.full),
-              ),
-              child: Text(
-                'Chat',
-                textAlign: TextAlign.center,
-                style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
-              ),
-            ),
+            variant: AppButtonVariant.primary,
+            shape: AppButtonShape.pill,
+            size: AppButtonSize.small,
+            isFullWidth: true,
           ),
         ),
       ],
@@ -486,43 +443,28 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
     return Row(
       children: [
         Expanded(
-          child: GestureDetector(
-            onTap: () => context.push('/trip/${booking.tripId}'),
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              decoration: BoxDecoration(
-                color: AppColors.surfaceHover,
-                borderRadius: BorderRadius.circular(AppRadius.full),
-                border: Border.all(color: AppColors.borderSubtle),
-              ),
-              child: Text(
-                'View Details',
-                textAlign: TextAlign.center,
-                style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
-              ),
-            ),
+          child: AppButton(
+            text: 'View Details',
+            onPressed: () => context.push('/trip/${booking.tripId}'),
+            variant: AppButtonVariant.secondary,
+            shape: AppButtonShape.pill,
+            size: AppButtonSize.small,
+            isFullWidth: true,
           ),
         ),
         if (booking.status == BookingStatus.completed) ...[
           const SizedBox(width: 12),
           Expanded(
-            child: GestureDetector(
-              onTap: () {
+            child: AppButton(
+              text: 'Book Again',
+              onPressed: () {
                 // TODO: Book again functionality
                 context.push('/trip/${booking.tripId}');
               },
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                decoration: BoxDecoration(
-                  gradient: AppColors.primaryGradient,
-                  borderRadius: BorderRadius.circular(AppRadius.full),
-                ),
-                child: Text(
-                  'Book Again',
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
-                ),
-              ),
+              variant: AppButtonVariant.primary,
+              shape: AppButtonShape.pill,
+              size: AppButtonSize.small,
+              isFullWidth: true,
             ),
           ),
         ],
@@ -576,20 +518,13 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
             ),
             if (actionText != null && onAction != null) ...[
               const SizedBox(height: 24),
-              GestureDetector(
-                onTap: onAction,
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-                  decoration: BoxDecoration(
-                    gradient: AppColors.primaryGradient,
-                    borderRadius: BorderRadius.circular(AppRadius.full),
-                  ),
-                  child: Text(
-                    actionText,
-                    style: AppTextStyles.h5.copyWith(color: Colors.white),
-                  ),
-                ),
+              AppButton(
+                text: actionText,
+                onPressed: onAction,
+                variant: AppButtonVariant.primary,
+                shape: AppButtonShape.pill,
+                size: AppButtonSize.medium,
+                isFullWidth: false,
               ),
             ],
           ],

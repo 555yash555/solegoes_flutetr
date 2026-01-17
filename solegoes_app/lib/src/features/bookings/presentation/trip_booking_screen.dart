@@ -11,6 +11,8 @@ import '../../authentication/data/auth_repository.dart';
 import '../data/booking_repository.dart';
 import '../domain/booking.dart';
 import '../../../common_widgets/app_snackbar.dart';
+import '../../../utils/app_exception.dart';
+import '../../shared/global_error_controller.dart';
 
 /// Booking screen where users select style, boarding/dropping points
 /// All steps are optional - adapts based on what the trip offers
@@ -900,25 +902,27 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
     setState(() => _isProcessing = false);
     
     final errorCode = response.code;
-    final errorMessage = response.message ?? 'Unknown error';
     
     // Debug: Log the actual error details
-    debugPrint('Razorpay Error - Code: $errorCode, Message: $errorMessage');
+    debugPrint('Razorpay Error - Code: $errorCode, Message: ${response.message}');
     
     if (mounted) {
       // User cancelled - detect by:
       // 1. PAYMENT_CANCELLED error code
       // 2. Error code 2 (NETWORK_ERROR) with "undefined" message (this happens on back button press)
       final isCancelled = errorCode == Razorpay.PAYMENT_CANCELLED ||
-                         (errorCode == Razorpay.NETWORK_ERROR && errorMessage == 'undefined');
+                         (errorCode == Razorpay.NETWORK_ERROR && response.message == 'undefined');
       
       if (isCancelled) {
         AppSnackbar.showInfo(context, 'Payment cancelled');
         return;
       }
+
+      // Convert to centralized exception
+      final exception = AppException.fromError(response);
+      final errorMessage = exception.message;
       
-      // For all other errors (NETWORK_ERROR, INVALID_OPTIONS, TLS_ERROR, UNKNOWN_ERROR),
-      // create a pending booking for retry
+      // For all other errors, create a pending booking for retry
       try {
         final trip = _currentTrip;
         if (trip == null) return;
@@ -972,7 +976,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
           selectedDroppingPoint: droppingPoint,
           status: BookingStatus.pending, // Mark as pending for retry
           paymentStatus: PaymentStatus.failed,
-          failureReason: _getErrorMessage(errorCode, errorMessage),
+          failureReason: errorMessage,
         );
         
         // Show error with retry option
@@ -990,7 +994,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  _getErrorMessage(errorCode, errorMessage),
+                  errorMessage,
                   style: const TextStyle(color: AppColors.textSecondary),
                 ),
                 const SizedBox(height: 16),
@@ -1035,23 +1039,10 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
       } catch (e) {
         debugPrint('Error creating pending booking: $e');
         if (mounted) {
-          AppSnackbar.showError(context, 'Payment failed: $errorMessage');
+          // Use Global Error for critical failures
+          ref.read(globalErrorProvider.notifier).setException(e);
         }
       }
-    }
-  }
-  
-  String _getErrorMessage(int? errorCode, String errorMessage) {
-    if (errorCode == Razorpay.NETWORK_ERROR) {
-      return 'Network error. Please check your internet connection and try again.';
-    } else if (errorCode == Razorpay.INVALID_OPTIONS) {
-      return 'Payment configuration error. Please contact support.';
-    } else if (errorCode == Razorpay.TLS_ERROR) {
-      return 'Your device does not support secure payment. Please update your device.';
-    } else if (errorCode == Razorpay.UNKNOWN_ERROR) {
-      return 'An unexpected error occurred. Please try again.';
-    } else {
-      return errorMessage;
     }
   }
 

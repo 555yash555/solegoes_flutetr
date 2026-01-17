@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../theme/app_theme.dart';
-import '../../../utils/async_value_ui.dart';
 import '../../../common_widgets/app_snackbar.dart';
+import '../../../common_widgets/app_button.dart';
+import '../../../common_widgets/app_text_field.dart';
+import '../../../common_widgets/social_sign_in_button.dart';
 import '../data/auth_repository.dart';
 import 'auth_controller.dart';
 
@@ -85,11 +87,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Listen for auth state changes and show errors
-    ref.listen(authControllerProvider, (prev, next) {
-      next.showSnackbarOnError(context);
-    });
-
     final authState = ref.watch(authControllerProvider);
     final isLoading = authState.isLoading;
 
@@ -125,7 +122,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   // Email field
                   _buildInputLabel('Email or Phone'),
                   const SizedBox(height: 8),
-                  _buildTextField(
+                  AppTextField(
                     controller: _emailController,
                     hint: 'Enter your email',
                     icon: LucideIcons.mail,
@@ -136,7 +133,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   // Password field
                   _buildInputLabel('Password'),
                   const SizedBox(height: 8),
-                  _buildTextField(
+                  AppTextField(
                     controller: _passwordController,
                     hint: 'Enter your password',
                     icon: LucideIcons.lock,
@@ -171,10 +168,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   const SizedBox(height: 24),
 
                   // Sign in button
-                  _buildPrimaryButton(
-                    label: 'Sign In',
-                    onTap: isLoading ? null : () => _handleLogin(),
+                  AppButton(
+                    text: 'Sign In',
+                    onPressed: () => _handleLogin(),
                     isLoading: isLoading,
+                    variant: AppButtonVariant.primary,
+                    shape: AppButtonShape.rounded,
                   ),
                   const SizedBox(height: 32),
 
@@ -185,9 +184,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   // Social buttons
                   Row(
                     children: [
-                      Expanded(child: _buildSocialButton(isGoogle: true)),
+                      Expanded(
+                        child: SocialSignInButton(
+                          provider: SocialProvider.google,
+                          onPressed: () => _handleGoogleSignIn(),
+                        ),
+                      ),
                       const SizedBox(width: 16),
-                      Expanded(child: _buildSocialButton(isGoogle: false)),
+                      Expanded(
+                        child: SocialSignInButton(
+                          provider: SocialProvider.apple,
+                          onPressed: () {},
+                          // isLoading: false, // Add isLoading if needed
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 32),
@@ -342,100 +352,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String hint,
-    required IconData icon,
-    bool obscureText = false,
-    TextInputType keyboardType = TextInputType.text,
-    Widget? suffixIcon,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.surfaceOverlay,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.borderSubtle),
-      ),
-      child: TextField(
-        controller: controller,
-        obscureText: obscureText,
-        keyboardType: keyboardType,
-        style: AppTextStyles.body.copyWith(color: AppColors.textPrimary),
-        decoration: InputDecoration(
-          hintText: hint,
-          hintStyle: TextStyle(
-            color: AppColors.iconMuted,
-            fontWeight: FontWeight.w500,
-          ),
-          prefixIcon: Icon(
-            icon,
-            size: 20,
-            color: AppColors.textTertiary,
-          ),
-          suffixIcon: suffixIcon != null
-              ? Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: suffixIcon,
-                )
-              : null,
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 16,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPrimaryButton({
-    required String label,
-    required VoidCallback? onTap,
-    bool isLoading = false,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 18),
-        decoration: BoxDecoration(
-          gradient: isLoading ? null : AppColors.primaryGradient,
-          color: isLoading ? AppColors.primary.withValues(alpha: 0.5) : null,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: isLoading
-              ? null
-              : [
-                  BoxShadow(
-                    color: AppColors.primary.withValues(alpha: 0.2),
-                    blurRadius: 6,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-        ),
-        child: isLoading
-            ? Center(
-                child: SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2.5,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                  ),
-                ),
-              )
-            : Text(
-                label,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                ),
-              ),
-      ),
-    );
-  }
-
   Widget _buildDivider() {
     return Row(
       children: [
@@ -461,110 +377,4 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       ],
     );
   }
-
-  Widget _buildSocialButton({required bool isGoogle}) {
-    return GestureDetector(
-      onTap: isGoogle ? () => _handleGoogleSignIn() : null,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        decoration: BoxDecoration(
-          color: AppColors.surfaceOverlay,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.borderSubtle),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (isGoogle)
-              // Google icon
-              SizedBox(
-                width: 20,
-                height: 20,
-                child: CustomPaint(
-                  painter: _GoogleLogoPainter(),
-                ),
-              )
-            else
-              // Apple icon
-              const Icon(
-                LucideIcons.apple,
-                size: 20,
-                color: Colors.white,
-              ),
-            const SizedBox(width: 12),
-            Text(
-              isGoogle ? 'Google' : 'Apple',
-              style: AppTextStyles.h5.copyWith(color: AppColors.textPrimary),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// Custom painter for Google logo
-class _GoogleLogoPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final double w = size.width;
-    final double h = size.height;
-
-    // Blue
-    final bluePaint = Paint()..color = const Color(0xFF4285F4);
-    canvas.drawArc(
-      Rect.fromLTWH(0, 0, w, h),
-      -0.5,
-      1.5,
-      true,
-      bluePaint,
-    );
-
-    // Green
-    final greenPaint = Paint()..color = const Color(0xFF34A853);
-    canvas.drawArc(
-      Rect.fromLTWH(0, 0, w, h),
-      1.0,
-      1.2,
-      true,
-      greenPaint,
-    );
-
-    // Yellow
-    final yellowPaint = Paint()..color = const Color(0xFFFBBC05);
-    canvas.drawArc(
-      Rect.fromLTWH(0, 0, w, h),
-      2.2,
-      1.0,
-      true,
-      yellowPaint,
-    );
-
-    // Red
-    final redPaint = Paint()..color = const Color(0xFFEA4335);
-    canvas.drawArc(
-      Rect.fromLTWH(0, 0, w, h),
-      3.2,
-      0.9,
-      true,
-      redPaint,
-    );
-
-    // White center
-    final whitePaint = Paint()..color = Colors.white;
-    canvas.drawCircle(
-      Offset(w / 2, h / 2),
-      w * 0.35,
-      whitePaint,
-    );
-
-    // Blue bar
-    canvas.drawRect(
-      Rect.fromLTWH(w * 0.5, h * 0.35, w * 0.5, h * 0.3),
-      bluePaint,
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

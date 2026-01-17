@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import '../../../../theme/app_theme.dart';
+import '../theme/app_theme.dart';
+import 'app_card.dart';
 
-/// Horizontal scrollable trip card for home screen
-/// Reference: designs/option15_mobile.html
+/// Horizontal scrollable trip card
 class TripCard extends StatelessWidget {
   final String tripId;
   final String title;
@@ -29,16 +29,15 @@ class TripCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return AppCard(
       onTap: () => context.push('/trip/$tripId'),
-      child: Container(
-        width: 260,
-        decoration: BoxDecoration(
-          color: const Color(0xFF111111),
-          borderRadius: BorderRadius.circular(AppRadius.md),
-          border: Border.all(color: AppColors.borderSubtle),
-        ),
-        child: Column(
+        padding: EdgeInsets.zero,
+        borderRadius: AppRadius.md,
+        backgroundColor: const Color(0xFF111111),
+        border: Border.all(color: AppColors.borderSubtle),
+        child: SizedBox(
+          width: 260,
+          child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -202,20 +201,19 @@ class FeaturedTripCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return AppCard(
       onTap: () => context.push('/trip/$tripId'),
-      child: Container(
-        height: 380,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(AppRadius.lg),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.overlay,
-              blurRadius: 40,
-              offset: const Offset(0, 10),
-            ),
-          ],
+      padding: EdgeInsets.zero,
+      borderRadius: AppRadius.lg,
+      boxShadow: [
+        BoxShadow(
+          color: AppColors.overlay,
+          blurRadius: 40,
+          offset: const Offset(0, 10),
         ),
+      ],
+      child: SizedBox(
+        height: 380,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(AppRadius.lg),
           child: Stack(

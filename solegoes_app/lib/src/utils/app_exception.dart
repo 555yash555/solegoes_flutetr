@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 /// Custom exception that wraps all errors with user-friendly messages.
 ///
@@ -34,6 +35,15 @@ class AppException implements Exception {
       return AppException(
         _mapFirebaseAuthError(error.code),
         code: error.code,
+        originalError: error,
+      );
+    }
+
+    // Razorpay errors
+    if (error is PaymentFailureResponse) {
+      return AppException(
+        _mapRazorpayError(error.code, error.message),
+        code: error.code?.toString(),
         originalError: error,
       );
     }
@@ -141,6 +151,24 @@ class AppException implements Exception {
         return 'Please sign in to continue';
       default:
         return 'Something went wrong. Please try again';
+    }
+  }
+
+  /// Maps Razorpay error codes to user-friendly messages
+  static String _mapRazorpayError(int? code, String? message) {
+    switch (code) {
+      case Razorpay.NETWORK_ERROR:
+        return 'Network error. Please check your internet connection and try again.';
+      case Razorpay.INVALID_OPTIONS:
+        return 'Payment configuration error. Please contact support.';
+      case Razorpay.TLS_ERROR:
+        return 'Your device does not support secure payment. Please update your device.';
+      case Razorpay.PAYMENT_CANCELLED:
+        return 'Payment was cancelled by user.';
+      case Razorpay.UNKNOWN_ERROR:
+        return 'An unexpected payment error occurred. Please try again.';
+      default:
+        return message ?? 'Payment failed. Please try again.';
     }
   }
 

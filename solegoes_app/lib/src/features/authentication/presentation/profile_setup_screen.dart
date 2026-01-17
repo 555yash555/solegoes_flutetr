@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../theme/app_theme.dart';
-import '../../../utils/async_value_ui.dart';
 import '../../../common_widgets/app_snackbar.dart';
 import '../data/auth_repository.dart';
 import 'auth_controller.dart';
@@ -129,11 +128,6 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Listen for auth state changes and show errors
-    ref.listen(authControllerProvider, (prev, next) {
-      next.showSnackbarOnError(context);
-    });
-
     final authState = ref.watch(authControllerProvider);
     final isLoading = authState.isLoading;
 

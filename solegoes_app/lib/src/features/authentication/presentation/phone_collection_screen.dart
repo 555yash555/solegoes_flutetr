@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../theme/app_theme.dart';
-import '../../../utils/async_value_ui.dart';
 import '../../../common_widgets/app_snackbar.dart';
+import '../../../common_widgets/app_button.dart';
 import 'auth_controller.dart';
 
 /// Phone number collection screen - shown after Google/Apple signup
@@ -58,11 +58,6 @@ class _PhoneCollectionScreenState extends ConsumerState<PhoneCollectionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Listen for auth state changes and show errors
-    ref.listen(authControllerProvider, (prev, next) {
-      next.showSnackbarOnError(context);
-    });
-
     final authState = ref.watch(authControllerProvider);
     final isLoading = authState.isLoading;
 
@@ -181,56 +176,13 @@ class _PhoneCollectionScreenState extends ConsumerState<PhoneCollectionScreen> {
               const Spacer(),
 
               // Continue button
-              GestureDetector(
-                onTap: isLoading ? null : () => _handleContinue(),
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 18),
-                  decoration: BoxDecoration(
-                    gradient: isLoading ? null : AppColors.primaryGradient,
-                    color: isLoading ? AppColors.primary.withValues(alpha: 0.5) : null,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: isLoading
-                        ? null
-                        : [
-                            BoxShadow(
-                              color: AppColors.primary.withValues(alpha: 0.2),
-                              blurRadius: 6,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                  ),
-                  child: isLoading
-                      ? Center(
-                          child: SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2.5,
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                            ),
-                          ),
-                        )
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Continue',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white,
-                              ),
-                            ),
-                            SizedBox(width: 8),
-                            Icon(
-                              LucideIcons.arrowRight,
-                              color: Colors.white,
-                              size: 20,
-                            ),
-                          ],
-                        ),
-                ),
+              AppButton(
+                text: 'Continue',
+                onPressed: () => _handleContinue(),
+                isLoading: isLoading,
+                variant: AppButtonVariant.primary,
+                shape: AppButtonShape.rounded,
+                icon: LucideIcons.arrowRight,
               ),
               const SizedBox(height: 16),
             ],

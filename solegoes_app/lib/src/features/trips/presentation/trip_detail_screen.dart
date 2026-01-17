@@ -12,7 +12,12 @@ import '../../bookings/domain/booking.dart' show Booking, BookingStatus, Payment
 import '../../payments/data/razorpay_service.dart';
 import '../data/trip_repository.dart';
 import '../domain/trip.dart';
+import '../../shared/global_error_controller.dart';
 import '../../../common_widgets/image_gallery_screen.dart';
+import '../../../utils/app_exception.dart';
+import '../../../common_widgets/app_button.dart';
+import '../../../common_widgets/app_card.dart';
+import '../../../common_widgets/app_expansion_tile.dart';
 
 /// Trip detail screen showing full trip information
 /// Reference: designs/option15_trip_detail.html
@@ -74,8 +79,10 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
     // Prevent duplicate handling
     if (_hasNavigated) return;
 
-    final failureMessage = response.message ?? 'Payment failed';
-    final errorCode = response.code?.toString() ?? 'unknown';
+    // Convert to centralized exception
+    final exception = AppException.fromError(response);
+    final failureMessage = exception.message;
+    final errorCode = exception.code ?? 'unknown';
 
     try {
       final userAsync = ref.read(authStateChangesProvider);
@@ -120,19 +127,10 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
     setState(() => _isProcessing = false);
 
     // Fallback: show snackbar if couldn't save booking
+    // Fallback: report error globally if couldn't save booking
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            failureMessage,
-            style: const TextStyle(color: Colors.white),
-          ),
-          backgroundColor: AppColors.accentRose,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
+      ref.read(globalErrorProvider.notifier).setException(
+        AppException(failureMessage, code: errorCode),
       );
     }
   }
@@ -740,143 +738,89 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
 
             return Padding(
               padding: const EdgeInsets.only(bottom: 12),
-              child: GestureDetector(
-                onTap: () {
+              child: AppExpansionTile(
+                isExpanded: isExpanded,
+                onExpansionChanged: (expanded) {
                   setState(() {
-                    _expandedDayIndex = isExpanded ? null : index;
+                    _expandedDayIndex = expanded ? index : null;
                   });
                 },
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
+                icon: Container(
+                  width: 32,
+                  height: 32,
                   decoration: BoxDecoration(
-                    color: AppColors.surfaceHover,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.borderGlass),
+                    color: dayColor.withValues(alpha: 0.2),
+                    shape: BoxShape.circle,
                   ),
-                  child: Column(
-                    children: [
-                      // Header
-                      Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 32,
-                              height: 32,
-                              decoration: BoxDecoration(
-                                color: dayColor.withValues(alpha: 0.2),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Center(
-                                child: Text(
-                                  (day['day'] ?? index + 1).toString().padLeft(2, '0'),
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w600,
-                                    color: dayColor,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Text(
-                                day['title'] ?? 'Day ${index + 1}',
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                  letterSpacing: 0.2,
-                                ),
-                              ),
-                            ),
-                            AnimatedRotation(
-                              duration: const Duration(milliseconds: 200),
-                              turns: isExpanded ? 0.5 : 0,
-                              child: Icon(
-                                LucideIcons.chevronDown,
-                                size: 20,
-                                color: AppColors.textHint,
-                              ),
-                            ),
-                          ],
-                        ),
+                  child: Center(
+                    child: Text(
+                      (day['day'] ?? index + 1).toString().padLeft(2, '0'),
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: dayColor,
                       ),
-                      // Expandable content
-                      AnimatedCrossFade(
-                        duration: const Duration(milliseconds: 200),
-                        crossFadeState: isExpanded
-                            ? CrossFadeState.showSecond
-                            : CrossFadeState.showFirst,
-                        firstChild: const SizedBox.shrink(),
-                        secondChild: Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                          decoration: BoxDecoration(
-                            color: AppColors.surfaceOverlay,
-                            borderRadius: const BorderRadius.vertical(
-                              bottom: Radius.circular(AppRadius.lg),
-                            ),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Divider(color: AppColors.borderGlass),
-                              const SizedBox(height: 8),
-                              Text(
-                                day['description'] ?? '',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  height: 1.6,
-                                  color: AppColors.textPrimary,
-                                ),
-                              ),
-                              if (day['activities'] != null) ...[
-                                const SizedBox(height: 16),
-                                Wrap(
-                                  spacing: 8,
-                                  runSpacing: 8,
-                                  children: (day['activities'] as List<dynamic>).map((activity) {
-                                    return Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.surfaceHover,
-                                        borderRadius: BorderRadius.circular(AppRadius.full),
-                                      ),
-                                      child: Text(
-                                        activity.toString(),
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: AppColors.textPrimary,
-                                        ),
-                                      ),
-                                    );
-                                  }).toList(),
-                                ),
-                              ],
-                              if (day['meals'] != null) ...[
-                                const SizedBox(height: 12),
-                                Row(
-                                  children: [
-                                    Icon(LucideIcons.utensils, size: 14, color: AppColors.textMuted),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      day['meals'].toString(),
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: AppColors.textMuted,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
+                title: Text(
+                  day['title'] ?? 'Day ${index + 1}',
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                    letterSpacing: 0.2,
+                  ),
+                ),
+                children: [
+                  Text(
+                    day['description'] ?? '',
+                    style: TextStyle(
+                      fontSize: 14,
+                      height: 1.6,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                  if (day['activities'] != null) ...[
+                    const SizedBox(height: 16),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: (day['activities'] as List<dynamic>).map((activity) {
+                        return Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: AppColors.surfaceHover,
+                            borderRadius: BorderRadius.circular(AppRadius.full),
+                          ),
+                          child: Text(
+                            activity.toString(),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                  if (day['meals'] != null) ...[
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Icon(LucideIcons.utensils, size: 14, color: AppColors.textMuted),
+                        const SizedBox(width: 8),
+                        Text(
+                          day['meals'].toString(),
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: AppColors.textMuted,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ],
               ),
             );
           }),
@@ -1073,13 +1017,8 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: AppColors.surfaceHover,
-              borderRadius: BorderRadius.circular(AppRadius.lg),
-              border: Border.all(color: AppColors.borderGlass),
-            ),
+          AppCard(
+            borderRadius: AppRadius.lg,
             child: Column(
               children: [
                 for (int i = 0; i < trip.inclusions.length; i += 2)
@@ -1158,96 +1097,92 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: AppColors.surfaceHover,
-              borderRadius: BorderRadius.circular(AppRadius.lg),
-              border: Border.all(color: AppColors.borderGlass),
-            ),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 56,
-                      height: 56,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.borderGlass, width: 2),
-                        image: const DecorationImage(
-                          image: NetworkImage('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&q=80'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            trip.agencyName,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Row(
-                            children: [
-                              if (trip.isVerifiedAgency) ...[
-                                const Icon(LucideIcons.shieldCheck, size: 12, color: Color(0xFF22C55E)),
-                                const SizedBox(width: 4),
-                                Text(
-                                  'Verified Agency',
-                                  style: AppTextStyles.labelSmall.copyWith(color: const Color(0xFF22C55E)),
-                                ),
-                                const SizedBox(width: 8),
-                              ],
-                              Text(
-                                '${trip.rating} Rating',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: AppColors.textMuted,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  'We specialize in curating immersive travel experiences for solo travelers. Our guides are locals who know the hidden gems.',
-                  style: TextStyle(
-                    fontSize: 14,
-                    height: 1.5,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceOverlay,
-                    borderRadius: BorderRadius.circular(AppRadius.full),
-                    border: Border.all(color: AppColors.borderGlass),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Contact Host',
-                      style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          AppCard(
+             borderRadius: AppRadius.lg,
+             padding: const EdgeInsets.all(20),
+             child: Column(
+               children: [
+                 Row(
+                   children: [
+                     Container(
+                       width: 56,
+                       height: 56,
+                       decoration: BoxDecoration(
+                         shape: BoxShape.circle,
+                         border: Border.all(color: AppColors.borderGlass, width: 2),
+                         image: const DecorationImage(
+                           image: NetworkImage('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&q=80'),
+                           fit: BoxFit.cover,
+                         ),
+                       ),
+                     ),
+                     const SizedBox(width: 16),
+                     Expanded(
+                       child: Column(
+                         crossAxisAlignment: CrossAxisAlignment.start,
+                         children: [
+                           Text(
+                             trip.agencyName,
+                             style: const TextStyle(
+                               fontSize: 18,
+                               fontWeight: FontWeight.w700,
+                               color: Colors.white,
+                             ),
+                           ),
+                           const SizedBox(height: 4),
+                           Row(
+                             children: [
+                               if (trip.isVerifiedAgency) ...[
+                                 const Icon(LucideIcons.shieldCheck, size: 12, color: Color(0xFF22C55E)),
+                                 const SizedBox(width: 4),
+                                 Text(
+                                   'Verified Agency',
+                                   style: AppTextStyles.labelSmall.copyWith(color: const Color(0xFF22C55E)),
+                                 ),
+                                 const SizedBox(width: 8),
+                               ],
+                               Text(
+                                 '${trip.rating} Rating',
+                                 style: TextStyle(
+                                   fontSize: 12,
+                                   color: AppColors.textMuted,
+                                 ),
+                               ),
+                             ],
+                           ),
+                         ],
+                       ),
+                     ),
+                   ],
+                 ),
+                 const SizedBox(height: 16),
+                 Text(
+                   'We specialize in curating immersive travel experiences for solo travelers. Our guides are locals who know the hidden gems.',
+                   style: TextStyle(
+                     fontSize: 14,
+                     height: 1.5,
+                     color: AppColors.textPrimary,
+                   ),
+                 ),
+                 const SizedBox(height: 16),
+                 Container(
+                   width: double.infinity,
+                   padding: const EdgeInsets.symmetric(vertical: 12),
+                   decoration: BoxDecoration(
+                     color: AppColors.surfaceOverlay,
+                     borderRadius: BorderRadius.circular(AppRadius.full),
+                     border: Border.all(color: AppColors.borderGlass),
+                   ),
+                   child: Center(
+                     child: Text(
+                       'Contact Host',
+                       style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
+                     ),
+                   ),
+                 ),
+               ],
+             ),
+           ),
         ],
       ),
     );
@@ -1268,52 +1203,49 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          Container(
+          SizedBox(
             height: 160,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(AppRadius.lg),
-              border: Border.all(color: AppColors.borderGlass),
-            ),
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(AppRadius.lg),
-                  child: Image.network(
+            child: AppCard(
+              borderRadius: AppRadius.lg,
+              padding: EdgeInsets.zero,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Image.network(
                     trip.imageUrl,
                     fit: BoxFit.cover,
                     colorBlendMode: BlendMode.saturation,
                     color: Colors.grey,
                   ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.iconMuted,
-                    borderRadius: BorderRadius.circular(AppRadius.lg),
-                  ),
-                ),
-                Center(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  Container(
                     decoration: BoxDecoration(
-                      color: AppColors.scrim,
-                      borderRadius: BorderRadius.circular(AppRadius.full),
-                      border: Border.all(color: AppColors.shimmer),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(LucideIcons.map, size: 16, color: AppColors.textPrimary),
-                        const SizedBox(width: 8),
-                        Text(
-                          'View on Map',
-                          style: AppTextStyles.bodyMedium.copyWith(color: Colors.white),
-                        ),
-                      ],
+                      color: AppColors.iconMuted,
+                      borderRadius: BorderRadius.circular(AppRadius.lg),
                     ),
                   ),
-                ),
-              ],
+                  Center(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: AppColors.scrim,
+                        borderRadius: BorderRadius.circular(AppRadius.full),
+                        border: Border.all(color: AppColors.shimmer),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(LucideIcons.map, size: 16, color: AppColors.textPrimary),
+                          const SizedBox(width: 8),
+                          Text(
+                            'View on Map',
+                            style: AppTextStyles.bodyMedium.copyWith(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 12),
@@ -1340,13 +1272,8 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
   Widget _buildCancellationPolicy() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: AppColors.surfaceHover,
-          borderRadius: BorderRadius.circular(AppRadius.lg),
-          border: Border.all(color: AppColors.borderGlass),
-        ),
+      child: AppCard(
+        borderRadius: AppRadius.lg,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -1486,25 +1413,13 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
         ),
         const SizedBox(width: 12),
         // View Booking button
-        GestureDetector(
-          onTap: () => context.push('/payment-confirmation/${booking.bookingId}'),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-            decoration: BoxDecoration(
-              color: AppColors.surfacePressed,
-              borderRadius: BorderRadius.circular(AppRadius.full),
-              border: Border.all(color: AppColors.borderGlass),
-            ),
-            child: Text(
-              'View Booking',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-                letterSpacing: 0.3,
-              ),
-            ),
-          ),
+        AppButton(
+          text: 'View Booking',
+          onPressed: () => context.push('/payment-confirmation/${booking.bookingId}'),
+          variant: AppButtonVariant.secondary,
+          shape: AppButtonShape.pill,
+          size: AppButtonSize.small,
+          isFullWidth: false,
         ),
       ],
     );
@@ -1559,53 +1474,14 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
           ],
         ),
         // Book Now button
-        GestureDetector(
-          onTap: _isProcessing ? null : () => _proceedToPay(trip),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-            decoration: BoxDecoration(
-              gradient: _isProcessing ? null : AppColors.primaryGradient,
-              color: _isProcessing ? AppColors.bgSurface : null,
-              borderRadius: BorderRadius.circular(AppRadius.full),
-              boxShadow: _isProcessing
-                  ? null
-                  : [
-                      BoxShadow(
-                        color: AppColors.primary.withValues(alpha: 0.4),
-                        blurRadius: 20,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-            ),
-            child: _isProcessing
-                ? Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(
-                        width: 18,
-                        height: 18,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      Text(
-                        'Processing...',
-                        style: AppTextStyles.h5.copyWith(color: Colors.white),
-                      ),
-                    ],
-                  )
-                : Text(
-                    'Book Now',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                      letterSpacing: 0.3,
-                    ),
-                  ),
-          ),
+        AppButton(
+          text: 'Book Now',
+          onPressed: () => _proceedToPay(trip),
+          isLoading: _isProcessing,
+          isFullWidth: false,
+          variant: AppButtonVariant.primary,
+          shape: AppButtonShape.pill,
+          size: AppButtonSize.medium,
         ),
       ],
     );

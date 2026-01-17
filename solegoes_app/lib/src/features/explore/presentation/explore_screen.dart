@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../theme/app_theme.dart';
+import '../../../common_widgets/app_text_field.dart';
+import '../../../common_widgets/trip_card.dart';
 import '../../../common_widgets/category_pill.dart';
 import '../../trips/data/trip_repository.dart';
 import '../../trips/domain/trip.dart';
@@ -55,33 +57,13 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppColors.bgSurface,
-                  borderRadius: BorderRadius.circular(AppRadius.lg),
-                  border: Border.all(color: AppColors.borderSubtle),
-                ),
-                child: TextField(
-                  controller: _searchController,
-                  style: const TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
-                    hintText: 'Search destinations, trips...',
-                    hintStyle: TextStyle(color: AppColors.textHint),
-                    prefixIcon: Icon(
-                      LucideIcons.search,
-                      color: AppColors.textHint,
-                      size: 20,
-                    ),
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 14,
-                    ),
-                  ),
-                  onChanged: (value) {
-                    // TODO: Implement search
-                  },
-                ),
+              child: AppTextField(
+                controller: _searchController,
+                hint: 'Search destinations, trips...',
+                icon: LucideIcons.search,
+                onChanged: (value) {
+                  // TODO: Implement search
+                },
               ),
             ),
           ),
@@ -254,7 +236,18 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
           // Determine layout pattern
           if (index == 0) {
             // First item: Large featured card
-            return _buildLargeFeaturedCard(trips[0]);
+            final trip = trips[0];
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+              child: FeaturedTripCard(
+                tripId: trip.tripId,
+                title: trip.title,
+                imageUrl: trip.imageUrl,
+                duration: '${trip.duration} Days',
+                location: trip.location,
+                price: trip.price,
+              ),
+            );
           } else if (index == 1 && trips.length > 2) {
             // Second row: Two medium cards
             return _buildTwoMediumCards(
@@ -286,148 +279,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
     );
   }
 
-  Widget _buildLargeFeaturedCard(Trip trip) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-      child: GestureDetector(
-        onTap: () => context.push('/trip/${trip.tripId}'),
-        child: Container(
-          height: 240,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(AppRadius.lg),
-            border: Border.all(color: AppColors.borderGlass),
-          ),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              // Image
-              ClipRRect(
-                borderRadius: BorderRadius.circular(AppRadius.lg),
-                child: Image.network(
-                  trip.imageUrl,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Container(
-                    color: AppColors.bgSurface,
-                    child: const Icon(LucideIcons.image, color: AppColors.textTertiary),
-                  ),
-                ),
-              ),
-              // Gradient overlay
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(AppRadius.lg),
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.transparent,
-                      AppColors.scrim,
-                    ],
-                  ),
-                ),
-              ),
-              // Content
-              Positioned(
-                bottom: 16,
-                left: 16,
-                right: 16,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      trip.title,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '${trip.duration} Days • ${trip.location}',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'STARTING FROM',
-                              style: TextStyle(
-                                fontSize: 10,
-                                color: AppColors.textMuted,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 0.5,
-                              ),
-                            ),
-                            Text(
-                              '₹${trip.price.toStringAsFixed(0)}',
-                              style: AppTextStyles.h2.copyWith(color: Colors.white),
-                            ),
-                          ],
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 10,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(AppRadius.full),
-                          ),
-                          child: Text(
-                            'View Trip',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              // Rating badge
-              Positioned(
-                top: 12,
-                right: 12,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: AppColors.scrim,
-                    borderRadius: BorderRadius.circular(AppRadius.full),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(LucideIcons.star, size: 12, color: Color(0xFFFBBF24)),
-                      const SizedBox(width: 4),
-                      Text(
-                        '4.9',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+
 
   Widget _buildTwoMediumCards(Trip trip1, Trip trip2) {
     return Padding(

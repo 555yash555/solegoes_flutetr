@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'firebase_options.dart';
 import 'src/constants/app_colors.dart';
 import 'src/routing/app_router.dart';
+import 'src/common_widgets/app_error_listener.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,6 +41,11 @@ class SoleGoesApp extends ConsumerWidget {
         ),
       ),
       routerConfig: goRouter,
+      builder: (context, child) {
+        return AppErrorListener(
+          child: child ?? const SizedBox.shrink(),
+        );
+      },
     );
   }
 }

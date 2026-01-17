@@ -9,6 +9,8 @@ import '../../bookings/data/booking_repository.dart';
 import '../../trips/data/trip_repository.dart';
 import '../../trips/domain/trip.dart';
 import '../data/razorpay_service.dart';
+import '../../shared/global_error_controller.dart';
+import '../../../utils/app_exception.dart';
 
 /// Payment method data model
 class PaymentMethod {
@@ -165,20 +167,9 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
   void _handlePaymentError(PaymentFailureResponse response) {
     setState(() => _isProcessing = false);
 
-    // Show error snackbar
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          response.message ?? 'Payment failed. Please try again.',
-          style: const TextStyle(color: Colors.white),
-        ),
-        backgroundColor: AppColors.accentRose,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-      ),
-    );
+    // Convert to centralized exception and report globally
+    final exception = AppException.fromError(response);
+    ref.read(globalErrorProvider.notifier).setException(exception);
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {

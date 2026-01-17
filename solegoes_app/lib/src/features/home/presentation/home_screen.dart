@@ -5,7 +5,9 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../../../theme/app_theme.dart';
 import '../../authentication/data/auth_repository.dart';
 import '../../trips/data/trip_repository.dart';
-import 'widgets/trip_card.dart';
+import '../../../common_widgets/app_text_field.dart';
+import '../../../common_widgets/category_pill.dart';
+import '../../../common_widgets/trip_card.dart';
 
 /// Home screen with trip cards and search
 /// Reference: designs/option15_mobile.html
@@ -179,45 +181,29 @@ class HomeScreen extends ConsumerWidget {
   Widget _buildSearchBar(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        decoration: BoxDecoration(
-          color: AppColors.surfaceOverlay,
-          borderRadius: BorderRadius.circular(AppRadius.full),
-          border: Border.all(color: AppColors.borderSubtle),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              LucideIcons.search,
-              size: 20,
-              color: AppColors.textHint,
+      child: AppTextField(
+        controller: TextEditingController(),
+        hint: 'Where to next?',
+        icon: LucideIcons.search,
+        readOnly: true,
+        onTap: () {
+          // TODO: Implement search
+        },
+        suffixIcon: GestureDetector(
+          onTap: () => context.push('/preferences'),
+          child: Container(
+            margin: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: AppColors.surfacePressed,
+              borderRadius: BorderRadius.circular(8),
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                'Where to next?',
-                style: AppTextStyles.body.copyWith(
-                  color: AppColors.textHint,
-                ),
-              ),
+            child: Icon(
+              LucideIcons.slidersHorizontal,
+              size: 16,
+              color: AppColors.textPrimary,
             ),
-            GestureDetector(
-              onTap: () => context.push('/preferences'),
-              child: Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  color: AppColors.surfacePressed,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(
-                  LucideIcons.slidersHorizontal,
-                  size: 16,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -332,23 +318,12 @@ class HomeScreen extends ConsumerWidget {
           final isActive = index == 0;
           return Padding(
             padding: const EdgeInsets.only(right: 12),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              decoration: BoxDecoration(
-                color: isActive
-                    ? AppColors.pillActiveBg
-                    : AppColors.pillInactiveBg,
-                borderRadius: BorderRadius.circular(AppRadius.full),
-                border: Border.all(
-                  color: isActive ? AppColors.primary : AppColors.borderSubtle,
-                ),
-              ),
-              child: Text(
-                categories[index],
-                style: AppTextStyles.labelLarge.copyWith(
-                  color: isActive ? Colors.white : AppColors.textSecondary,
-                ),
-              ),
+            child: CategoryPill(
+              label: categories[index],
+              isSelected: isActive,
+              onTap: () {
+                // TODO: Handle category selection
+              },
             ),
           );
         },

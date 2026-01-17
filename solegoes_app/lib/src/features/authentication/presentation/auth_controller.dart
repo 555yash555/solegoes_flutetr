@@ -1,4 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../../shared/global_error_controller.dart';
 import '../data/auth_repository.dart';
 import '../domain/app_user.dart';
 
@@ -26,6 +27,9 @@ class AuthController extends _$AuthController {
         password,
       );
     });
+    if (state.hasError) {
+      ref.read(globalErrorProvider.notifier).setException(state.error!);
+    }
     return !state.hasError;
   }
 
@@ -44,6 +48,9 @@ class AuthController extends _$AuthController {
         phoneNumber: phoneNumber,
       );
     });
+    if (state.hasError) {
+      ref.read(globalErrorProvider.notifier).setException(state.error!);
+    }
     return !state.hasError;
   }
 
@@ -57,6 +64,9 @@ class AuthController extends _$AuthController {
     state = await AsyncValue.guard(() async {
       user = await ref.read(authRepositoryProvider).signInWithGoogle();
     });
+    if (state.hasError) {
+      ref.read(globalErrorProvider.notifier).setException(state.error!);
+    }
     return state.hasError ? null : user;
   }
 
@@ -69,6 +79,9 @@ class AuthController extends _$AuthController {
     state = await AsyncValue.guard(() async {
       await ref.read(authRepositoryProvider).updatePhoneNumber(phoneNumber);
     });
+    if (state.hasError) {
+      ref.read(globalErrorProvider.notifier).setException(state.error!);
+    }
     return !state.hasError;
   }
 
@@ -89,6 +102,9 @@ class AuthController extends _$AuthController {
         personalityTraits: personalityTraits,
       );
     });
+    if (state.hasError) {
+      ref.read(globalErrorProvider.notifier).setException(state.error!);
+    }
     return !state.hasError;
   }
 
@@ -105,6 +121,9 @@ class AuthController extends _$AuthController {
         travelStyle: travelStyle,
       );
     });
+    if (state.hasError) {
+      ref.read(globalErrorProvider.notifier).setException(state.error!);
+    }
     return !state.hasError;
   }
 
@@ -117,5 +136,8 @@ class AuthController extends _$AuthController {
     state = await AsyncValue.guard(() async {
       await ref.read(authRepositoryProvider).signOut();
     });
+    if (state.hasError) {
+      ref.read(globalErrorProvider.notifier).setException(state.error!);
+    }
   }
 }
