@@ -975,3 +975,10 @@ lib/src/features/payments/presentation/payment_confirmation_screen.dart:1154:39:
               style: AppTextStyles.h5.copyWith(color: Colors.white),
                                       ^^^^^^^^
 Try again after fixing the above error(s).
+
+Performing hot reload...                                        
+Reloaded 36 of 2771 libraries in 673ms (compile: 172 ms, reload: 204 ms, reassemble: 255 ms).
+W/WindowOnBackDispatcher( 7126): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher( 7126): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+W/WindowOnBackDispatcher( 7126): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher( 7126): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
