@@ -263,7 +263,7 @@ class _PhoneCollectionScreenState extends ConsumerState<PhoneCollectionScreen> {
                 children: [
                   Text(
                     _selectedFlag,
-                    style: const TextStyle(fontSize: 20),
+                    style: AppTextStyles.h3,
                   ),
                   const SizedBox(width: 8),
                   Text(
@@ -401,7 +401,7 @@ class _CountryPickerSheet extends StatelessWidget {
                       children: [
                         Text(
                           country['flag']!,
-                          style: const TextStyle(fontSize: 24),
+                          style: AppTextStyles.h2,
                         ),
                         const SizedBox(width: 16),
                         Expanded(

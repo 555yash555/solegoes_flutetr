@@ -1202,7 +1202,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                                 const SizedBox(width: 4),
                                 const Text(
                                   'Verified Agency',
-                                  style: TextStyle(fontSize: 12, color: Color(0xFF22C55E)),
+                                  style: AppTextStyles.labelSmall.copyWith(color: const Color(0xFF22C55E)),
                                 ),
                                 const SizedBox(width: 8),
                               ],

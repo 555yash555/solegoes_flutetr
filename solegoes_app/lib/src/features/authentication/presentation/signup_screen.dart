@@ -456,7 +456,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               children: [
                 const Text(
                   '🇮🇳',
-                  style: TextStyle(fontSize: 18),
+                  style: AppTextStyles.h4,
                 ),
                 const SizedBox(width: 8),
                 Text(
