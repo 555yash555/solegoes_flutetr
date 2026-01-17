@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../theme/app_theme.dart';
 import 'app_card.dart';
+import 'app_image.dart';
 
 /// Horizontal scrollable trip card
 class TripCard extends StatelessWidget {
@@ -49,37 +50,11 @@ class TripCard extends StatelessWidget {
               child: Stack(
                 children: [
                   // Image
-                  SizedBox(
+                  AppImage(
+                    imageUrl: imageUrl,
                     height: 140,
                     width: double.infinity,
-                    child: Image.network(
-                      imageUrl,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          color: AppColors.bgSurface,
-                          child: Center(
-                            child: Icon(
-                              LucideIcons.image,
-                              color: AppColors.textTertiary,
-                              size: 40,
-                            ),
-                          ),
-                        );
-                      },
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return Container(
-                          color: AppColors.bgSurface,
-                          child: Center(
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: AppColors.primary,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                    fit: BoxFit.cover,
                   ),
                   // Rating badge
                   Positioned(
@@ -220,21 +195,21 @@ class FeaturedTripCard extends StatelessWidget {
             fit: StackFit.expand,
             children: [
               // Background image
-              Image.network(
-                imageUrl,
+              AppImage(
+                imageUrl: imageUrl,
+                width: double.infinity,
+                height: double.infinity,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    color: AppColors.bgSurface,
-                    child: Center(
-                      child: Icon(
-                        LucideIcons.image,
-                        color: AppColors.textTertiary,
-                        size: 60,
-                      ),
+                errorWidget: Container(
+                  color: AppColors.bgSurface,
+                  child: Center(
+                    child: Icon(
+                      LucideIcons.image,
+                      color: AppColors.textTertiary,
+                      size: 60,
                     ),
-                  );
-                },
+                  ),
+                ),
               ),
               // Gradient overlay
               Container(
@@ -323,7 +298,7 @@ class FeaturedTripCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        title,
+                        title.replaceAll(r'\n', '\n'),
                         style: const TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.w700,

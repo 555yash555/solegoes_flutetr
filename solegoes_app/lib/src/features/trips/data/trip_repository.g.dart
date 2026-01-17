@@ -25,7 +25,7 @@ final class TripRepositoryProvider
         argument: null,
         retry: null,
         name: r'tripRepositoryProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -52,7 +52,7 @@ final class TripRepositoryProvider
   }
 }
 
-String _$tripRepositoryHash() => r'2696c54918f21f48b07fb71b95947854dc9067e8';
+String _$tripRepositoryHash() => r'aa5630e98fb3da418ff7582760cf808feb9638fe';
 
 /// Provider for all trips
 
@@ -66,9 +66,9 @@ final class AllTripsProvider
         $FunctionalProvider<
           AsyncValue<List<Trip>>,
           List<Trip>,
-          FutureOr<List<Trip>>
+          Stream<List<Trip>>
         >
-    with $FutureModifier<List<Trip>>, $FutureProvider<List<Trip>> {
+    with $FutureModifier<List<Trip>>, $StreamProvider<List<Trip>> {
   /// Provider for all trips
   AllTripsProvider._()
     : super(
@@ -76,7 +76,7 @@ final class AllTripsProvider
         argument: null,
         retry: null,
         name: r'allTripsProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -86,16 +86,16 @@ final class AllTripsProvider
 
   @$internal
   @override
-  $FutureProviderElement<List<Trip>> $createElement($ProviderPointer pointer) =>
-      $FutureProviderElement(pointer);
+  $StreamProviderElement<List<Trip>> $createElement($ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
 
   @override
-  FutureOr<List<Trip>> create(Ref ref) {
+  Stream<List<Trip>> create(Ref ref) {
     return allTrips(ref);
   }
 }
 
-String _$allTripsHash() => r'e8107a573fb3ca3f5ba96b0b68d922e0ed90b3eb';
+String _$allTripsHash() => r'4f2f41358e3aa9e75b71f436c6cbcec7e49fefde';
 
 /// Provider for featured trips
 
@@ -109,9 +109,9 @@ final class FeaturedTripsProvider
         $FunctionalProvider<
           AsyncValue<List<Trip>>,
           List<Trip>,
-          FutureOr<List<Trip>>
+          Stream<List<Trip>>
         >
-    with $FutureModifier<List<Trip>>, $FutureProvider<List<Trip>> {
+    with $FutureModifier<List<Trip>>, $StreamProvider<List<Trip>> {
   /// Provider for featured trips
   FeaturedTripsProvider._()
     : super(
@@ -119,7 +119,7 @@ final class FeaturedTripsProvider
         argument: null,
         retry: null,
         name: r'featuredTripsProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -129,16 +129,16 @@ final class FeaturedTripsProvider
 
   @$internal
   @override
-  $FutureProviderElement<List<Trip>> $createElement($ProviderPointer pointer) =>
-      $FutureProviderElement(pointer);
+  $StreamProviderElement<List<Trip>> $createElement($ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
 
   @override
-  FutureOr<List<Trip>> create(Ref ref) {
+  Stream<List<Trip>> create(Ref ref) {
     return featuredTrips(ref);
   }
 }
 
-String _$featuredTripsHash() => r'f59d702cca1f5e21ea6505926079c10594a40485';
+String _$featuredTripsHash() => r'7b742af44532deeec2357a77d8df6de0fd8a25fa';
 
 /// Provider for trending trips
 
@@ -152,9 +152,9 @@ final class TrendingTripsProvider
         $FunctionalProvider<
           AsyncValue<List<Trip>>,
           List<Trip>,
-          FutureOr<List<Trip>>
+          Stream<List<Trip>>
         >
-    with $FutureModifier<List<Trip>>, $FutureProvider<List<Trip>> {
+    with $FutureModifier<List<Trip>>, $StreamProvider<List<Trip>> {
   /// Provider for trending trips
   TrendingTripsProvider._()
     : super(
@@ -162,7 +162,7 @@ final class TrendingTripsProvider
         argument: null,
         retry: null,
         name: r'trendingTripsProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -172,16 +172,16 @@ final class TrendingTripsProvider
 
   @$internal
   @override
-  $FutureProviderElement<List<Trip>> $createElement($ProviderPointer pointer) =>
-      $FutureProviderElement(pointer);
+  $StreamProviderElement<List<Trip>> $createElement($ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
 
   @override
-  FutureOr<List<Trip>> create(Ref ref) {
+  Stream<List<Trip>> create(Ref ref) {
     return trendingTrips(ref);
   }
 }
 
-String _$trendingTripsHash() => r'ad0f640eb57bf7779ee75a9476238051997f4532';
+String _$trendingTripsHash() => r'f5a0cfacd7139c2bd90e4f0354872231dee3cfb2';
 
 /// Provider for a specific trip
 

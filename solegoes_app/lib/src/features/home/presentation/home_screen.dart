@@ -8,6 +8,10 @@ import '../../trips/data/trip_repository.dart';
 import '../../../common_widgets/app_text_field.dart';
 import '../../../common_widgets/category_pill.dart';
 import '../../../common_widgets/trip_card.dart';
+import '../../trips/data/trip_repository.dart';
+import '../../../common_widgets/skeletons/trip_card_skeleton.dart';
+import '../../../common_widgets/app_shimmer.dart';
+import '../../../common_widgets/app_image.dart';
 
 /// Home screen with trip cards and search
 /// Reference: designs/option15_mobile.html
@@ -143,13 +147,11 @@ class HomeScreen extends ConsumerWidget {
                       border: Border.all(color: AppColors.borderSubtle),
                     ),
                     child: ClipOval(
-                      child: user?.photoUrl != null
-                          ? Image.network(
-                              user!.photoUrl!,
-                              fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) => _buildAvatarFallback(user.displayName),
-                            )
-                          : _buildAvatarFallback(user?.displayName),
+                      child: AppImage.avatar(
+                        imageUrl: user?.photoUrl,
+                        name: user?.displayName,
+                        size: 40,
+                      ),
                     ),
                   ),
                   loading: () => const SizedBox(width: 40, height: 40),
@@ -228,13 +230,10 @@ class HomeScreen extends ConsumerWidget {
             isTrending: trip.isTrending,
           );
         },
-        loading: () => Container(
+        loading: () => const AppShimmer(
+          width: double.infinity,
           height: 380,
-          decoration: BoxDecoration(
-            color: AppColors.bgSurface,
-            borderRadius: BorderRadius.circular(AppRadius.lg),
-          ),
-          child: Center(child: CircularProgressIndicator()),
+          borderRadius: 24,
         ),
         error: (_, __) => const SizedBox.shrink(),
       ),
@@ -389,8 +388,15 @@ class HomeScreen extends ConsumerWidget {
                 },
               );
             },
-            loading: () => Center(
-              child: CircularProgressIndicator(),
+            loading: () => ListView.separated(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: 3,
+              separatorBuilder: (_, __) => const SizedBox(width: 16),
+              itemBuilder: (context, index) => const SizedBox(
+                width: 280,
+                child: TripCardSkeleton(),
+              ),
             ),
             error: (_, __) => Center(
               child: Text('Failed to load trips'),

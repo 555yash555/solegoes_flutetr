@@ -143,33 +143,61 @@ class TripRepository {
             .map((doc) => Trip.fromJson({...doc.data(), 'tripId': doc.id}))
             .toList());
   }
+
+  /// Stream of featured trips
+  Stream<List<Trip>> watchFeaturedTrips() {
+    return _firestore
+        .collection('trips')
+        .where('status', isEqualTo: 'live')
+        .where('isFeatured', isEqualTo: true)
+        .orderBy('createdAt', descending: true)
+        .limit(5)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => Trip.fromJson({...doc.data(), 'tripId': doc.id}))
+            .toList());
+  }
+
+  /// Stream of trending trips
+  Stream<List<Trip>> watchTrendingTrips() {
+    return _firestore
+        .collection('trips')
+        .where('status', isEqualTo: 'live')
+        .where('isTrending', isEqualTo: true)
+        .orderBy('rating', descending: true)
+        .limit(10)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => Trip.fromJson({...doc.data(), 'tripId': doc.id}))
+            .toList());
+  }
 }
 
 /// Provider for TripRepository
-@riverpod
+@Riverpod(keepAlive: true)
 TripRepository tripRepository(Ref ref) {
   return TripRepository(FirebaseFirestore.instance);
 }
 
 /// Provider for all trips
-@riverpod
-Future<List<Trip>> allTrips(Ref ref) {
+@Riverpod(keepAlive: true)
+Stream<List<Trip>> allTrips(Ref ref) {
   final repository = ref.watch(tripRepositoryProvider);
-  return repository.getAllTrips();
+  return repository.watchAllTrips();
 }
 
 /// Provider for featured trips
-@riverpod
-Future<List<Trip>> featuredTrips(Ref ref) {
+@Riverpod(keepAlive: true)
+Stream<List<Trip>> featuredTrips(Ref ref) {
   final repository = ref.watch(tripRepositoryProvider);
-  return repository.getFeaturedTrips();
+  return repository.watchFeaturedTrips();
 }
 
 /// Provider for trending trips
-@riverpod
-Future<List<Trip>> trendingTrips(Ref ref) {
+@Riverpod(keepAlive: true)
+Stream<List<Trip>> trendingTrips(Ref ref) {
   final repository = ref.watch(tripRepositoryProvider);
-  return repository.getTrendingTrips();
+  return repository.watchTrendingTrips();
 }
 
 /// Provider for a specific trip

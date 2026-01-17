@@ -18,6 +18,7 @@ import '../../../utils/app_exception.dart';
 import '../../../common_widgets/app_button.dart';
 import '../../../common_widgets/app_card.dart';
 import '../../../common_widgets/app_expansion_tile.dart';
+import '../../../common_widgets/app_image.dart';
 
 /// Trip detail screen showing full trip information
 /// Reference: designs/option15_trip_detail.html
@@ -241,10 +242,12 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
             fit: StackFit.expand,
             children: [
               // Hero Image
-              Image.network(
-                trip.imageUrl,
+              AppImage(
+                imageUrl: trip.imageUrl,
+                width: double.infinity,
+                height: double.infinity,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
+                errorWidget: Container(
                   color: AppColors.bgSurface,
                   child: const Icon(LucideIcons.image, color: AppColors.textTertiary, size: 60),
                 ),
@@ -613,10 +616,11 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(color: AppColors.bgDeep, width: 2),
-                            image: DecorationImage(
-                              image: NetworkImage('https://i.pravatar.cc/150?img=${index + 1}'),
-                              fit: BoxFit.cover,
-                            ),
+                          ),
+                          child: AppImage(
+                            imageUrl: 'https://i.pravatar.cc/150?img=${index + 1}',
+                            shape: BoxShape.circle,
+                            fit: BoxFit.cover,
                           ),
                         ),
                       );
@@ -874,10 +878,12 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(AppRadius.md),
-                    child: Image.network(
-                      galleryImages[0],
+                    child: AppImage(
+                      imageUrl: galleryImages[0],
                       fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      errorWidget: Container(
                         color: AppColors.bgSurface,
                         child: const Icon(LucideIcons.image, color: AppColors.textTertiary, size: 40),
                       ),
@@ -967,10 +973,12 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
         aspectRatio: 4 / 5,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(AppRadius.md),
-          child: Image.network(
-            imageUrl,
+          child: AppImage(
+            imageUrl: imageUrl,
             fit: BoxFit.cover,
-            errorBuilder: (_, __, ___) => Container(
+            width: double.infinity,
+            height: double.infinity,
+            errorWidget: Container(
               color: AppColors.bgSurface,
               child: const Icon(LucideIcons.image, color: AppColors.textTertiary),
             ),
@@ -1110,10 +1118,11 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                        decoration: BoxDecoration(
                          shape: BoxShape.circle,
                          border: Border.all(color: AppColors.borderGlass, width: 2),
-                         image: const DecorationImage(
-                           image: NetworkImage('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&q=80'),
-                           fit: BoxFit.cover,
-                         ),
+                       ),
+                       child: AppImage(
+                         imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&q=80',
+                         shape: BoxShape.circle,
+                         fit: BoxFit.cover,
                        ),
                      ),
                      const SizedBox(width: 16),
@@ -1211,9 +1220,11 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  Image.network(
-                    trip.imageUrl,
+                  AppImage(
+                    imageUrl: trip.imageUrl,
                     fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: double.infinity,
                     colorBlendMode: BlendMode.saturation,
                     color: Colors.grey,
                   ),

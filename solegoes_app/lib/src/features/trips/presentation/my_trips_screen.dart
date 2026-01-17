@@ -1,5 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import '../../../common_widgets/skeletons/trip_card_skeleton.dart';
+import '../../../common_widgets/app_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -196,8 +197,10 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
               _buildTripCard(upcomingBookings[index]),
         );
       },
-      loading: () => Center(
-        child: CircularProgressIndicator(color: AppColors.primary),
+      loading: () => ListView.builder(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
+        itemCount: 3,
+        itemBuilder: (context, index) => const TripCardSkeleton(),
       ),
       error: (error, _) => _buildErrorState(error.toString()),
     );
@@ -229,8 +232,10 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
           itemBuilder: (context, index) => _buildTripCard(pastBookings[index]),
         );
       },
-      loading: () => Center(
-        child: CircularProgressIndicator(color: AppColors.primary),
+      loading: () => ListView.builder(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
+        itemCount: 3,
+        itemBuilder: (context, index) => const TripCardSkeleton(),
       ),
       error: (error, _) => _buildErrorState(error.toString()),
     );
@@ -270,28 +275,13 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
                 SizedBox(
                   height: 160,
                   width: double.infinity,
-                  child: CachedNetworkImage(
+                  child: AppImage(
                     imageUrl: booking.tripImageUrl,
+                    height: 160,
+                    width: double.infinity,
                     fit: BoxFit.cover,
                     color: isPast ? Colors.grey : null,
                     colorBlendMode: isPast ? BlendMode.saturation : null,
-                    placeholder: (context, url) => Container(
-                      color: AppColors.bgSurface,
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          color: AppColors.primary,
-                          strokeWidth: 2,
-                        ),
-                      ),
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                      color: AppColors.bgSurface,
-                      child: const Icon(
-                        LucideIcons.image,
-                        color: AppColors.textTertiary,
-                        size: 40,
-                      ),
-                    ),
                   ),
                 ),
                 // Status badge

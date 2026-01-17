@@ -8,6 +8,7 @@ import '../../../common_widgets/trip_card.dart';
 import '../../../common_widgets/category_pill.dart';
 import '../../trips/data/trip_repository.dart';
 import '../../trips/domain/trip.dart';
+import '../../../common_widgets/skeletons/trip_card_skeleton.dart';
 
 /// Explore screen with search, categories, and varied trip layouts
 class ExploreScreen extends ConsumerStatefulWidget {
@@ -188,12 +189,13 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
 
               return _buildTripLayouts(filteredTrips);
             },
-            loading: () => const SliverToBoxAdapter(
-              child: Center(
-                child: Padding(
-                  padding: EdgeInsets.all(32),
-                  child: CircularProgressIndicator(),
+            loading: () => SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) => const Padding(
+                  padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  child: TripCardSkeleton(),
                 ),
+                childCount: 4,
               ),
             ),
             error: (error, stack) => SliverToBoxAdapter(
