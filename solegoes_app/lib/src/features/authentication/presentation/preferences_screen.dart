@@ -161,10 +161,7 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
                     onTap: _skipSetup,
                     child: Text(
                       'Skip',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimary.withValues(alpha: 0.6),
+                      style: AppTextStyles.labelLarge.copyWith(color: AppColors.textPrimary.withValues(alpha: 0.6),
                       ),
                     ),
                   ),
@@ -183,11 +180,7 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
                   // Title
                   const Text(
                     'Your Preferences',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimary,
-                    ),
+                    style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
                   ),
                   const SizedBox(height: 8),
                   Text(
@@ -348,13 +341,9 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
             ),
             child: Text(
               interest,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: isSelected
+              style: AppTextStyles.labelLarge.copyWith(color: isSelected
                     ? Colors.white
-                    : AppColors.textSecondary,
-              ),
+                    : AppColors.textSecondary),
             ),
           ),
         );
@@ -407,11 +396,7 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
                 Expanded(
                   child: Text(
                     option['label'] as String,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimary,
-                    ),
+                    style: const AppTextStyles.h5.copyWith(color: AppColors.textPrimary),
                   ),
                 ),
               ],
@@ -455,13 +440,9 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
             ),
             child: Text(
               style,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: isSelected
+              style: AppTextStyles.labelLarge.copyWith(color: isSelected
                     ? Colors.white
-                    : AppColors.textSecondary,
-              ),
+                    : AppColors.textSecondary),
             ),
           ),
         );

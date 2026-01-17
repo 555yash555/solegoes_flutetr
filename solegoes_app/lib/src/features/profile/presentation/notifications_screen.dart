@@ -140,11 +140,7 @@ class NotificationsScreen extends ConsumerWidget {
             },
             child: Text(
               'Mark all as read',
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-                color: AppColors.textMuted,
-              ),
+              style: AppTextStyles.labelSmall.copyWith(color: AppColors.textMuted),
             ),
           ),
         ],

@@ -282,11 +282,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
       children: [
         const Text(
           'Choose Your Style',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
-            color: AppColors.textPrimary,
-          ),
+          style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
         ),
         const SizedBox(height: 8),
         Text(
@@ -438,11 +434,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
           const SizedBox(width: 6),
           Text(
             label,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              color: AppColors.textSecondary,
-            ),
+            style: AppTextStyles.labelSmall.copyWith(color: AppColors.textSecondary),
           ),
         ],
       ),
@@ -469,11 +461,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
       children: [
         const Text(
           'Select Boarding Point',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
-            color: AppColors.textPrimary,
-          ),
+          style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
         ),
         const SizedBox(height: 8),
         Text(
@@ -500,11 +488,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
       children: [
         const Text(
           'Select Dropping Point',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
-            color: AppColors.textPrimary,
-          ),
+          style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
         ),
         const SizedBox(height: 8),
         Text(
@@ -618,11 +602,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
       children: [
         const Text(
           'Review Your Booking',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
-            color: AppColors.textPrimary,
-          ),
+          style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
         ),
         const SizedBox(height: 24),
         
@@ -773,11 +753,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
               ),
               child: Text(
                 isLastStep ? 'Proceed to Payment' : 'Continue',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                ),
+                style: const AppTextStyles.h5.copyWith(color: Colors.white),
               ),
             ),
           ),

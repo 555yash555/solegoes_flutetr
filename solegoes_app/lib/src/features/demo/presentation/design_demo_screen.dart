@@ -81,11 +81,7 @@ class _DesignDemoScreenState extends State<DesignDemoScreen> {
                     AppColors.primaryGradient.createShader(bounds),
                 child: const Text(
                   'Gradient Text',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                  ),
+                  style: AppTextStyles.h2.copyWith(color: Colors.white),
                 ),
               ),
               const SizedBox(height: AppSpacing.lg),
@@ -451,11 +447,7 @@ class _DesignDemoScreenState extends State<DesignDemoScreen> {
           child: Center(
             child: Text(
               isFilled ? '${index + 1}' : '',
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
-                color: AppColors.textPrimary,
-              ),
+              style: const AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
             ),
           ),
         );
@@ -487,11 +479,7 @@ class _DesignDemoScreenState extends State<DesignDemoScreen> {
         ),
         child: Text(
           text,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: selected ? Colors.white : AppColors.textSecondary,
-          ),
+          style: AppTextStyles.labelLarge.copyWith(color: selected ? Colors.white : AppColors.textSecondary),
         ),
       ),
     );

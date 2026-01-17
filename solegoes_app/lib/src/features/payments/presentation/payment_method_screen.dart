@@ -230,11 +230,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                         children: [
                           const Text(
                             'Select Payment Method',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                            ),
+                            style: AppTextStyles.h2.copyWith(color: Colors.white),
                           ),
                           const SizedBox(height: 8),
                           // Razorpay test mode indicator
@@ -412,11 +408,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
             Expanded(
               child: Text(
                 method.name,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
+                style: const AppTextStyles.h5.copyWith(color: Colors.white),
               ),
             ),
             // Radio
@@ -481,22 +473,14 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
               children: [
                 Text(
                   'Total Amount',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.textMuted,
-                  ),
+                  style: AppTextStyles.labelLarge.copyWith(color: AppColors.textMuted),
                 ),
                 Text(
                   '₹${price.toStringAsFixed(0).replaceAllMapped(
                         RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
                         (Match m) => '${m[1]},',
                       )}',
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                  ),
+                  style: const AppTextStyles.h2.copyWith(color: Colors.white),
                 ),
               ],
             ),

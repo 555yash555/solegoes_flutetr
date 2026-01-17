@@ -134,11 +134,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   // Welcome text
                   const Text(
                     'Create Account',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimary,
-                    ),
+                    style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -255,10 +251,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       children: [
                         Text(
                           'Already have an account? ',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.textPrimary.withValues(alpha: 0.5),
+                          style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textPrimary.withValues(alpha: 0.5),
                           ),
                         ),
                         GestureDetector(
@@ -392,11 +385,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   Widget _buildInputLabel(String label) {
     return Text(
       label,
-      style: const TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.w600,
-        color: AppColors.textPrimary,
-      ),
+      style: const AppTextStyles.labelLarge.copyWith(color: AppColors.textPrimary),
     );
   }
 
@@ -418,11 +407,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         controller: controller,
         obscureText: obscureText,
         keyboardType: keyboardType,
-        style: const TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.w500,
-          color: AppColors.textPrimary,
-        ),
+        style: const AppTextStyles.body.copyWith(color: AppColors.textPrimary),
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: TextStyle(
@@ -496,11 +481,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             child: TextField(
               controller: _phoneController,
               keyboardType: TextInputType.phone,
-              style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
-                color: AppColors.textPrimary,
-              ),
+              style: const AppTextStyles.body.copyWith(color: AppColors.textPrimary),
               decoration: InputDecoration(
                 hintText: 'Enter phone number',
                 hintStyle: TextStyle(
@@ -550,10 +531,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           Expanded(
             child: RichText(
               text: TextSpan(
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.textPrimary.withValues(alpha: 0.6),
+                style: AppTextStyles.labelMedium.copyWith(color: AppColors.textPrimary.withValues(alpha: 0.6),
                   height: 1.4,
                 ),
                 children: const [
@@ -643,11 +621,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             'or continue with',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: AppColors.textHint,
-            ),
+            style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textHint),
           ),
         ),
         Expanded(
@@ -692,11 +666,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             const SizedBox(width: 12),
             Text(
               isGoogle ? 'Google' : 'Apple',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
-              ),
+              style: const AppTextStyles.h5.copyWith(color: AppColors.textPrimary),
             ),
           ],
         ),

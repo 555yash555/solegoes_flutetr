@@ -186,10 +186,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
                     onTap: () => _skipToHome(),
                     child: Text(
                       'Skip',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimary.withValues(alpha: 0.6),
+                      style: AppTextStyles.labelLarge.copyWith(color: AppColors.textPrimary.withValues(alpha: 0.6),
                       ),
                     ),
                   ),
@@ -209,11 +206,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
                   const Center(
                     child: Text(
                       'Complete Your Profile',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.textPrimary,
-                      ),
+                      style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -483,20 +476,12 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
       children: [
         Text(
           text,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: AppColors.textPrimary,
-          ),
+          style: const AppTextStyles.labelLarge.copyWith(color: AppColors.textPrimary),
         ),
         if (required)
           const Text(
             ' *',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: AppColors.accentRose,
-            ),
+            style: AppTextStyles.labelLarge.copyWith(color: AppColors.accentRose),
           ),
       ],
     );
@@ -515,11 +500,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
       ),
       child: TextField(
         controller: controller,
-        style: const TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.w500,
-          color: AppColors.textPrimary,
-        ),
+        style: const AppTextStyles.body.copyWith(color: AppColors.textPrimary),
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: TextStyle(
@@ -625,13 +606,9 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
             ),
             child: Text(
               trait,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: isSelected
+              style: AppTextStyles.labelLarge.copyWith(color: isSelected
                     ? Colors.white
-                    : AppColors.textSecondary,
-              ),
+                    : AppColors.textSecondary),
             ),
           ),
         );
@@ -649,11 +626,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
       child: TextField(
         controller: _bioController,
         maxLines: 5,
-        style: const TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.w500,
-          color: AppColors.textPrimary,
-        ),
+        style: const AppTextStyles.body.copyWith(color: AppColors.textPrimary),
         decoration: InputDecoration(
           hintText: 'Tell us a bit about yourself...',
           hintStyle: TextStyle(

@@ -39,11 +39,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
             backgroundColor: AppColors.bgDeep,
             title: const Text(
               'Explore',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
-                color: Colors.white,
-              ),
+              style: AppTextStyles.h2.copyWith(color: Colors.white),
             ),
             actions: [
               IconButton(
@@ -372,11 +368,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                             ),
                             Text(
                               '₹${trip.price.toStringAsFixed(0)}',
-                              style: const TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white,
-                              ),
+                              style: const AppTextStyles.h2.copyWith(color: Colors.white),
                             ),
                           ],
                         ),
@@ -516,11 +508,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                     children: [
                       Text(
                         '₹${trip.price.toStringAsFixed(0)}',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
+                        style: const AppTextStyles.h5.copyWith(color: Colors.white),
                       ),
                       Container(
                         padding: const EdgeInsets.all(4),

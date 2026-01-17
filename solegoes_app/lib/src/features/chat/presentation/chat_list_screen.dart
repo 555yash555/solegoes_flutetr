@@ -200,11 +200,7 @@ class ChatListScreen extends ConsumerWidget {
                       Expanded(
                         child: Text(
                           chat.name,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
-                          ),
+                          style: const AppTextStyles.h5.copyWith(color: Colors.white),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),

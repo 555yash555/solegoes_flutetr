@@ -597,10 +597,7 @@ $boardingInfo$droppingInfo''';
                       : isPending
                           ? 'Payment Pending'
                           : 'Payment Successful!',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                    color: isFailed
+                  style: AppTextStyles.h2.copyWith(color: isFailed
                         ? const Color(0xFFEF4444)
                         : isPending
                             ? const Color(0xFFEAB308)
@@ -693,11 +690,7 @@ $boardingInfo$droppingInfo''';
 
                 const Text(
                   'Payment Successful!',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                  ),
+                  style: AppTextStyles.h2.copyWith(color: Colors.white),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -989,11 +982,7 @@ $boardingInfo$droppingInfo''';
           child: Text(
             value,
             style: valueStyle ??
-                TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: valueColor ?? Colors.white,
-                ),
+                AppTextStyles.labelLarge.copyWith(color: valueColor ?? Colors.white),
             textAlign: TextAlign.right,
           ),
         ),
@@ -1162,11 +1151,7 @@ $boardingInfo$droppingInfo''';
             SizedBox(width: 8),
             Text(
               'Download Receipt',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-              ),
+              style: AppTextStyles.h5.copyWith(color: Colors.white),
             ),
           ],
         ),
@@ -1217,11 +1202,7 @@ $boardingInfo$droppingInfo''';
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Text(
           'Back to Home',
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: AppColors.textMuted,
-          ),
+          style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textMuted),
         ),
       ),
     );

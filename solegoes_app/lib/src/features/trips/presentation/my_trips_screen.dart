@@ -184,10 +184,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
             fontSize: 14,
             fontWeight: FontWeight.w700,
           ),
-          unselectedLabelStyle: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
+          unselectedLabelStyle: const AppTextStyles.bodyMedium,
           tabs: const [
             Tab(text: 'Upcoming'),
             Tab(text: 'Past'),
@@ -446,11 +443,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
               child: const Text(
                 'View Details',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
+                style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
               ),
             ),
           ),
@@ -480,11 +473,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
               child: const Text(
                 'Chat',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
+                style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
               ),
             ),
           ),
@@ -509,11 +498,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
               child: const Text(
                 'View Details',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
+                style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
               ),
             ),
           ),
@@ -535,11 +520,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
                 child: const Text(
                   'Book Again',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
+                  style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
                 ),
               ),
             ),
@@ -606,11 +587,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
                   ),
                   child: Text(
                     actionText,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
+                    style: const AppTextStyles.h5.copyWith(color: Colors.white),
                   ),
                 ),
               ),

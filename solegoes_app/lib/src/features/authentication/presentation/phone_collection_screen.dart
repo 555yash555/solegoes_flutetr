@@ -101,10 +101,7 @@ class _PhoneCollectionScreenState extends ConsumerState<PhoneCollectionScreen> {
                     onTap: _handleSkip,
                     child: Text(
                       'Skip',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimary.withValues(alpha: 0.6),
+                      style: AppTextStyles.labelLarge.copyWith(color: AppColors.textPrimary.withValues(alpha: 0.6),
                       ),
                     ),
                   ),
@@ -138,11 +135,7 @@ class _PhoneCollectionScreenState extends ConsumerState<PhoneCollectionScreen> {
               // Title
               const Text(
                 'Add Phone Number',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.textPrimary,
-                ),
+                style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
               ),
               const SizedBox(height: 8),
               Text(
@@ -158,11 +151,7 @@ class _PhoneCollectionScreenState extends ConsumerState<PhoneCollectionScreen> {
               // Phone field
               const Text(
                 'Phone Number',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimary,
-                ),
+                style: AppTextStyles.labelLarge.copyWith(color: AppColors.textPrimary),
               ),
               const SizedBox(height: 12),
               _buildPhoneField(),
@@ -418,19 +407,12 @@ class _CountryPickerSheet extends StatelessWidget {
                         Expanded(
                           child: Text(
                             country['name']!,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.textPrimary,
-                            ),
+                            style: const AppTextStyles.bodyLarge.copyWith(color: AppColors.textPrimary),
                           ),
                         ),
                         Text(
                           country['code']!,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.textPrimary.withValues(alpha: 0.5),
+                          style: AppTextStyles.labelLarge.copyWith(color: AppColors.textPrimary.withValues(alpha: 0.5),
                           ),
                         ),
                       ],

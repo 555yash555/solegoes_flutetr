@@ -110,11 +110,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   // Welcome text
                   const Text(
                     'Welcome back',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimary,
-                    ),
+                    style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -168,11 +164,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       },
                       child: const Text(
                         'Forgot Password?',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.primary,
-                        ),
+                        style: AppTextStyles.labelLarge.copyWith(color: AppColors.primary),
                       ),
                     ),
                   ),
@@ -207,10 +199,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       children: [
                         Text(
                           "Don't have an account? ",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.textPrimary.withValues(alpha: 0.5),
+                          style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textPrimary.withValues(alpha: 0.5),
                           ),
                         ),
                         GestureDetector(
@@ -336,11 +325,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 const SizedBox(height: 8),
                 Text(
                   'Solo travel, made social ✨',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.textPrimary,
-                  ),
+                  style: AppTextStyles.bodyLarge.copyWith(color: AppColors.textPrimary),
                 ),
               ],
             ),
@@ -353,11 +338,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget _buildInputLabel(String label) {
     return Text(
       label,
-      style: const TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.w600,
-        color: AppColors.textPrimary,
-      ),
+      style: const AppTextStyles.labelLarge.copyWith(color: AppColors.textPrimary),
     );
   }
 
@@ -379,11 +360,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         controller: controller,
         obscureText: obscureText,
         keyboardType: keyboardType,
-        style: const TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.w500,
-          color: AppColors.textPrimary,
-        ),
+        style: const AppTextStyles.body.copyWith(color: AppColors.textPrimary),
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: TextStyle(
@@ -472,11 +449,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             'or continue with',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: AppColors.textHint,
-            ),
+            style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textHint),
           ),
         ),
         Expanded(
@@ -521,11 +494,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             const SizedBox(width: 12),
             Text(
               isGoogle ? 'Google' : 'Apple',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
-              ),
+              style: const AppTextStyles.h5.copyWith(color: AppColors.textPrimary),
             ),
           ],
         ),
