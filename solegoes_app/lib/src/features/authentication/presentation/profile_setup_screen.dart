@@ -360,7 +360,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
                       ),
                     ),
                   )
-                : const Text(
+                : Text(
                     'Continue',
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -479,7 +479,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
           style: AppTextStyles.labelLarge.copyWith(color: AppColors.textPrimary),
         ),
         if (required)
-          const Text(
+          Text(
             ' *',
             style: AppTextStyles.labelLarge.copyWith(color: AppColors.accentRose),
           ),

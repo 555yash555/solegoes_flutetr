@@ -499,7 +499,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
   Widget _buildSkipButton() {
     return GestureDetector(
       onTap: _skipToLogin,
-      child: const Padding(
+      child: Padding(
         padding: EdgeInsets.all(16),
         child: Text(
           'Skip to Login',

@@ -780,3 +780,198 @@ lib/src/features/home/presentation/widgets/trip_card.dart:154:55: Error: Couldn'
                         style: const AppTextStyles.h5.copyWith(color: AppColors.textPrimary),
                                                       ^^^^^^^^
 Try again after fixing the above error(s).
+
+Performing hot reload...                                        
+lib/src/features/onboarding/presentation/onboarding_screen.dart:506:43: Error: Method invocation is not a constant expression.
+          style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textTertiary),
+                                          ^^^^^^^^
+lib/src/features/authentication/presentation/login_screen.dart:113:45: Error: Method invocation is not a constant expression.
+                    style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
+                                            ^^^^^^^^
+lib/src/features/authentication/presentation/login_screen.dart:167:57: Error: Method invocation is not a constant expression.
+                        style: AppTextStyles.labelLarge.copyWith(color: AppColors.primary),
+                                                        ^^^^^^^^
+lib/src/features/authentication/presentation/signup_screen.dart:137:45: Error: Method invocation is not a constant expression.
+                    style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
+                                            ^^^^^^^^
+lib/src/features/authentication/presentation/phone_collection_screen.dart:138:41: Error: Method invocation is not a constant expression.
+                style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
+                                        ^^^^^^^^
+lib/src/features/authentication/presentation/phone_collection_screen.dart:154:49: Error: Method invocation is not a constant expression.
+                style: AppTextStyles.labelLarge.copyWith(color: AppColors.textPrimary),
+                                                ^^^^^^^^
+lib/src/features/authentication/presentation/profile_setup_screen.dart:209:47: Error: Method invocation is not a constant expression.
+                      style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
+                                              ^^^^^^^^
+lib/src/features/authentication/presentation/profile_setup_screen.dart:484:45: Error: Method invocation is not a constant expression.
+            style: AppTextStyles.labelLarge.copyWith(color: AppColors.accentRose),
+                                            ^^^^^^^^
+lib/src/features/authentication/presentation/preferences_screen.dart:183:45: Error: Method invocation is not a constant expression.
+                    style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
+                                            ^^^^^^^^
+lib/src/features/trips/presentation/trip_detail_screen.dart:550:45: Error: Method invocation is not a constant expression.
+                    style: AppTextStyles.h2.copyWith(color: Colors.white),
+                                            ^^^^^^^^
+lib/src/features/trips/presentation/trip_detail_screen.dart:665:55: Error: Method invocation is not a constant expression.
+                      style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
+                                                      ^^^^^^^^
+lib/src/features/trips/presentation/trip_detail_screen.dart:972:57: Error: Method invocation is not a constant expression.
+                        style: AppTextStyles.labelSmall.copyWith(color: Colors.white),
+                                                        ^^^^^^^^
+lib/src/features/trips/presentation/trip_detail_screen.dart:1205:67: Error: Method invocation is not a constant expression.
+                                  style: AppTextStyles.labelSmall.copyWith(color: const Color(0xFF22C55E)),
+                                                                  ^^^^^^^^
+lib/src/features/trips/presentation/trip_detail_screen.dart:1244:55: Error: Method invocation is not a constant expression.
+                      style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
+                                                      ^^^^^^^^
+lib/src/features/trips/presentation/trip_detail_screen.dart:1310:59: Error: Method invocation is not a constant expression.
+                          style: AppTextStyles.bodyMedium.copyWith(color: Colors.white),
+                                                          ^^^^^^^^
+lib/src/features/trips/presentation/trip_detail_screen.dart:1595:49: Error: Method invocation is not a constant expression.
+                        style: AppTextStyles.h5.copyWith(color: Colors.white),
+                                                ^^^^^^^^
+lib/src/features/trips/presentation/my_trips_screen.dart:446:49: Error: Method invocation is not a constant expression.
+                style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
+                                                ^^^^^^^^
+lib/src/features/trips/presentation/my_trips_screen.dart:476:49: Error: Method invocation is not a constant expression.
+                style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
+                                                ^^^^^^^^
+lib/src/features/trips/presentation/my_trips_screen.dart:501:49: Error: Method invocation is not a constant expression.
+                style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
+                                                ^^^^^^^^
+lib/src/features/trips/presentation/my_trips_screen.dart:523:51: Error: Method invocation is not a constant expression.
+                  style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
+                                                  ^^^^^^^^
+lib/src/features/payments/presentation/payment_method_screen.dart:233:53: Error: Method invocation is not a constant expression.
+                            style: AppTextStyles.h2.copyWith(color: Colors.white),
+                                                    ^^^^^^^^
+lib/src/features/payments/presentation/payment_confirmation_screen.dart:693:43: Error: Method invocation is not a constant expression.
+                  style: AppTextStyles.h2.copyWith(color: Colors.white),
+                                          ^^^^^^^^
+lib/src/features/payments/presentation/payment_confirmation_screen.dart:1154:39: Error: Method invocation is not a constant expression.
+              style: AppTextStyles.h5.copyWith(color: Colors.white),
+                                      ^^^^^^^^
+lib/src/features/bookings/presentation/trip_booking_screen.dart:285:35: Error: Method invocation is not a constant expression.
+          style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
+                                  ^^^^^^^^
+lib/src/features/bookings/presentation/trip_booking_screen.dart:464:35: Error: Method invocation is not a constant expression.
+          style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
+                                  ^^^^^^^^
+lib/src/features/bookings/presentation/trip_booking_screen.dart:491:35: Error: Method invocation is not a constant expression.
+          style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
+                                  ^^^^^^^^
+lib/src/features/bookings/presentation/trip_booking_screen.dart:605:35: Error: Method invocation is not a constant expression.
+          style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
+                                  ^^^^^^^^
+lib/src/features/explore/presentation/explore_screen.dart:42:39: Error: Method invocation is not a constant expression.
+              style: AppTextStyles.h2.copyWith(color: Colors.white),
+                                      ^^^^^^^^
+lib/src/features/demo/presentation/design_demo_screen.dart:84:43: Error: Method invocation is not a constant expression.
+                  style: AppTextStyles.h2.copyWith(color: Colors.white),
+                                          ^^^^^^^^
+Try again after fixing the above error(s).
+
+Performing hot reload...                                        
+lib/src/features/onboarding/presentation/onboarding_screen.dart:506:43: Error: Method invocation is not a constant expression.
+          style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textTertiary),
+                                          ^^^^^^^^
+lib/src/features/authentication/presentation/login_screen.dart:113:45: Error: Method invocation is not a constant expression.
+                    style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
+                                            ^^^^^^^^
+lib/src/features/authentication/presentation/login_screen.dart:167:57: Error: Method invocation is not a constant expression.
+                        style: AppTextStyles.labelLarge.copyWith(color: AppColors.primary),
+                                                        ^^^^^^^^
+lib/src/features/authentication/presentation/signup_screen.dart:137:45: Error: Method invocation is not a constant expression.
+                    style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
+                                            ^^^^^^^^
+lib/src/features/authentication/presentation/phone_collection_screen.dart:138:41: Error: Method invocation is not a constant expression.
+                style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
+                                        ^^^^^^^^
+lib/src/features/authentication/presentation/phone_collection_screen.dart:154:49: Error: Method invocation is not a constant expression.
+                style: AppTextStyles.labelLarge.copyWith(color: AppColors.textPrimary),
+                                                ^^^^^^^^
+lib/src/features/authentication/presentation/profile_setup_screen.dart:209:47: Error: Method invocation is not a constant expression.
+                      style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
+                                              ^^^^^^^^
+lib/src/features/authentication/presentation/profile_setup_screen.dart:484:45: Error: Method invocation is not a constant expression.
+            style: AppTextStyles.labelLarge.copyWith(color: AppColors.accentRose),
+                                            ^^^^^^^^
+lib/src/features/authentication/presentation/preferences_screen.dart:183:45: Error: Method invocation is not a constant expression.
+                    style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
+                                            ^^^^^^^^
+lib/src/features/trips/presentation/trip_detail_screen.dart:550:45: Error: Method invocation is not a constant expression.
+                    style: AppTextStyles.h2.copyWith(color: Colors.white),
+                                            ^^^^^^^^
+lib/src/features/trips/presentation/trip_detail_screen.dart:665:55: Error: Method invocation is not a constant expression.
+                      style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
+                                                      ^^^^^^^^
+lib/src/features/trips/presentation/trip_detail_screen.dart:972:57: Error: Method invocation is not a constant expression.
+                        style: AppTextStyles.labelSmall.copyWith(color: Colors.white),
+                                                        ^^^^^^^^
+lib/src/features/trips/presentation/trip_detail_screen.dart:1205:67: Error: Method invocation is not a constant expression.
+                                  style: AppTextStyles.labelSmall.copyWith(color: const Color(0xFF22C55E)),
+                                                                  ^^^^^^^^
+lib/src/features/trips/presentation/trip_detail_screen.dart:1244:55: Error: Method invocation is not a constant expression.
+                      style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
+                                                      ^^^^^^^^
+lib/src/features/trips/presentation/trip_detail_screen.dart:1310:59: Error: Method invocation is not a constant expression.
+                          style: AppTextStyles.bodyMedium.copyWith(color: Colors.white),
+                                                          ^^^^^^^^
+lib/src/features/trips/presentation/trip_detail_screen.dart:1595:49: Error: Method invocation is not a constant expression.
+                        style: AppTextStyles.h5.copyWith(color: Colors.white),
+                                                ^^^^^^^^
+lib/src/features/trips/presentation/my_trips_screen.dart:446:49: Error: Method invocation is not a constant expression.
+                style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
+                                                ^^^^^^^^
+lib/src/features/trips/presentation/my_trips_screen.dart:476:49: Error: Method invocation is not a constant expression.
+                style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
+                                                ^^^^^^^^
+lib/src/features/trips/presentation/my_trips_screen.dart:501:49: Error: Method invocation is not a constant expression.
+                style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
+                                                ^^^^^^^^
+lib/src/features/trips/presentation/my_trips_screen.dart:523:51: Error: Method invocation is not a constant expression.
+                  style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
+                                                  ^^^^^^^^
+lib/src/features/payments/presentation/payment_method_screen.dart:233:53: Error: Method invocation is not a constant expression.
+                            style: AppTextStyles.h2.copyWith(color: Colors.white),
+                                                    ^^^^^^^^
+lib/src/features/payments/presentation/payment_confirmation_screen.dart:693:43: Error: Method invocation is not a constant expression.
+                  style: AppTextStyles.h2.copyWith(color: Colors.white),
+                                          ^^^^^^^^
+lib/src/features/payments/presentation/payment_confirmation_screen.dart:1154:39: Error: Method invocation is not a constant expression.
+              style: AppTextStyles.h5.copyWith(color: Colors.white),
+                                      ^^^^^^^^
+lib/src/features/bookings/presentation/trip_booking_screen.dart:285:35: Error: Method invocation is not a constant expression.
+          style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
+                                  ^^^^^^^^
+lib/src/features/bookings/presentation/trip_booking_screen.dart:464:35: Error: Method invocation is not a constant expression.
+          style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
+                                  ^^^^^^^^
+lib/src/features/bookings/presentation/trip_booking_screen.dart:491:35: Error: Method invocation is not a constant expression.
+          style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
+                                  ^^^^^^^^
+lib/src/features/bookings/presentation/trip_booking_screen.dart:605:35: Error: Method invocation is not a constant expression.
+          style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
+                                  ^^^^^^^^
+lib/src/features/explore/presentation/explore_screen.dart:42:39: Error: Method invocation is not a constant expression.
+              style: AppTextStyles.h2.copyWith(color: Colors.white),
+                                      ^^^^^^^^
+lib/src/features/demo/presentation/design_demo_screen.dart:84:43: Error: Method invocation is not a constant expression.
+                  style: AppTextStyles.h2.copyWith(color: Colors.white),
+                                          ^^^^^^^^
+Try again after fixing the above error(s).
+
+Performing hot reload...                                        
+lib/src/features/authentication/presentation/profile_setup_screen.dart:209:47: Error: Method invocation is not a constant expression.
+                      style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
+                                              ^^^^^^^^
+lib/src/features/trips/presentation/trip_detail_screen.dart:1244:55: Error: Method invocation is not a constant expression.
+                      style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
+                                                      ^^^^^^^^
+lib/src/features/trips/presentation/trip_detail_screen.dart:1595:49: Error: Method invocation is not a constant expression.
+                        style: AppTextStyles.h5.copyWith(color: Colors.white),
+                                                ^^^^^^^^
+lib/src/features/payments/presentation/payment_confirmation_screen.dart:1154:39: Error: Method invocation is not a constant expression.
+              style: AppTextStyles.h5.copyWith(color: Colors.white),
+                                      ^^^^^^^^
+Try again after fixing the above error(s).

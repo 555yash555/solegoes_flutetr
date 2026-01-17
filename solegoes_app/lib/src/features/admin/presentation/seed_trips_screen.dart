@@ -963,7 +963,7 @@ class _SeedTripsScreenState extends ConsumerState<SeedTripsScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFF050505),
       appBar: AppBar(
-        title: const Text('Seed Trips to Firebase'),
+        title: Text('Seed Trips to Firebase'),
         backgroundColor: const Color(0xFF0A0A0A),
       ),
       body: Padding(
@@ -971,7 +971,7 @@ class _SeedTripsScreenState extends ConsumerState<SeedTripsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text(
+            Text(
               'Firebase Data Seeder',
               style: TextStyle(
                 fontSize: 24,
@@ -980,7 +980,7 @@ class _SeedTripsScreenState extends ConsumerState<SeedTripsScreen> {
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
+            Text(
               'This will add 4 agencies and 4 sample trips to your Firestore database.',
               style: TextStyle(
                 fontSize: 14,
@@ -1014,7 +1014,7 @@ class _SeedTripsScreenState extends ConsumerState<SeedTripsScreen> {
                         Text('Seeding...'),
                       ],
                     )
-                  : const Text(
+                  : Text(
                       'Seed Trips to Firebase',
                       style: TextStyle(
                         fontSize: 16,

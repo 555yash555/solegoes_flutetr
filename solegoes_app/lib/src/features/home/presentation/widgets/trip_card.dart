@@ -281,7 +281,7 @@ class FeaturedTripCard extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 6),
-                        const Text(
+                        Text(
                           'Trending Now',
                           style: TextStyle(
                             fontSize: 12,
@@ -404,7 +404,7 @@ class FeaturedTripCard extends StatelessWidget {
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(AppRadius.full),
                             ),
-                            child: const Text(
+                            child: Text(
                               'View Trip',
                               style: TextStyle(
                                 fontSize: 14,

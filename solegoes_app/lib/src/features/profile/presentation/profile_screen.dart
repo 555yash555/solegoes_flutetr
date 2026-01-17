@@ -61,7 +61,7 @@ class ProfileScreen extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const SizedBox(width: 40), // Spacer for balance
-          const Text(
+          Text(
             'Profile',
             style: TextStyle(
               fontSize: 18,
@@ -398,11 +398,11 @@ class ProfileScreen extends ConsumerWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        title: const Text(
+        title: Text(
           'Logout',
           style: TextStyle(color: Colors.white),
         ),
-        content: const Text(
+        content: Text(
           'Are you sure you want to logout?',
           style: TextStyle(color: AppColors.textSecondary),
         ),
@@ -418,7 +418,7 @@ class ProfileScreen extends ConsumerWidget {
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text(
+            child: Text(
               'Logout',
               style: TextStyle(color: AppColors.accentRose),
             ),

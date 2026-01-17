@@ -142,7 +142,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
             ),
           ),
           const SizedBox(width: 12),
-          const Text(
+          Text(
             'My Trips',
             style: TextStyle(
               fontSize: 18,
@@ -440,7 +440,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
                 borderRadius: BorderRadius.circular(AppRadius.full),
                 border: Border.all(color: AppColors.borderSubtle),
               ),
-              child: const Text(
+              child: Text(
                 'View Details',
                 textAlign: TextAlign.center,
                 style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
@@ -455,7 +455,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
               // TODO: Navigate to trip chat
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: const Text('Chat coming soon!'),
+                  content: Text('Chat coming soon!'),
                   backgroundColor: AppColors.primary,
                   behavior: SnackBarBehavior.floating,
                   shape: RoundedRectangleBorder(
@@ -470,7 +470,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
                 gradient: AppColors.primaryGradient,
                 borderRadius: BorderRadius.circular(AppRadius.full),
               ),
-              child: const Text(
+              child: Text(
                 'Chat',
                 textAlign: TextAlign.center,
                 style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
@@ -495,7 +495,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
                 borderRadius: BorderRadius.circular(AppRadius.full),
                 border: Border.all(color: AppColors.borderSubtle),
               ),
-              child: const Text(
+              child: Text(
                 'View Details',
                 textAlign: TextAlign.center,
                 style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
@@ -517,7 +517,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
                   gradient: AppColors.primaryGradient,
                   borderRadius: BorderRadius.circular(AppRadius.full),
                 ),
-                child: const Text(
+                child: Text(
                   'Book Again',
                   textAlign: TextAlign.center,
                   style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
@@ -611,7 +611,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
               color: AppColors.accentRose,
             ),
             const SizedBox(height: 16),
-            const Text(
+            Text(
               'Something went wrong',
               style: TextStyle(
                 fontSize: 18,

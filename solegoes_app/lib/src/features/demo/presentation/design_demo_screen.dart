@@ -59,27 +59,27 @@ class _DesignDemoScreenState extends State<DesignDemoScreen> {
               // ===== TYPOGRAPHY =====
               _buildSectionTitle('TYPOGRAPHY'),
               const SizedBox(height: AppSpacing.sm),
-              const Text('H1 - Plus Jakarta Sans', style: AppTextStyles.h1),
+              Text('H1 - Plus Jakarta Sans', style: AppTextStyles.h1),
               const SizedBox(height: AppSpacing.xs),
-              const Text('H2 - Plus Jakarta Sans', style: AppTextStyles.h2),
+              Text('H2 - Plus Jakarta Sans', style: AppTextStyles.h2),
               const SizedBox(height: AppSpacing.xs),
-              const Text('H3 - Plus Jakarta Sans', style: AppTextStyles.h3),
+              Text('H3 - Plus Jakarta Sans', style: AppTextStyles.h3),
               const SizedBox(height: AppSpacing.xs),
-              const Text('Body Large', style: AppTextStyles.bodyLarge),
+              Text('Body Large', style: AppTextStyles.bodyLarge),
               const SizedBox(height: AppSpacing.xs),
-              const Text('Body Regular', style: AppTextStyles.body),
+              Text('Body Regular', style: AppTextStyles.body),
               const SizedBox(height: AppSpacing.xs),
-              const Text('Body Small', style: AppTextStyles.bodySmall),
+              Text('Body Small', style: AppTextStyles.bodySmall),
               const SizedBox(height: AppSpacing.xs),
-              const Text('Label', style: AppTextStyles.label),
+              Text('Label', style: AppTextStyles.label),
               const SizedBox(height: AppSpacing.xs),
-              const Text('Caption', style: AppTextStyles.caption),
+              Text('Caption', style: AppTextStyles.caption),
               const SizedBox(height: AppSpacing.sm),
               // Gradient text
               ShaderMask(
                 shaderCallback: (bounds) =>
                     AppColors.primaryGradient.createShader(bounds),
-                child: const Text(
+                child: Text(
                   'Gradient Text',
                   style: AppTextStyles.h2.copyWith(color: Colors.white),
                 ),
@@ -125,7 +125,7 @@ class _DesignDemoScreenState extends State<DesignDemoScreen> {
               const SizedBox(height: AppSpacing.sm),
 
               // Text Label
-              const Text('Email or Phone', style: AppTextStyles.label),
+              Text('Email or Phone', style: AppTextStyles.label),
               const SizedBox(height: AppSpacing.xs),
 
               // Input with icon
@@ -136,7 +136,7 @@ class _DesignDemoScreenState extends State<DesignDemoScreen> {
               ),
               const SizedBox(height: AppSpacing.md),
 
-              const Text('Password', style: AppTextStyles.label),
+              Text('Password', style: AppTextStyles.label),
               const SizedBox(height: AppSpacing.xs),
               _buildInputWithIcon(
                 hintText: 'Enter your password',
@@ -510,7 +510,7 @@ class _DesignDemoScreenState extends State<DesignDemoScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Bali Adventure', style: AppTextStyles.label),
+                Text('Bali Adventure', style: AppTextStyles.label),
                 const SizedBox(height: 4),
                 Text(
                   '7 days • Starting ₹45,000',

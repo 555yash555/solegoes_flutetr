@@ -105,7 +105,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
     return Scaffold(
       backgroundColor: AppColors.bgDeep,
       appBar: AppBar(
-        title: const Text('Book Your Trip'),
+        title: Text('Book Your Trip'),
         backgroundColor: AppColors.bgDeep,
         leading: IconButton(
           icon: const Icon(LucideIcons.chevronLeft),
@@ -280,7 +280,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Choose Your Style',
           style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
         ),
@@ -459,7 +459,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Select Boarding Point',
           style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
         ),
@@ -486,7 +486,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Select Dropping Point',
           style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
         ),
@@ -600,7 +600,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Review Your Booking',
           style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
         ),
@@ -735,7 +735,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text('Back'),
+                child: Text('Back'),
               ),
             ),
           if (currentIndex > 0) const SizedBox(width: 12),
@@ -981,7 +981,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
           barrierDismissible: false,
           builder: (context) => AlertDialog(
             backgroundColor: AppColors.bgSurface,
-            title: const Text(
+            title: Text(
               'Payment Failed',
               style: TextStyle(color: AppColors.textPrimary),
             ),
@@ -1006,14 +1006,14 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
-                child: const Text('View Bookings', style: TextStyle(color: AppColors.textSecondary)),
+                child: Text('View Bookings', style: TextStyle(color: AppColors.textSecondary)),
               ),
               ElevatedButton(
                 onPressed: () => Navigator.of(context).pop(true),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                 ),
-                child: const Text('Retry Payment', style: TextStyle(color: Colors.white)),
+                child: Text('Retry Payment', style: TextStyle(color: Colors.white)),
               ),
             ],
           ),

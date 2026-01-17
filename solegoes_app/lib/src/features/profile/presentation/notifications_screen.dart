@@ -123,7 +123,7 @@ class NotificationsScreen extends ConsumerWidget {
                 ),
               ),
               const SizedBox(width: 12),
-              const Text(
+              Text(
                 'Notifications',
                 style: TextStyle(
                   fontSize: 18,

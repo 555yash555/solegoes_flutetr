@@ -132,7 +132,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 children: [
                   const SizedBox(height: 24),
                   // Welcome text
-                  const Text(
+                  Text(
                     'Create Account',
                     style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
                   ),
@@ -256,7 +256,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         ),
                         GestureDetector(
                           onTap: () => context.go('/login'),
-                          child: const Text(
+                          child: Text(
                             'Sign In',
                             style: TextStyle(
                               fontSize: 14,
@@ -352,7 +352,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Start Your',
                   style: TextStyle(
                     fontSize: 24,
@@ -364,7 +364,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 ShaderMask(
                   shaderCallback: (bounds) =>
                       AppColors.primaryGradient.createShader(bounds),
-                  child: const Text(
+                  child: Text(
                     'Adventure',
                     style: TextStyle(
                       fontSize: 24,
@@ -454,7 +454,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             ),
             child: Row(
               children: [
-                const Text(
+                Text(
                   '🇮🇳',
                   style: AppTextStyles.h4,
                 ),

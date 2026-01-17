@@ -168,7 +168,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 ),
               ),
               const SizedBox(width: 12),
-              const Text(
+              Text(
                 'Edit Profile',
                 style: TextStyle(
                   fontSize: 18,
@@ -275,7 +275,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           onTap: () {
             // TODO: Implement photo picker
           },
-          child: const Text(
+          child: Text(
             'Change Photo',
             style: TextStyle(
               fontSize: 14,

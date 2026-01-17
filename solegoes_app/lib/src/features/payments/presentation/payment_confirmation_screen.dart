@@ -122,7 +122,7 @@ $boardingInfo$droppingInfo''';
     Clipboard.setData(ClipboardData(text: receiptText));
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: const Text(
+        content: Text(
           'Receipt copied to clipboard',
           style: TextStyle(color: Colors.white),
         ),
@@ -688,7 +688,7 @@ $boardingInfo$droppingInfo''';
 
                 const SizedBox(height: 16),
 
-                const Text(
+                Text(
                   'Payment Successful!',
                   style: AppTextStyles.h2.copyWith(color: Colors.white),
                 ),
@@ -1015,7 +1015,7 @@ $boardingInfo$droppingInfo''';
                     ),
                   ),
                   const SizedBox(height: 24),
-                  const Text(
+                  Text(
                     'Download Receipt',
                     style: TextStyle(
                       fontSize: 18,
@@ -1038,7 +1038,7 @@ $boardingInfo$droppingInfo''';
                         color: AppColors.primary,
                       ),
                     ),
-                    title: const Text(
+                    title: Text(
                       'Download PDF',
                       style: TextStyle(
                         color: Colors.white,
@@ -1072,7 +1072,7 @@ $boardingInfo$droppingInfo''';
                         color: Colors.white,
                       ),
                     ),
-                    title: const Text(
+                    title: Text(
                       'Share as Text',
                       style: TextStyle(
                         color: Colors.white,
@@ -1106,7 +1106,7 @@ $boardingInfo$droppingInfo''';
                         color: Colors.white,
                       ),
                     ),
-                    title: const Text(
+                    title: Text(
                       'Copy to Clipboard',
                       style: TextStyle(
                         color: Colors.white,
@@ -1182,7 +1182,7 @@ $boardingInfo$droppingInfo''';
             ),
           ],
         ),
-        child: const Text(
+        child: Text(
           'View Trip Details',
           textAlign: TextAlign.center,
           style: TextStyle(

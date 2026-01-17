@@ -133,7 +133,7 @@ class _PhoneCollectionScreenState extends ConsumerState<PhoneCollectionScreen> {
               const SizedBox(height: 32),
 
               // Title
-              const Text(
+              Text(
                 'Add Phone Number',
                 style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
               ),
@@ -149,7 +149,7 @@ class _PhoneCollectionScreenState extends ConsumerState<PhoneCollectionScreen> {
               const SizedBox(height: 40),
 
               // Phone field
-              const Text(
+              Text(
                 'Phone Number',
                 style: AppTextStyles.labelLarge.copyWith(color: AppColors.textPrimary),
               ),
@@ -373,7 +373,7 @@ class _CountryPickerSheet extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 24),
-          const Text(
+          Text(
             'Select Country',
             style: TextStyle(
               fontSize: 20,

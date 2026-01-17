@@ -72,7 +72,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ),
           ),
           const SizedBox(width: 12),
-          const Text(
+          Text(
             'Settings',
             style: TextStyle(
               fontSize: 18,
@@ -419,11 +419,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        title: const Text(
+        title: Text(
           'Logout',
           style: TextStyle(color: Colors.white),
         ),
-        content: const Text(
+        content: Text(
           'Are you sure you want to logout?',
           style: TextStyle(color: AppColors.textSecondary),
         ),
@@ -439,7 +439,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text(
+            child: Text(
               'Logout',
               style: TextStyle(color: AppColors.accentRose),
             ),

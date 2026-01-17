@@ -37,7 +37,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
           SliverAppBar(
             floating: true,
             backgroundColor: AppColors.bgDeep,
-            title: const Text(
+            title: Text(
               'Explore',
               style: AppTextStyles.h2.copyWith(color: Colors.white),
             ),
@@ -381,7 +381,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(AppRadius.full),
                           ),
-                          child: const Text(
+                          child: Text(
                             'View Trip',
                             style: TextStyle(
                               color: Colors.black,

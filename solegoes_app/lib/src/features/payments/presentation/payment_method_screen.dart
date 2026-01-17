@@ -228,7 +228,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             'Select Payment Method',
                             style: AppTextStyles.h2.copyWith(color: Colors.white),
                           ),
@@ -528,7 +528,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                           ),
                         ],
                       )
-                    : const Text(
+                    : Text(
                         'Proceed to Pay',
                         textAlign: TextAlign.center,
                         style: TextStyle(

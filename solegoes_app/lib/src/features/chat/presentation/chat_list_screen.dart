@@ -99,7 +99,7 @@ class ChatListScreen extends ConsumerWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
+          Text(
             'Messages',
             style: TextStyle(
               fontSize: 18,

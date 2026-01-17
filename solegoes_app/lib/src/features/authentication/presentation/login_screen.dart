@@ -108,7 +108,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 children: [
                   const SizedBox(height: 32),
                   // Welcome text
-                  const Text(
+                  Text(
                     'Welcome back',
                     style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
                   ),
@@ -162,7 +162,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       onTap: () {
                         // TODO: Navigate to forgot password
                       },
-                      child: const Text(
+                      child: Text(
                         'Forgot Password?',
                         style: AppTextStyles.labelLarge.copyWith(color: AppColors.primary),
                       ),
@@ -204,7 +204,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         ),
                         GestureDetector(
                           onTap: () => context.go('/signup'),
-                          child: const Text(
+                          child: Text(
                             'Sign Up',
                             style: TextStyle(
                               fontSize: 14,
@@ -300,7 +300,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Embark on Your',
                   style: TextStyle(
                     fontSize: 28,
@@ -312,7 +312,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ShaderMask(
                   shaderCallback: (bounds) =>
                       AppColors.primaryGradient.createShader(bounds),
-                  child: const Text(
+                  child: Text(
                     'Next Journey',
                     style: TextStyle(
                       fontSize: 28,

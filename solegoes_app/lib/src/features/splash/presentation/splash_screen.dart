@@ -83,7 +83,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
             ),
             const SizedBox(height: 24),
             // App name
-            const Text(
+            Text(
               'SoleGoes',
               style: TextStyle(
                 fontSize: 32,

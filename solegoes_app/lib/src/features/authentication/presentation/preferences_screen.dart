@@ -178,7 +178,7 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Title
-                  const Text(
+                  Text(
                     'Your Preferences',
                     style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
                   ),
@@ -275,7 +275,7 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
                       ),
                     ),
                   )
-                : const Text(
+                : Text(
                     'Finish Setup',
                     textAlign: TextAlign.center,
                     style: TextStyle(

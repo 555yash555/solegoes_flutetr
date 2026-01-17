@@ -284,7 +284,7 @@ class HomeScreen extends ConsumerWidget {
                 children: [
                   Row(
                     children: [
-                      const Text(
+                      Text(
                         'Spin the Globe',
                         style: TextStyle(
                           fontSize: 18,
@@ -309,7 +309,7 @@ class HomeScreen extends ConsumerWidget {
                   ),
                 ],
               ),
-              const Text(
+              Text(
                 '🌍',
                 style: TextStyle(fontSize: 48),
               ),

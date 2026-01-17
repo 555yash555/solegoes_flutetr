@@ -207,11 +207,11 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
             children: [
               const Icon(LucideIcons.alertTriangle, color: Colors.red, size: 48),
               const SizedBox(height: 16),
-              const Text('Failed to load trip', style: TextStyle(color: Colors.white)),
+              Text('Failed to load trip', style: TextStyle(color: Colors.white)),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () => ref.invalidate(tripProvider(widget.tripId)),
-                child: const Text('Retry'),
+                child: Text('Retry'),
               ),
             ],
           ),
@@ -298,7 +298,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                                 ),
                               ),
                               const SizedBox(width: 8),
-                              const Text(
+                              Text(
                                 'Filling Fast',
                                 style: TextStyle(
                                   fontSize: 12,
@@ -545,7 +545,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
             Expanded(
               child: Column(
                 children: [
-                  const Text(
+                  Text(
                     'Easy',
                     style: AppTextStyles.h2.copyWith(color: Colors.white),
                   ),
@@ -575,7 +575,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 "Who's Going",
                 style: TextStyle(
                   fontSize: 18,
@@ -660,7 +660,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                       borderRadius: BorderRadius.circular(AppRadius.full),
                       border: Border.all(color: AppColors.borderGlass),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Join Chat',
                       style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
                     ),
@@ -680,7 +680,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'About This Trip',
             style: TextStyle(
               fontSize: 18,
@@ -711,7 +711,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Itinerary',
             style: TextStyle(
               fontSize: 18,
@@ -903,7 +903,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Vibes',
             style: TextStyle(
               fontSize: 18,
@@ -967,7 +967,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(color: AppColors.surfacePressed),
                       ),
-                      child: const Text(
+                      child: Text(
                         'Watch Experience',
                         style: AppTextStyles.labelSmall.copyWith(color: Colors.white),
                       ),
@@ -1064,7 +1064,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             "What's Included",
             style: TextStyle(
               fontSize: 18,
@@ -1149,7 +1149,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Meet Your Host',
             style: TextStyle(
               fontSize: 18,
@@ -1200,7 +1200,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                               if (trip.isVerifiedAgency) ...[
                                 const Icon(LucideIcons.shieldCheck, size: 12, color: Color(0xFF22C55E)),
                                 const SizedBox(width: 4),
-                                const Text(
+                                Text(
                                   'Verified Agency',
                                   style: AppTextStyles.labelSmall.copyWith(color: const Color(0xFF22C55E)),
                                 ),
@@ -1259,7 +1259,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Location',
             style: TextStyle(
               fontSize: 18,
@@ -1305,7 +1305,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                       children: [
                         Icon(LucideIcons.map, size: 16, color: AppColors.textPrimary),
                         const SizedBox(width: 8),
-                        const Text(
+                        Text(
                           'View on Map',
                           style: AppTextStyles.bodyMedium.copyWith(color: Colors.white),
                         ),
@@ -1495,7 +1495,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
               borderRadius: BorderRadius.circular(AppRadius.full),
               border: Border.all(color: AppColors.borderGlass),
             ),
-            child: const Text(
+            child: Text(
               'View Booking',
               style: TextStyle(
                 fontSize: 16,
@@ -1596,7 +1596,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                       ),
                     ],
                   )
-                : const Text(
+                : Text(
                     'Book Now',
                     style: TextStyle(
                       fontSize: 18,
