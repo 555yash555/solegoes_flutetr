@@ -338,7 +338,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget _buildInputLabel(String label) {
     return Text(
       label,
-      style: const AppTextStyles.labelLarge.copyWith(color: AppColors.textPrimary),
+      style: AppTextStyles.labelLarge.copyWith(color: AppColors.textPrimary),
     );
   }
 
@@ -360,7 +360,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         controller: controller,
         obscureText: obscureText,
         keyboardType: keyboardType,
-        style: const AppTextStyles.body.copyWith(color: AppColors.textPrimary),
+        style: AppTextStyles.body.copyWith(color: AppColors.textPrimary),
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: TextStyle(

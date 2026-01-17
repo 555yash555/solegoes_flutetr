@@ -385,7 +385,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   Widget _buildInputLabel(String label) {
     return Text(
       label,
-      style: const AppTextStyles.labelLarge.copyWith(color: AppColors.textPrimary),
+      style: AppTextStyles.labelLarge.copyWith(color: AppColors.textPrimary),
     );
   }
 
@@ -407,7 +407,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         controller: controller,
         obscureText: obscureText,
         keyboardType: keyboardType,
-        style: const AppTextStyles.body.copyWith(color: AppColors.textPrimary),
+        style: AppTextStyles.body.copyWith(color: AppColors.textPrimary),
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: TextStyle(
@@ -481,7 +481,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             child: TextField(
               controller: _phoneController,
               keyboardType: TextInputType.phone,
-              style: const AppTextStyles.body.copyWith(color: AppColors.textPrimary),
+              style: AppTextStyles.body.copyWith(color: AppColors.textPrimary),
               decoration: InputDecoration(
                 hintText: 'Enter phone number',
                 hintStyle: TextStyle(

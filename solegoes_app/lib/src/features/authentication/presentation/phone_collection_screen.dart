@@ -407,7 +407,7 @@ class _CountryPickerSheet extends StatelessWidget {
                         Expanded(
                           child: Text(
                             country['name']!,
-                            style: const AppTextStyles.bodyLarge.copyWith(color: AppColors.textPrimary),
+                            style: AppTextStyles.bodyLarge.copyWith(color: AppColors.textPrimary),
                           ),
                         ),
                         Text(

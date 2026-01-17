@@ -476,7 +476,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
       children: [
         Text(
           text,
-          style: const AppTextStyles.labelLarge.copyWith(color: AppColors.textPrimary),
+          style: AppTextStyles.labelLarge.copyWith(color: AppColors.textPrimary),
         ),
         if (required)
           const Text(
@@ -500,7 +500,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
       ),
       child: TextField(
         controller: controller,
-        style: const AppTextStyles.body.copyWith(color: AppColors.textPrimary),
+        style: AppTextStyles.body.copyWith(color: AppColors.textPrimary),
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: TextStyle(
@@ -626,7 +626,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
       child: TextField(
         controller: _bioController,
         maxLines: 5,
-        style: const AppTextStyles.body.copyWith(color: AppColors.textPrimary),
+        style: AppTextStyles.body.copyWith(color: AppColors.textPrimary),
         decoration: InputDecoration(
           hintText: 'Tell us a bit about yourself...',
           hintStyle: TextStyle(

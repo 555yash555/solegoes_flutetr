@@ -184,7 +184,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
             fontSize: 14,
             fontWeight: FontWeight.w700,
           ),
-          unselectedLabelStyle: const AppTextStyles.bodyMedium,
+          unselectedLabelStyle: AppTextStyles.bodyMedium,
           tabs: const [
             Tab(text: 'Upcoming'),
             Tab(text: 'Past'),

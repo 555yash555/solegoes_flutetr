@@ -248,7 +248,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             Expanded(
               child: Text(
                 label,
-                style: const AppTextStyles.bodyLarge.copyWith(color: Colors.white),
+                style: AppTextStyles.bodyLarge.copyWith(color: Colors.white),
               ),
             ),
             Icon(
@@ -293,7 +293,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           Expanded(
             child: Text(
               label,
-              style: const AppTextStyles.bodyLarge.copyWith(color: Colors.white),
+              style: AppTextStyles.bodyLarge.copyWith(color: Colors.white),
             ),
           ),
           Text(
@@ -340,7 +340,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           Expanded(
             child: Text(
               label,
-              style: const AppTextStyles.bodyLarge.copyWith(color: Colors.white),
+              style: AppTextStyles.bodyLarge.copyWith(color: Colors.white),
             ),
           ),
           // Custom toggle switch
@@ -402,7 +402,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             Expanded(
               child: Text(
                 label,
-                style: const AppTextStyles.bodyLarge.copyWith(color: AppColors.accentRose),
+                style: AppTextStyles.bodyLarge.copyWith(color: AppColors.accentRose),
               ),
             ),
           ],
