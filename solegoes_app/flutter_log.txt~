@@ -360,3 +360,20 @@ W/System  ( 7126): Ignoring header X-Firebase-Locale because its value was null.
 D/FirebaseAuth( 7126): Notifying id token listeners about user ( 0AIy8cU4T6M29HU2eEbuovYeOP42 ).
 W/System  ( 7126): Ignoring header X-Firebase-Locale because its value was null.
 D/FirebaseAuth( 7126): Notifying id token listeners about user ( 0AIy8cU4T6M29HU2eEbuovYeOP42 ).
+W/WindowOnBackDispatcher( 7126): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher( 7126): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+W/WindowOnBackDispatcher( 7126): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher( 7126): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+W/es.solegoes_app( 7126): Reducing the number of considered missed Gc histogram windows from 401 to 100
+D/InsetsController( 7126): hide(ime(), fromIme=false)
+I/ImeTracker( 7126): com.solegoes.solegoes_app:39cae061: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+E/com.razorpay.checkout( 7126): Webview JS Error: Refused to get unsafe header "x-rtb-fingerprint-id"
+I/chromium( 7126): [INFO:CONSOLE:1] "Refused to get unsafe header "x-rtb-fingerprint-id"", source: https://checkout.razorpay.com/v1/v2-entry.modern.js (1)
+W/cr_VibrationManager( 7126): Failed to use vibrate API, requires VIBRATE permission.
+I/flutter ( 7126): Payment Error: 2 - undefined
+I/flutter ( 7126): Razorpay Error - Code: 2, Message: undefined
+D/VRI[CheckoutActivity]( 7126): visibilityChanged oldVisibility=true newVisibility=false
+W/WindowOnBackDispatcher( 7126): sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda13@864a5f9
+D/ViewRootImpl( 7126): Skipping stats log for color mode
+D/InsetsController( 7126): hide(ime(), fromIme=false)
+I/ImeTracker( 7126): com.solegoes.solegoes_app:7649b5c9: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN

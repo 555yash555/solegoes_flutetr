@@ -930,8 +930,13 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
     debugPrint('Razorpay Error - Code: $errorCode, Message: $errorMessage');
     
     if (mounted) {
-      // User cancelled - just return, don't create booking
-      if (errorCode == Razorpay.PAYMENT_CANCELLED) {
+      // User cancelled - detect by:
+      // 1. PAYMENT_CANCELLED error code
+      // 2. Error code 2 (NETWORK_ERROR) with "undefined" message (this happens on back button press)
+      final isCancelled = errorCode == Razorpay.PAYMENT_CANCELLED ||
+                         (errorCode == Razorpay.NETWORK_ERROR && errorMessage == 'undefined');
+      
+      if (isCancelled) {
         AppSnackbar.showInfo(context, 'Payment cancelled');
         return;
       }
