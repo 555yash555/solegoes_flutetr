@@ -59,7 +59,7 @@ class TripCard extends StatelessWidget {
                       errorBuilder: (context, error, stackTrace) {
                         return Container(
                           color: AppColors.bgSurface,
-                          child: const Center(
+                          child: Center(
                             child: Icon(
                               LucideIcons.image,
                               color: AppColors.textTertiary,
@@ -72,7 +72,7 @@ class TripCard extends StatelessWidget {
                         if (loadingProgress == null) return child;
                         return Container(
                           color: AppColors.bgSurface,
-                          child: const Center(
+                          child: Center(
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
                               color: AppColors.primary,
@@ -228,7 +228,7 @@ class FeaturedTripCard extends StatelessWidget {
                 errorBuilder: (context, error, stackTrace) {
                   return Container(
                     color: AppColors.bgSurface,
-                    child: const Center(
+                    child: Center(
                       child: Icon(
                         LucideIcons.image,
                         color: AppColors.textTertiary,

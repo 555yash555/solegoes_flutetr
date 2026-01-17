@@ -201,7 +201,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
       body: tripAsync.when(
         data: (trip) {
           if (trip == null) {
-            return const Center(
+            return Center(
               child: Text(
                 'Trip not found',
                 style: TextStyle(color: AppColors.textSecondary),
@@ -293,10 +293,10 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
             ],
           );
         },
-        loading: () => const Center(
+        loading: () => Center(
           child: CircularProgressIndicator(color: AppColors.primary),
         ),
-        error: (_, __) => const Center(
+        error: (_, __) => Center(
           child: Text(
             'Failed to load trip',
             style: TextStyle(color: AppColors.textSecondary),
@@ -506,7 +506,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                         ],
                 ),
                 child: _isProcessing
-                    ? const Row(
+                    ? Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(

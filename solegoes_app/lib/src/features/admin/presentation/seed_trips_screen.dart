@@ -998,7 +998,7 @@ class _SeedTripsScreenState extends ConsumerState<SeedTripsScreen> {
                 ),
               ),
               child: _isSeeding
-                  ? const Row(
+                  ? Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SizedBox(

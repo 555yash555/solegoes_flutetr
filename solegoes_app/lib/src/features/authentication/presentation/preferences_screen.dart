@@ -265,7 +265,7 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
                     ],
             ),
             child: isLoading
-                ? const Center(
+                ? Center(
                     child: SizedBox(
                       width: 24,
                       height: 24,

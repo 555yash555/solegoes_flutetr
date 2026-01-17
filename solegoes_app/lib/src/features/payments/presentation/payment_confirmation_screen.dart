@@ -536,7 +536,7 @@ $boardingInfo$droppingInfo''';
             }
             return _buildContent(context, booking);
           },
-          loading: () => const Center(
+          loading: () => Center(
             child: CircularProgressIndicator(color: AppColors.primary),
           ),
           error: (_, __) => _buildFallbackContent(context),
@@ -1140,7 +1140,7 @@ $boardingInfo$droppingInfo''';
           borderRadius: BorderRadius.circular(AppRadius.full),
           border: Border.all(color: AppColors.borderSubtle),
         ),
-        child: const Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(

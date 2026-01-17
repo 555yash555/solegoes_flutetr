@@ -174,7 +174,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
       body: tripAsync.when(
         data: (trip) {
           if (trip == null) {
-            return const Center(
+            return Center(
               child: Text('Trip not found', style: TextStyle(color: Colors.white)),
             );
           }
@@ -198,7 +198,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
             ],
           );
         },
-        loading: () => const Center(
+        loading: () => Center(
           child: CircularProgressIndicator(color: AppColors.primary),
         ),
         error: (_, __) => Center(
@@ -633,7 +633,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                             shape: BoxShape.circle,
                             border: Border.all(color: AppColors.bgDeep, width: 2),
                           ),
-                          child: const Center(
+                          child: Center(
                             child: Text(
                               '+8',
                               style: TextStyle(
@@ -1238,7 +1238,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                     borderRadius: BorderRadius.circular(AppRadius.full),
                     border: Border.all(color: AppColors.borderGlass),
                   ),
-                  child: const Center(
+                  child: Center(
                     child: Text(
                       'Contact Host',
                       style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
@@ -1578,7 +1578,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                     ],
             ),
             child: _isProcessing
-                ? const Row(
+                ? Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       SizedBox(

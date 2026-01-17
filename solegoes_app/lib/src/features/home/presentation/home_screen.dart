@@ -248,7 +248,7 @@ class HomeScreen extends ConsumerWidget {
             color: AppColors.bgSurface,
             borderRadius: BorderRadius.circular(AppRadius.lg),
           ),
-          child: const Center(child: CircularProgressIndicator()),
+          child: Center(child: CircularProgressIndicator()),
         ),
         error: (_, __) => const SizedBox.shrink(),
       ),
@@ -390,7 +390,7 @@ class HomeScreen extends ConsumerWidget {
           child: trendingTripsAsync.when(
             data: (trips) {
               if (trips.isEmpty) {
-                return const Center(
+                return Center(
                   child: Text('No trips available'),
                 );
               }
@@ -414,10 +414,10 @@ class HomeScreen extends ConsumerWidget {
                 },
               );
             },
-            loading: () => const Center(
+            loading: () => Center(
               child: CircularProgressIndicator(),
             ),
-            error: (_, __) => const Center(
+            error: (_, __) => Center(
               child: Text('Failed to load trips'),
             ),
           ),

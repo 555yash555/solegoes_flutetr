@@ -203,7 +203,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Title
-                  const Center(
+                  Center(
                     child: Text(
                       'Complete Your Profile',
                       style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
@@ -350,7 +350,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
                     ],
             ),
             child: isLoading
-                ? const Center(
+                ? Center(
                     child: SizedBox(
                       width: 24,
                       height: 24,

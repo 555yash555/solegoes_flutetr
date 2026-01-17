@@ -201,7 +201,7 @@ class _PhoneCollectionScreenState extends ConsumerState<PhoneCollectionScreen> {
                           ],
                   ),
                   child: isLoading
-                      ? const Center(
+                      ? Center(
                           child: SizedBox(
                             width: 24,
                             height: 24,
@@ -211,7 +211,7 @@ class _PhoneCollectionScreenState extends ConsumerState<PhoneCollectionScreen> {
                             ),
                           ),
                         )
-                      : const Row(
+                      : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(

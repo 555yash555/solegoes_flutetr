@@ -107,7 +107,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
                     ],
                   );
                 },
-                loading: () => const Center(
+                loading: () => Center(
                   child: CircularProgressIndicator(color: AppColors.primary),
                 ),
                 error: (_, __) => _buildLoginPrompt(context),
@@ -224,7 +224,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
               _buildTripCard(upcomingBookings[index]),
         );
       },
-      loading: () => const Center(
+      loading: () => Center(
         child: CircularProgressIndicator(color: AppColors.primary),
       ),
       error: (error, _) => _buildErrorState(error.toString()),
@@ -257,7 +257,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
           itemBuilder: (context, index) => _buildTripCard(pastBookings[index]),
         );
       },
-      loading: () => const Center(
+      loading: () => Center(
         child: CircularProgressIndicator(color: AppColors.primary),
       ),
       error: (error, _) => _buildErrorState(error.toString()),
@@ -305,7 +305,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
                     colorBlendMode: isPast ? BlendMode.saturation : null,
                     placeholder: (context, url) => Container(
                       color: AppColors.bgSurface,
-                      child: const Center(
+                      child: Center(
                         child: CircularProgressIndicator(
                           color: AppColors.primary,
                           strokeWidth: 2,

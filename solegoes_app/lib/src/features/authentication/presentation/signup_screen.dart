@@ -585,7 +585,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 ],
         ),
         child: isLoading
-            ? const Center(
+            ? Center(
                 child: SizedBox(
                   width: 24,
                   height: 24,

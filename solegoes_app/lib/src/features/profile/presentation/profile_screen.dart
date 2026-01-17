@@ -40,10 +40,10 @@ class ProfileScreen extends ConsumerWidget {
               ],
             ),
           ),
-          loading: () => const Center(
+          loading: () => Center(
             child: CircularProgressIndicator(color: AppColors.primary),
           ),
-          error: (_, __) => const Center(
+          error: (_, __) => Center(
             child: Text(
               'Failed to load profile',
               style: TextStyle(color: AppColors.textSecondary),

@@ -257,7 +257,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                     color: AppColors.scrimLight,
                     shape: BoxShape.circle,
                   ),
-                  child: const Center(
+                  child: Center(
                     child: Icon(
                       LucideIcons.camera,
                       size: 24,

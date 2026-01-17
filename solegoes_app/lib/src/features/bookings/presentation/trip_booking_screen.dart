@@ -115,7 +115,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
       body: tripAsync.when(
         data: (trip) {
           if (trip == null) {
-            return const Center(child: Text('Trip not found'));
+            return Center(child: Text('Trip not found'));
           }
           
           // Initialize current step to first available step
@@ -132,7 +132,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
           // This ensures users see the confirmation page before payment
           return _buildBookingFlow(trip);
         },
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => Center(child: CircularProgressIndicator()),
         error: (err, stack) => Center(child: Text('Error: $err')),
       ),
     );
