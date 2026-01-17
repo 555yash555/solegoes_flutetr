@@ -402,3 +402,24 @@ lib/src/features/bookings/presentation/trip_booking_screen.dart:1092:1: Error: E
 }
 ^
 Try again after fixing the above error(s).
+
+Performing hot reload...                                        
+Reloaded 3 of 2771 libraries in 702ms (compile: 30 ms, reload: 296 ms, reassemble: 340 ms).
+D/InsetsController( 7126): hide(ime(), fromIme=false)
+I/ImeTracker( 7126): com.solegoes.solegoes_app:a33d9de7: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+E/com.razorpay.checkout( 7126): Webview JS Error: Refused to get unsafe header "x-rtb-fingerprint-id"
+I/chromium( 7126): [INFO:CONSOLE:1] "Refused to get unsafe header "x-rtb-fingerprint-id"", source: https://checkout.razorpay.com/v1/v2-entry.modern.js (1)
+W/cr_VibrationManager( 7126): Failed to use vibrate API, requires VIBRATE permission.
+I/flutter ( 7126): Payment Error: 2 - undefined
+I/flutter ( 7126): Razorpay Error - Code: 2, Message: undefined
+I/flutter ( 7126): isCancelled: true, errorCode: 2, NETWORK_ERROR: 0
+I/flutter ( 7126): Showing cancellation snackbar
+D/VRI[CheckoutActivity]( 7126): visibilityChanged oldVisibility=true newVisibility=false
+W/WindowOnBackDispatcher( 7126): sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda13@119219b
+D/ViewRootImpl( 7126): Skipping stats log for color mode
+D/InsetsController( 7126): hide(ime(), fromIme=false)
+I/ImeTracker( 7126): com.solegoes.solegoes_app:d5a32b92: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+D/InsetsController( 7126): hide(ime(), fromIme=false)
+I/ImeTracker( 7126): com.solegoes.solegoes_app:ec503810: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+E/com.razorpay.checkout( 7126): Webview JS Error: Refused to get unsafe header "x-rtb-fingerprint-id"
+I/chromium( 7126): [INFO:CONSOLE:1] "Refused to get unsafe header "x-rtb-fingerprint-id"", source: https://checkout.razorpay.com/v1/v2-entry.modern.js (1)
