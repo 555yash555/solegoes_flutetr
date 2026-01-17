@@ -267,3 +267,96 @@ W/WindowOnBackDispatcher( 7126): sendCancelIfRunning: isInProgress=false callbac
 D/ViewRootImpl( 7126): Skipping stats log for color mode
 D/InsetsController( 7126): hide(ime(), fromIme=false)
 I/ImeTracker( 7126): com.solegoes.solegoes_app:1fd4cb71: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+
+Performing hot restart...                                       
+Restarted application in 4,176ms.
+E/flutter ( 7126): [ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Bad state: The provider authStateChangesProvider was disposed during loading state, yet no value could be emitted.
+E/flutter ( 7126): #0      ElementWithFuture.dispose (package:riverpod/src/core/element.dart:329:70)
+E/flutter ( 7126): #1      $StreamProviderElement.dispose (package:riverpod/src/providers/stream_provider.dart:163:11)
+E/flutter ( 7126): #2      ProviderContainer._disposeProvider (package:riverpod/src/core/provider_container.dart:1023:22)
+E/flutter ( 7126): #3      ProviderScheduler._performDispose (package:riverpod/src/core/scheduler.dart:172:27)
+E/flutter ( 7126): #4      ProviderScheduler._task (package:riverpod/src/core/scheduler.dart:107:5)
+E/flutter ( 7126): #5      Task.call (package:riverpod/src/core/scheduler.dart:14:16)
+E/flutter ( 7126): #6      _UncontrolledProviderScopeState._callTask (package:flutter_riverpod/src/core/provider_scope.dart:292:11)
+E/flutter ( 7126): #7      _UncontrolledProviderScopeState._flutterVsync.<anonymous closure>.<anonymous closure> (package:flutter_riverpod/src/core/provider_scope.dart:324:9)
+E/flutter ( 7126): #8      Timer._createTimer.<anonymous closure> (dart:async-patch/timer_patch.dart:18:15)
+E/flutter ( 7126): #9      _Timer._runTimers (dart:isolate-patch/timer_impl.dart:410:19)
+E/flutter ( 7126): #10     _Timer._handleMessage (dart:isolate-patch/timer_impl.dart:441:5)
+E/flutter ( 7126): #11     _RawReceivePort._handleMessage (dart:isolate-patch/isolate_patch.dart:193:12)
+E/flutter ( 7126): 
+I/es.solegoes_app( 7126): AssetManager2(0xb4000078cd3aecf8) locale list changing from [] to [en-US]
+W/WindowOnBackDispatcher( 7126): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher( 7126): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+W/WindowOnBackDispatcher( 7126): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher( 7126): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+W/WindowOnBackDispatcher( 7126): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher( 7126): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+W/WindowOnBackDispatcher( 7126): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher( 7126): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+D/InsetsController( 7126): hide(ime(), fromIme=false)
+I/ImeTracker( 7126): com.solegoes.solegoes_app:ffb5414d: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+E/com.razorpay.checkout( 7126): Webview JS Error: Refused to get unsafe header "x-rtb-fingerprint-id"
+I/chromium( 7126): [INFO:CONSOLE:1] "Refused to get unsafe header "x-rtb-fingerprint-id"", source: https://checkout.razorpay.com/v1/v2-entry.modern.js (1)
+W/cr_VibrationManager( 7126): Failed to use vibrate API, requires VIBRATE permission.
+I/flutter ( 7126): Payment Error: 2 - undefined
+I/flutter ( 7126): Razorpay Error - Code: 2, Message: undefined
+D/VRI[CheckoutActivity]( 7126): visibilityChanged oldVisibility=true newVisibility=false
+W/WindowOnBackDispatcher( 7126): sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda13@949334d
+D/ViewRootImpl( 7126): Skipping stats log for color mode
+D/InsetsController( 7126): hide(ime(), fromIme=false)
+I/ImeTracker( 7126): com.solegoes.solegoes_app:cf9f9274: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+W/System  ( 7126): Ignoring header X-Firebase-Locale because its value was null.
+D/FirebaseAuth( 7126): Notifying id token listeners about user ( 0AIy8cU4T6M29HU2eEbuovYeOP42 ).
+W/System  ( 7126): Ignoring header X-Firebase-Locale because its value was null.
+D/FirebaseAuth( 7126): Notifying id token listeners about user ( 0AIy8cU4T6M29HU2eEbuovYeOP42 ).
+W/es.solegoes_app( 7126): Reducing the number of considered missed Gc histogram windows from 582 to 100
+W/System  ( 7126): Ignoring header X-Firebase-Locale because its value was null.
+D/FirebaseAuth( 7126): Notifying id token listeners about user ( 0AIy8cU4T6M29HU2eEbuovYeOP42 ).
+W/WindowOnBackDispatcher( 7126): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher( 7126): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+W/WindowOnBackDispatcher( 7126): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher( 7126): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+W/System  ( 7126): Ignoring header X-Firebase-Locale because its value was null.
+D/FirebaseAuth( 7126): Notifying id token listeners about user ( 0AIy8cU4T6M29HU2eEbuovYeOP42 ).
+W/es.solegoes_app( 7126): Reducing the number of considered missed Gc histogram windows from 616 to 100
+W/System  ( 7126): Ignoring header X-Firebase-Locale because its value was null.
+D/FirebaseAuth( 7126): Notifying id token listeners about user ( 0AIy8cU4T6M29HU2eEbuovYeOP42 ).
+W/System  ( 7126): Ignoring header X-Firebase-Locale because its value was null.
+D/FirebaseAuth( 7126): Notifying id token listeners about user ( 0AIy8cU4T6M29HU2eEbuovYeOP42 ).
+I/es.solegoes_app( 7126): Background concurrent mark compact GC freed 6853KB AllocSpace bytes, 6(248KB) LOS objects, 49% free, 6800KB/13MB, paused 786us,9.939ms total 115.195ms
+W/es.solegoes_app( 7126): Reducing the number of considered missed Gc histogram windows from 749 to 100
+W/System  ( 7126): Ignoring header X-Firebase-Locale because its value was null.
+D/FirebaseAuth( 7126): Notifying id token listeners about user ( 0AIy8cU4T6M29HU2eEbuovYeOP42 ).
+W/System  ( 7126): Ignoring header X-Firebase-Locale because its value was null.
+D/FirebaseAuth( 7126): Notifying id token listeners about user ( 0AIy8cU4T6M29HU2eEbuovYeOP42 ).
+W/System  ( 7126): Ignoring header X-Firebase-Locale because its value was null.
+D/FirebaseAuth( 7126): Notifying id token listeners about user ( 0AIy8cU4T6M29HU2eEbuovYeOP42 ).
+I/es.solegoes_app( 7126): Waiting for a blocking GC ProfileSaver
+I/es.solegoes_app( 7126): Background concurrent mark compact GC freed 6483KB AllocSpace bytes, 9(372KB) LOS objects, 49% free, 6848KB/13MB, paused 878us,4.275ms total 113.901ms
+W/es.solegoes_app( 7126): Reducing the number of considered missed Gc histogram windows from 918 to 100
+I/es.solegoes_app( 7126): WaitForGcToComplete blocked ProfileSaver on Background for 67.380ms
+W/System  ( 7126): Ignoring header X-Firebase-Locale because its value was null.
+D/FirebaseAuth( 7126): Notifying id token listeners about user ( 0AIy8cU4T6M29HU2eEbuovYeOP42 ).
+W/System  ( 7126): Ignoring header X-Firebase-Locale because its value was null.
+D/FirebaseAuth( 7126): Notifying id token listeners about user ( 0AIy8cU4T6M29HU2eEbuovYeOP42 ).
+I/es.solegoes_app( 7126): Background concurrent mark compact GC freed 6401KB AllocSpace bytes, 6(248KB) LOS objects, 49% free, 6832KB/13MB, paused 493us,4.723ms total 113.480ms
+W/es.solegoes_app( 7126): Reducing the number of considered missed Gc histogram windows from 637 to 100
+W/System  ( 7126): Ignoring header X-Firebase-Locale because its value was null.
+D/FirebaseAuth( 7126): Notifying id token listeners about user ( 0AIy8cU4T6M29HU2eEbuovYeOP42 ).
+W/es.solegoes_app( 7126): Reducing the number of considered missed Gc histogram windows from 589 to 100
+W/System  ( 7126): Ignoring header X-Firebase-Locale because its value was null.
+D/FirebaseAuth( 7126): Notifying id token listeners about user ( 0AIy8cU4T6M29HU2eEbuovYeOP42 ).
+W/System  ( 7126): Ignoring header X-Firebase-Locale because its value was null.
+D/FirebaseAuth( 7126): Notifying id token listeners about user ( 0AIy8cU4T6M29HU2eEbuovYeOP42 ).
+W/System  ( 7126): Ignoring header X-Firebase-Locale because its value was null.
+D/FirebaseAuth( 7126): Notifying id token listeners about user ( 0AIy8cU4T6M29HU2eEbuovYeOP42 ).
+I/es.solegoes_app( 7126): Waiting for a blocking GC ProfileSaver
+W/es.solegoes_app( 7126): Reducing the number of considered missed Gc histogram windows from 704 to 100
+I/es.solegoes_app( 7126): WaitForGcToComplete blocked ProfileSaver on Background for 64.942ms
+W/System  ( 7126): Ignoring header X-Firebase-Locale because its value was null.
+D/FirebaseAuth( 7126): Notifying id token listeners about user ( 0AIy8cU4T6M29HU2eEbuovYeOP42 ).
+W/es.solegoes_app( 7126): Reducing the number of considered missed Gc histogram windows from 618 to 100
+W/System  ( 7126): Ignoring header X-Firebase-Locale because its value was null.
+D/FirebaseAuth( 7126): Notifying id token listeners about user ( 0AIy8cU4T6M29HU2eEbuovYeOP42 ).
+W/System  ( 7126): Ignoring header X-Firebase-Locale because its value was null.
+D/FirebaseAuth( 7126): Notifying id token listeners about user ( 0AIy8cU4T6M29HU2eEbuovYeOP42 ).

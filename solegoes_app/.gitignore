@@ -43,3 +43,8 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Flutter log files
+flutter_log.txt
+flutter_log.txt~
+*.log.txt
