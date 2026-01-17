@@ -255,7 +255,7 @@ class FeaturedTripCard extends StatelessWidget {
                     colors: [
                       Colors.transparent,
                       AppColors.shimmer,
-                      Colors.black.withValues(alpha: 0.9),
+                      AppColors.scrim,
                     ],
                   ),
                 ),

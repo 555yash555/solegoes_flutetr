@@ -224,7 +224,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
           opacity: opacity.clamp(0.0, 1.0),
           child: ColorFiltered(
             colorFilter: ColorFilter.mode(
-              Colors.black.withValues(alpha: 1 - brightness),
+              AppColors.overlay.withValues(alpha: 1 - brightness),
               BlendMode.darken,
             ),
             child: _buildCardContent(index, isActive),

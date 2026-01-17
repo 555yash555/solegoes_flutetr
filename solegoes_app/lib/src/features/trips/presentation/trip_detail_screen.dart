@@ -373,7 +373,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
           bottom: 8,
         ),
         decoration: BoxDecoration(
-          color: _showHeader ? Colors.black.withValues(alpha: 0.85) : Colors.transparent,
+          color: _showHeader ? AppColors.scrim : Colors.transparent,
           border: Border(
             bottom: BorderSide(
               color: _showHeader ? AppColors.borderGlass : Colors.transparent,
@@ -1172,7 +1172,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w500,
-              color: Colors.white.withValues(alpha: 0.85),
+              color: AppColors.textPrimary,
             ),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
