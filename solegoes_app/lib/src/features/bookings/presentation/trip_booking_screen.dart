@@ -10,6 +10,7 @@ import '../../payments/data/razorpay_service.dart';
 import '../../authentication/data/auth_repository.dart';
 import '../data/booking_repository.dart';
 import '../domain/booking.dart';
+import '../../../common_widgets/app_snackbar.dart';
 
 /// Booking screen where users select style, boarding/dropping points
 /// All steps are optional - adapts based on what the trip offers
@@ -931,14 +932,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
     if (mounted) {
       // User cancelled - just return, don't create booking
       if (errorCode == Razorpay.PAYMENT_CANCELLED) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Payment cancelled'),
-            backgroundColor: AppColors.textSecondary,
-            behavior: SnackBarBehavior.floating,
-            duration: const Duration(seconds: 2),
-          ),
-        );
+        AppSnackbar.showInfo(context, 'Payment cancelled');
         return;
       }
       
@@ -1060,13 +1054,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
       } catch (e) {
         debugPrint('Error creating pending booking: $e');
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Payment failed: $errorMessage'),
-              backgroundColor: AppColors.error,
-              duration: const Duration(seconds: 5),
-            ),
-          );
+          AppSnackbar.showError(context, 'Payment failed: $errorMessage');
         }
       }
     }
