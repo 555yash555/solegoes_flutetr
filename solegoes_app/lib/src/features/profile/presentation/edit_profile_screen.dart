@@ -238,7 +238,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                           errorBuilder: (_, __, ___) => Center(
                             child: Text(
                               initials,
-                              style: const AppTextStyles.h1.copyWith(color: Colors.white),
+                              style: AppTextStyles.h1.copyWith(color: Colors.white),
                             ),
                           ),
                         ),
@@ -246,7 +246,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                     : Center(
                         child: Text(
                           initials,
-                          style: const AppTextStyles.h1.copyWith(color: Colors.white),
+                          style: AppTextStyles.h1.copyWith(color: Colors.white),
                         ),
                       ),
               ),

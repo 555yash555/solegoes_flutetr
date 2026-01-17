@@ -396,7 +396,7 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
                 Expanded(
                   child: Text(
                     option['label'] as String,
-                    style: const AppTextStyles.h5.copyWith(color: AppColors.textPrimary),
+                    style: AppTextStyles.h5.copyWith(color: AppColors.textPrimary),
                   ),
                 ),
               ],

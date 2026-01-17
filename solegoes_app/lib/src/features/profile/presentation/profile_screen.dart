@@ -172,7 +172,7 @@ class ProfileScreen extends ConsumerWidget {
           // Name
           Text(
             displayName,
-            style: const AppTextStyles.h2.copyWith(color: Colors.white),
+            style: AppTextStyles.h2.copyWith(color: Colors.white),
           ),
           const SizedBox(height: 4),
           // Email
@@ -220,7 +220,7 @@ class ProfileScreen extends ConsumerWidget {
         children: [
           Text(
             value,
-            style: const AppTextStyles.h2.copyWith(color: Colors.white),
+            style: AppTextStyles.h2.copyWith(color: Colors.white),
           ),
           const SizedBox(height: 4),
           Text(

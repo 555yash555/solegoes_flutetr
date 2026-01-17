@@ -408,7 +408,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
             Expanded(
               child: Text(
                 method.name,
-                style: const AppTextStyles.h5.copyWith(color: Colors.white),
+                style: AppTextStyles.h5.copyWith(color: Colors.white),
               ),
             ),
             // Radio
@@ -480,7 +480,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                         RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
                         (Match m) => '${m[1]},',
                       )}',
-                  style: const AppTextStyles.h2.copyWith(color: Colors.white),
+                  style: AppTextStyles.h2.copyWith(color: Colors.white),
                 ),
               ],
             ),

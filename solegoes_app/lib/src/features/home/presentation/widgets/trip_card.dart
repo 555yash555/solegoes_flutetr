@@ -128,7 +128,7 @@ class TripCard extends StatelessWidget {
                   // Title
                   Text(
                     title,
-                    style: const AppTextStyles.h5.copyWith(color: AppColors.textPrimary),
+                    style: AppTextStyles.h5.copyWith(color: AppColors.textPrimary),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -151,7 +151,7 @@ class TripCard extends StatelessWidget {
                               RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
                               (Match m) => '${m[1]},',
                             )}',
-                        style: const AppTextStyles.h5.copyWith(color: AppColors.textPrimary),
+                        style: AppTextStyles.h5.copyWith(color: AppColors.textPrimary),
                       ),
                       Container(
                         width: 28,

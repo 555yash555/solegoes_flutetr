@@ -494,7 +494,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             const SizedBox(width: 12),
             Text(
               isGoogle ? 'Google' : 'Apple',
-              style: const AppTextStyles.h5.copyWith(color: AppColors.textPrimary),
+              style: AppTextStyles.h5.copyWith(color: AppColors.textPrimary),
             ),
           ],
         ),

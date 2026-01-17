@@ -396,7 +396,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
                     trip.title.replaceAll('\\n', ' '),
-                    style: const AppTextStyles.h5.copyWith(color: Colors.white),
+                    style: AppTextStyles.h5.copyWith(color: Colors.white),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
@@ -499,7 +499,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                 children: [
                   Text(
                     trip.rating.toString(),
-                    style: const AppTextStyles.h2.copyWith(color: Colors.white),
+                    style: AppTextStyles.h2.copyWith(color: Colors.white),
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -523,7 +523,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                 children: [
                   Text(
                     spots,
-                    style: const AppTextStyles.h2.copyWith(color: Colors.white),
+                    style: AppTextStyles.h2.copyWith(color: Colors.white),
                   ),
                   const SizedBox(height: 4),
                   Text(

@@ -587,7 +587,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
                   ),
                   child: Text(
                     actionText,
-                    style: const AppTextStyles.h5.copyWith(color: Colors.white),
+                    style: AppTextStyles.h5.copyWith(color: Colors.white),
                   ),
                 ),
               ),

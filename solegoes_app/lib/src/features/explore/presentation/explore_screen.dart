@@ -368,7 +368,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                             ),
                             Text(
                               '₹${trip.price.toStringAsFixed(0)}',
-                              style: const AppTextStyles.h2.copyWith(color: Colors.white),
+                              style: AppTextStyles.h2.copyWith(color: Colors.white),
                             ),
                           ],
                         ),
@@ -508,7 +508,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                     children: [
                       Text(
                         '₹${trip.price.toStringAsFixed(0)}',
-                        style: const AppTextStyles.h5.copyWith(color: Colors.white),
+                        style: AppTextStyles.h5.copyWith(color: Colors.white),
                       ),
                       Container(
                         padding: const EdgeInsets.all(4),

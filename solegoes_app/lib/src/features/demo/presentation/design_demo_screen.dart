@@ -447,7 +447,7 @@ class _DesignDemoScreenState extends State<DesignDemoScreen> {
           child: Center(
             child: Text(
               isFilled ? '${index + 1}' : '',
-              style: const AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
+              style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary),
             ),
           ),
         );
