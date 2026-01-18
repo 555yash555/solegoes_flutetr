@@ -72,7 +72,7 @@ class CategoryTripsScreen extends ConsumerWidget {
                     crossAxisCount: 2,
                     mainAxisSpacing: 16,
                     crossAxisSpacing: 16,
-                    childAspectRatio: 0.6, // Adjust based on card content
+                    mainAxisExtent: 280, // Increased to prevent overflow
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {

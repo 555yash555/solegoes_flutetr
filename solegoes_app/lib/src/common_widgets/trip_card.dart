@@ -103,98 +103,97 @@ class TripCard extends StatelessWidget {
             ),
             // Content section
             Padding(
-              padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
+              padding: const EdgeInsets.all(12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Title
-                  Text(
-                    title.replaceAll(r'\n', ' '), 
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimary,
-                    ),
-                    maxLines: 2, 
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  // Details
-                  Text(
-                    [
-                      duration,
-                      if (location != null) location,
-                      if (category != null) category,
-                      if (groupSize != null) groupSize,
-                    ].join(' • '),
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: AppColors.textPrimary.withValues(alpha: 0.6),
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 8),
-                  
-                  // Start Date badge (if available)
-                  if (startDate != null)
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: AppColors.surfaceHover,
-                        borderRadius: BorderRadius.circular(4),
-                        border: Border.all(color: AppColors.borderGlass),
+                    // Title
+                    Text(
+                      title.replaceAll(r'\n', ' '), 
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textPrimary,
                       ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                           // Calendar icon
-                           const Icon(LucideIcons.calendar, size: 10, color: AppColors.textSecondary),
-                           const SizedBox(width: 4),
-                           Text(
-                             'Starts ${DateFormat('MMM d').format(startDate!)}',
-                             style: AppTextStyles.labelSmall.copyWith(
-                               color: AppColors.textSecondary,
-                               fontSize: 10,
-                               fontWeight: FontWeight.w600,
-                             ),
-                           ),
-                        ],
-                      ),
+                      maxLines: 2, 
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  if (startDate != null)
+                    const SizedBox(height: 4),
+                    // Details
+                    Text(
+                      [
+                        duration,
+                        if (location != null) location,
+                        if (category != null) category,
+                        if (groupSize != null) groupSize,
+                      ].join(' • '),
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: AppColors.textPrimary.withValues(alpha: 0.6),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                     const SizedBox(height: 8),
-
-                  // Price and arrow
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '₹${price.toStringAsFixed(0).replaceAllMapped(
-                              RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                              (Match m) => '${m[1]},',
-                            )}',
-                        style: AppTextStyles.h5.copyWith(color: AppColors.textPrimary),
-                      ),
+                    
+                    // Start Date badge (if available)
+                    if (startDate != null) ...[
                       Container(
-                        width: 28,
-                        height: 28,
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                         decoration: BoxDecoration(
                           color: AppColors.surfaceHover,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.borderSubtle),
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(color: AppColors.borderGlass),
                         ),
-                        child: const Icon(
-                          LucideIcons.arrowRight,
-                          size: 14,
-                          color: AppColors.textPrimary,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(LucideIcons.calendar, size: 10, color: AppColors.textSecondary),
+                            const SizedBox(width: 4),
+                            Text(
+                              'Starts ${DateFormat('MMM d').format(startDate!)}',
+                              style: AppTextStyles.labelSmall.copyWith(
+                                color: AppColors.textSecondary,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
+                      const SizedBox(height: 8),
                     ],
-                  ),
-                ],
+
+                    // Price and arrow
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '₹${price.toStringAsFixed(0).replaceAllMapped(
+                                RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                                (Match m) => '${m[1]},',
+                              )}',
+                          style: AppTextStyles.h5.copyWith(color: AppColors.textPrimary),
+                        ),
+                        Container(
+                          width: 28,
+                          height: 28,
+                          decoration: BoxDecoration(
+                            color: AppColors.surfaceHover,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: AppColors.borderSubtle),
+                          ),
+                          child: const Icon(
+                            LucideIcons.arrowRight,
+                            size: 14,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
           ],
         ),
       ),
