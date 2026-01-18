@@ -81,7 +81,10 @@ Errors should be captured and displayed uniformly to ensuring a fault-tolerant u
 *   **State Management:** Riverpod 2.0 (Generator pattern preferred).
 *   **Navigation:** GoRouter.
 *   **Data Layer:** Repositories Pattern (Abstract interface + Implementation).
-*   **Model Layer:** Immutable data classes (Freezed preferred, or strict conventions).
+## 8. Data Models & Collections
+*   **Reference:** Always check `scripts/seed_data.dart` (or `seed_screen`) first for existing Firestore structures.
+*   **New Collections:** If a requirement implies a new collection, **PROMPT THE USER** to confirm the schema before implementation.
+*   **Modularity:** Use dedicated sub-classes for nested objects (e.g., `Location`, `Pricing`) to ensure modularity and reusability. Do not dump everything into one massive class.
 
 ---
 *Last Updated: 2026-01-18*
