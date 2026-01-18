@@ -11,7 +11,9 @@ import '../../../common_widgets/trip_card.dart';
 import '../../trips/data/trip_repository.dart';
 import '../../../common_widgets/skeletons/trip_card_skeleton.dart';
 import '../../../common_widgets/app_shimmer.dart';
+import '../../../common_widgets/app_shimmer.dart';
 import '../../../common_widgets/app_image.dart';
+import 'featured_trip_slideshow.dart';
 
 /// Home screen with trip cards and search
 /// Reference: designs/option15_mobile.html
@@ -48,6 +50,9 @@ class HomeScreen extends ConsumerWidget {
 
               // Popular trips section
               _buildPopularTrips(context, ref),
+
+              // Weekend Getaways
+              _buildWeekendGetaways(context, ref),
 
               const SizedBox(height: 24),
             ],
@@ -189,7 +194,8 @@ class HomeScreen extends ConsumerWidget {
         icon: LucideIcons.search,
         readOnly: true,
         onTap: () {
-          // TODO: Implement search
+          // Switch to Explore tab with autofocus
+          context.go(Uri(path: '/explore', queryParameters: {'autofocus': 'true'}).toString());
         },
         suffixIcon: GestureDetector(
           onTap: () => context.push('/preferences'),
@@ -213,27 +219,21 @@ class HomeScreen extends ConsumerWidget {
 
   Widget _buildFeaturedTrip(BuildContext context, WidgetRef ref) {
     final featuredTripsAsync = ref.watch(featuredTripsProvider);
-
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 0), // Padding moved inside slideshow
       child: featuredTripsAsync.when(
         data: (trips) {
           if (trips.isEmpty) return const SizedBox.shrink();
-          final trip = trips.first;
-          return FeaturedTripCard(
-            tripId: trip.tripId,
-            title: trip.title,
-            imageUrl: trip.imageUrl,
-            duration: '${trip.duration} Days',
-            location: trip.location,
-            price: trip.price,
-            isTrending: trip.isTrending,
-          );
+          // Pass all featured trips to the slideshow
+          return FeaturedTripSlideshow(trips: trips);
         },
-        loading: () => const AppShimmer(
-          width: double.infinity,
-          height: 380,
-          borderRadius: 24,
+        loading: () => const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: AppShimmer(
+            width: double.infinity,
+            height: 380,
+            borderRadius: 24,
+          ),
         ),
         error: (_, __) => const SizedBox.shrink(),
       ),
@@ -241,72 +241,80 @@ class HomeScreen extends ConsumerWidget {
   }
 
   Widget _buildSpinGlobe(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: GestureDetector(
-        onTap: () {
-          // TODO: Implement spin the globe feature
-        },
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                const Color(0xFF1A1A1A),
-                const Color(0xFF0A0A0A),
-              ],
-            ),
-            borderRadius: BorderRadius.circular(AppRadius.md),
-            border: Border.all(color: AppColors.borderGlass),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+    return Consumer(
+      builder: (context, ref, _) {
+        return Padding(
+          padding: const EdgeInsets.all(16),
+          child: GestureDetector(
+            onTap: () {
+              final allTrips = ref.read(allTripsProvider).asData?.value;
+              if (allTrips != null && allTrips.isNotEmpty) {
+                final randomTrip = (allTrips..shuffle()).first;
+                context.push('/trip/${randomTrip.tripId}');
+              }
+            },
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    const Color(0xFF1A1A1A),
+                    const Color(0xFF0A0A0A),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(AppRadius.md),
+                border: Border.all(color: AppColors.borderGlass),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Spin the Globe',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
+                      Row(
+                        children: [
+                          Text(
+                            'Spin the Globe',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Icon(
+                            LucideIcons.sparkles,
+                            size: 16,
+                            color: const Color(0xFFFACC15),
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 8),
-                      Icon(
-                        LucideIcons.sparkles,
-                        size: 16,
-                        color: const Color(0xFFFACC15),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Feeling adventurous? Let fate decide.',
+                        style: AppTextStyles.bodySmall.copyWith(
+                          color: AppColors.textMuted,
+                        ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 4),
                   Text(
-                    'Feeling adventurous? Let fate decide.',
-                    style: AppTextStyles.bodySmall.copyWith(
-                      color: AppColors.textMuted,
-                    ),
+                    '🌍',
+                    style: TextStyle(fontSize: 48),
                   ),
                 ],
               ),
-              Text(
-                '🌍',
-                style: TextStyle(fontSize: 48),
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
   Widget _buildCategories() {
-    final categories = ['All Trips', 'Beach', 'Mountain', 'City Break', 'Adventure'];
+    final categories = ['Beach', 'Mountain', 'City', 'Forest', 'Desert', 'Snow'];
     return SizedBox(
       height: 40,
       child: ListView.builder(
@@ -314,14 +322,17 @@ class HomeScreen extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         itemCount: categories.length,
         itemBuilder: (context, index) {
-          final isActive = index == 0;
+          final category = categories[index];
           return Padding(
             padding: const EdgeInsets.only(right: 12),
             child: CategoryPill(
-              label: categories[index],
-              isSelected: isActive,
+              label: category,
+              isSelected: false,
               onTap: () {
-                // TODO: Handle category selection
+                context.pushNamed(
+                  'categoryTrips', 
+                  pathParameters: {'category': category},
+                );
               },
             ),
           );
@@ -332,7 +343,7 @@ class HomeScreen extends ConsumerWidget {
 
   Widget _buildPopularTrips(BuildContext context, WidgetRef ref) {
     final trendingTripsAsync = ref.watch(trendingTripsProvider);
-
+    // ... (rest of Popular Trips implementation, using previously updated height)
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -347,7 +358,7 @@ class HomeScreen extends ConsumerWidget {
                 style: AppTextStyles.sectionTitle,
               ),
               GestureDetector(
-                onTap: () => context.go('/explore'), // Use go instead of push to switch tabs
+                onTap: () => context.go('/explore'),
                 child: Text(
                   'See All',
                   style: AppTextStyles.labelLarge.copyWith(
@@ -360,12 +371,12 @@ class HomeScreen extends ConsumerWidget {
         ),
         // Horizontal trip cards
         SizedBox(
-          height: 250,
+          height: 280,
           child: trendingTripsAsync.when(
             data: (trips) {
               if (trips.isEmpty) {
                 return Center(
-                  child: Text('No trips available'),
+                  child: Text('No trips available', style: TextStyle(color: AppColors.textSecondary)),
                 );
               }
               return ListView.separated(
@@ -380,8 +391,7 @@ class HomeScreen extends ConsumerWidget {
                     title: trip.title,
                     imageUrl: trip.imageUrl,
                     duration: '${trip.duration} Days',
-                    category: trip.categories.isNotEmpty ? trip.categories.first : '',
-                    groupSize: trip.groupSize,
+                    location: trip.location,
                     price: trip.price,
                     rating: trip.rating,
                   );
@@ -394,13 +404,66 @@ class HomeScreen extends ConsumerWidget {
               itemCount: 3,
               separatorBuilder: (_, __) => const SizedBox(width: 16),
               itemBuilder: (context, index) => const SizedBox(
-                width: 280,
+                width: 260,
                 child: TripCardSkeleton(),
               ),
             ),
             error: (_, __) => Center(
               child: Text('Failed to load trips'),
             ),
+          ),
+        ),
+      ],
+    );
+  }
+  
+  Widget _buildWeekendGetaways(BuildContext context, WidgetRef ref) {
+    final weekendTripsAsync = ref.watch(weekendGetawaysProvider);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Section header
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 32, 16, 16),
+          child: Text(
+            'WEEKEND GETAWAYS',
+            style: AppTextStyles.sectionTitle,
+          ),
+        ),
+        // Vertical List
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: weekendTripsAsync.when(
+            data: (trips) {
+              if (trips.isEmpty) return const Text('No short trips found.');
+              
+              // Show first 4
+              final displayTrips = trips.take(4).toList();
+              
+              return Column(
+                children: displayTrips.map((trip) => Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: TripCard(
+                    tripId: trip.tripId,
+                    title: trip.title,
+                    imageUrl: trip.imageUrl,
+                    duration: '${trip.duration} Days',
+                    location: trip.location,
+                    price: trip.price,
+                    rating: trip.rating,
+                    width: double.infinity, // Full width vertical cards
+                  ),
+                )).toList(),
+              );
+            },
+            loading: () => Column(
+              children: List.generate(3, (index) => const Padding(
+                padding: EdgeInsets.only(bottom: 16),
+                child: TripCardSkeleton(),
+              )),
+            ),
+            error: (_,__) => const SizedBox(),
           ),
         ),
       ],

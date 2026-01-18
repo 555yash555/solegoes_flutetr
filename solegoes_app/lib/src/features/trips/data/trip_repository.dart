@@ -206,3 +206,14 @@ Future<Trip?> trip(Ref ref, String tripId) {
   final repository = ref.watch(tripRepositoryProvider);
   return repository.getTripById(tripId);
 }
+
+/// Provider for weekend getaways (short trips <= 4 days)
+@Riverpod(keepAlive: true)
+Stream<List<Trip>> weekendGetaways(Ref ref) {
+  final repository = ref.watch(tripRepositoryProvider);
+  return repository.watchAllTrips().map((trips) {
+    return trips.where((t) {
+      return t.duration <= 4;
+    }).toList();
+  });
+}

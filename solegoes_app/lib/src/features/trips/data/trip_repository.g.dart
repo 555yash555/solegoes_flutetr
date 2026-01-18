@@ -260,3 +260,46 @@ final class TripFamily extends $Family
   @override
   String toString() => r'tripProvider';
 }
+
+/// Provider for weekend getaways (short trips <= 4 days)
+
+@ProviderFor(weekendGetaways)
+final weekendGetawaysProvider = WeekendGetawaysProvider._();
+
+/// Provider for weekend getaways (short trips <= 4 days)
+
+final class WeekendGetawaysProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<Trip>>,
+          List<Trip>,
+          Stream<List<Trip>>
+        >
+    with $FutureModifier<List<Trip>>, $StreamProvider<List<Trip>> {
+  /// Provider for weekend getaways (short trips <= 4 days)
+  WeekendGetawaysProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'weekendGetawaysProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$weekendGetawaysHash();
+
+  @$internal
+  @override
+  $StreamProviderElement<List<Trip>> $createElement($ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
+
+  @override
+  Stream<List<Trip>> create(Ref ref) {
+    return weekendGetaways(ref);
+  }
+}
+
+String _$weekendGetawaysHash() => r'666e2087476e4d69fcd38dd6e189fdc8a28e1244';

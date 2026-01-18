@@ -11,10 +11,12 @@ class TripCard extends StatelessWidget {
   final String title;
   final String imageUrl;
   final String duration;
-  final String category;
-  final String groupSize;
+  final String? location;
+  final String? category;
+  final String? groupSize;
   final double price;
   final double rating;
+  final double? width;
 
   const TripCard({
     super.key,
@@ -22,10 +24,12 @@ class TripCard extends StatelessWidget {
     required this.title,
     required this.imageUrl,
     required this.duration,
-    required this.category,
-    required this.groupSize,
+    this.location,
+    this.category,
+    this.groupSize,
     required this.price,
     required this.rating,
+    this.width = 260,
   });
 
   @override
@@ -37,7 +41,7 @@ class TripCard extends StatelessWidget {
         backgroundColor: const Color(0xFF111111),
         border: Border.all(color: AppColors.borderSubtle),
         child: SizedBox(
-          width: 260,
+          width: width,
           child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -52,68 +56,76 @@ class TripCard extends StatelessWidget {
                   // Image
                   AppImage(
                     imageUrl: imageUrl,
-                    height: 140,
+                    height: 135,
                     width: double.infinity,
                     fit: BoxFit.cover,
                   ),
                   // Rating badge
-                  Positioned(
-                    top: 12,
-                    right: 12,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.scrim,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(
-                            LucideIcons.star,
-                            size: 12,
-                            color: Color(0xFFFACC15),
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            rating.toStringAsFixed(1),
-                            style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
+                  if (rating > 0)
+                    Positioned(
+                      top: 12,
+                      right: 12,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.scrim,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              LucideIcons.star,
+                              size: 12,
+                              color: Color(0xFFFACC15),
                             ),
-                          ),
-                        ],
+                            const SizedBox(width: 4),
+                            Text(
+                              rating.toStringAsFixed(1),
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
                 ],
               ),
             ),
             // Content section
             Padding(
-              padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+              padding: const EdgeInsets.fromLTRB(14, 10, 14, 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Title
                   Text(
-                    title,
+                    title.replaceAll(r'\n', ' '), // Use space instead of newline for card titles
                     style: AppTextStyles.h5.copyWith(color: AppColors.textPrimary),
-                    maxLines: 1,
+                    maxLines: 2, // Allow 2 lines
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 2),
                   // Details
                   Text(
-                    '$duration • $category • $groupSize',
+                    [
+                      duration,
+                      if (location != null) location,
+                      if (category != null) category,
+                      if (groupSize != null) groupSize,
+                    ].join(' • '),
                     style: TextStyle(
                       fontSize: 11,
                       color: AppColors.textPrimary.withValues(alpha: 0.6),
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 8),
                   // Price and arrow

@@ -5,12 +5,12 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../../../theme/app_theme.dart';
 import '../../../common_widgets/app_text_field.dart';
 import '../../../common_widgets/trip_card.dart';
-import '../../../common_widgets/category_pill.dart';
+import '../../../common_widgets/skeletons/trip_card_skeleton.dart';
 import '../../trips/data/trip_repository.dart';
 import '../../trips/domain/trip.dart';
-import '../../../common_widgets/skeletons/trip_card_skeleton.dart';
+import 'category_card.dart';
 
-/// Explore screen with search, categories, and varied trip layouts
+/// Explore screen with Search, Category Grid, and Trending section
 class ExploreScreen extends ConsumerStatefulWidget {
   const ExploreScreen({super.key});
 
@@ -20,17 +20,32 @@ class ExploreScreen extends ConsumerStatefulWidget {
 
 class _ExploreScreenState extends ConsumerState<ExploreScreen> {
   final TextEditingController _searchController = TextEditingController();
-  String _selectedCategory = 'all';
+  final FocusNode _searchFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final state = GoRouterState.of(context);
+      if (state.uri.queryParameters['autofocus'] == 'true') {
+        _searchFocusNode.requestFocus();
+      }
+    });
+  }
 
   @override
   void dispose() {
     _searchController.dispose();
+    _searchFocusNode.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final allTripsAsync = ref.watch(allTripsProvider);
+    final trendingTripsAsync = ref.watch(trendingTripsProvider);
+
+    final isSearching = _searchController.text.isNotEmpty;
 
     return Scaffold(
       backgroundColor: AppColors.bgDeep,
@@ -57,457 +72,218 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
           // Search Bar
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
               child: AppTextField(
                 controller: _searchController,
-                hint: 'Search destinations, trips...',
+                focusNode: _searchFocusNode,
+                hint: 'Where to next?',
                 icon: LucideIcons.search,
                 onChanged: (value) {
-                  // TODO: Implement search
+                  setState(() {});
                 },
-              ),
-            ),
-          ),
-
-          // Category Pills - Dynamically generated from trip data
-          allTripsAsync.when(
-            data: (allTrips) {
-              // Get unique categories from trips with counts
-              final categories = <String, int>{'all': allTrips.length};
-              for (final trip in allTrips) {
-                if (trip.categories.isNotEmpty) {
-                  // A trip can have multiple categories, count each
-                  for (final cat in trip.categories) {
-                    if (cat.isNotEmpty) {
-                      categories[cat] = (categories[cat] ?? 0) + 1;
-                    }
-                  }
-                }
-              }
-
-              // Sort categories: 'all' first, then by count descending
-              final sortedCategories = categories.entries.toList()
-                ..sort((a, b) {
-                  if (a.key == 'all') return -1;
-                  if (b.key == 'all') return 1;
-                  return b.value.compareTo(a.value);
-                });
-
-              return SliverToBoxAdapter(
-                child: SizedBox(
-                  height: 44,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: sortedCategories.length,
-                    separatorBuilder: (_, __) => const SizedBox(width: 8),
-                    itemBuilder: (context, index) {
-                      final entry = sortedCategories[index];
-                      final category = entry.key;
-                      
-                      // Format label
-                      String label;
-                      if (category == 'all') {
-                        label = 'All Trips';
-                      } else {
-                        // Capitalize first letter
-                        label = category[0].toUpperCase() + category.substring(1);
-                        // Handle special cases
-                        if (category == 'city') label = 'City Break';
-                      }
-
-                      return CategoryPill(
-                        label: label,
-                        isSelected: _selectedCategory == category,
-                        onTap: () => setState(() => _selectedCategory = category),
-                      );
-                    },
-                  ),
-                ),
-              );
-            },
-            loading: () => const SliverToBoxAdapter(
-              child: SizedBox(
-                height: 44,
-                child: Center(child: SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                )),
-              ),
-            ),
-            error: (_, __) => const SliverToBoxAdapter(child: SizedBox(height: 44)),
-          ),
-
-          const SliverToBoxAdapter(child: SizedBox(height: 24)),
-
-          // Trending Section Header
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    _selectedCategory == 'all' 
-                        ? 'Trending Now' 
-                        : '${_selectedCategory[0].toUpperCase()}${_selectedCategory.substring(1)} Trips',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                      letterSpacing: 0.2,
-                    ),
-                  ),
-                  if (_selectedCategory == 'all')
-                    TextButton(
+                suffixIcon: isSearching
+                  ? IconButton(
+                      icon: const Icon(LucideIcons.x, size: 16, color: Colors.white),
                       onPressed: () {
-                        // TODO: Show all trending
+                        _searchController.clear();
+                        setState(() {});
                       },
-                      child: Text(
-                        'See All',
-                        style: TextStyle(
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.w600,
+                    )
+                  : null,
+              ),
+            ),
+          ),
+
+          if (isSearching)
+            allTripsAsync.when(
+              data: (allTrips) {
+                 final query = _searchController.text.toLowerCase();
+                 final results = allTrips.where((trip) {
+                   return trip.title.toLowerCase().contains(query) ||
+                          trip.location.toLowerCase().contains(query) ||
+                          trip.categories.any((c) => c.toLowerCase().contains(query));
+                 }).toList();
+
+                 if (results.isEmpty) {
+                   return SliverFillRemaining(
+                     child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(LucideIcons.search, size: 48, color: Colors.white24),
+                            const SizedBox(height: 16),
+                            Text(
+                              'No matching trips found',
+                              style: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
+                            ),
+                          ],
                         ),
+                     ),
+                   );
+                 }
+
+                 return SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          final trip = results[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: TripCard(
+                              tripId: trip.tripId,
+                              title: trip.title,
+                              imageUrl: trip.imageUrl,
+                              duration: '${trip.duration} Days',
+                              location: trip.location,
+                              price: trip.price,
+                              rating: trip.rating,
+                              width: double.infinity,
+                            ),
+                          );
+                        },
+                        childCount: results.length,
                       ),
                     ),
-                ],
-              ),
-            ),
-          ),
+                 );
+              },
+              loading: () => const SliverFillRemaining(child: Center(child: CircularProgressIndicator())), // Or skeleton
+              error: (_,__) => const SliverToBoxAdapter(),
+            )
+          else ...[
+            // Category Grid Section
+            allTripsAsync.when(
+              data: (allTrips) {
+                // 1. Extract unique categories
+                final uniqueCategories = <String>{};
+                for (final trip in allTrips) {
+                  uniqueCategories.addAll(trip.categories.where((c) => c.isNotEmpty));
+                }
 
-          const SliverToBoxAdapter(child: SizedBox(height: 12)),
+                final categories = uniqueCategories.toList()..sort();
 
-          // Trip Cards with Varied Layouts - Filtered by category
-          allTripsAsync.when(
-            data: (allTrips) {
-              // Filter trips by selected category
-              final filteredTrips = _selectedCategory == 'all'
-                  ? allTrips
-                  : allTrips.where((trip) => trip.categories.contains(_selectedCategory)).toList();
+                if (categories.isEmpty) return const SliverToBoxAdapter();
 
-              return _buildTripLayouts(filteredTrips);
-            },
-            loading: () => SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) => const Padding(
-                  padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
-                  child: TripCardSkeleton(),
-                ),
-                childCount: 4,
-              ),
-            ),
-            error: (error, stack) => SliverToBoxAdapter(
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(32),
-                  child: Text(
-                    'Error loading trips: $error',
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-            ),
-          ),
-
-          const SliverToBoxAdapter(child: SizedBox(height: 100)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTripLayouts(List<Trip> trips) {
-    if (trips.isEmpty) {
-      return const SliverToBoxAdapter(
-        child: Center(
-          child: Padding(
-            padding: EdgeInsets.all(32),
-            child: Text(
-              'No trips found',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ),
-      );
-    }
-
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          // Determine layout pattern
-          if (index == 0) {
-            // First item: Large featured card
-            final trip = trips[0];
-            return Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-              child: FeaturedTripCard(
-                tripId: trip.tripId,
-                title: trip.title,
-                imageUrl: trip.imageUrl,
-                duration: '${trip.duration} Days',
-                location: trip.location,
-                price: trip.price,
-              ),
-            );
-          } else if (index == 1 && trips.length > 2) {
-            // Second row: Two medium cards
-            return _buildTwoMediumCards(
-              trips.length > 1 ? trips[1] : trips[0],
-              trips.length > 2 ? trips[2] : trips[0],
-            );
-          } else if (index == 2 && trips.length > 5) {
-            // Third row: Three small cards
-            return _buildThreeSmallCards(
-              trips.length > 3 ? trips[3] : trips[0],
-              trips.length > 4 ? trips[4] : trips[0],
-              trips.length > 5 ? trips[5] : trips[0],
-            );
-          } else if (index == 3 && trips.length > 6) {
-            // Fourth row: Horizontal scroll
-            return _buildHorizontalScroll(trips.skip(6).take(5).toList());
-          } else if (index > 3 && trips.length > index * 2) {
-            // Remaining: Two medium cards
-            final idx1 = index * 2;
-            final idx2 = idx1 + 1;
-            if (trips.length > idx2) {
-              return _buildTwoMediumCards(trips[idx1], trips[idx2]);
-            }
-          }
-          return const SizedBox.shrink();
-        },
-        childCount: (trips.length / 2).ceil() + 2,
-      ),
-    );
-  }
-
-
-
-  Widget _buildTwoMediumCards(Trip trip1, Trip trip2) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-      child: Row(
-        children: [
-          Expanded(child: _buildMediumCard(trip1)),
-          const SizedBox(width: 12),
-          Expanded(child: _buildMediumCard(trip2)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMediumCard(Trip trip) {
-    return GestureDetector(
-      onTap: () => context.push('/trip/${trip.tripId}'),
-      child: Container(
-        height: 200,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(AppRadius.md),
-          border: Border.all(color: AppColors.borderGlass),
-        ),
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(AppRadius.md),
-              child: Image.network(
-                trip.imageUrl,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
-                  color: AppColors.bgSurface,
-                ),
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(AppRadius.md),
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.transparent,
-                    AppColors.scrim,
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: 12,
-              left: 12,
-              right: 12,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    trip.title,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
+                return SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  sliver: SliverGrid(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 12,
+                      crossAxisSpacing: 12,
+                      childAspectRatio: 1.1, // Slightly wider than square
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '${trip.duration} Days',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: AppColors.textPrimary,
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        final category = categories[index];
+                        // Use a dynamic image service that supports keywords
+                        final imageUrl = 'https://loremflickr.com/800/600/$category,travel/all';
+                        
+                        return CategoryCard(
+                          category: category,
+                          imageUrl: imageUrl,
+                          onTap: () => context.pushNamed(
+                            'categoryTrips', 
+                            pathParameters: {'category': category},
+                          ),
+                        );
+                      },
+                      childCount: categories.length,
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '₹${trip.price.toStringAsFixed(0)}',
-                        style: AppTextStyles.h5.copyWith(color: Colors.white),
+                );
+              },
+              loading: () => SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                sliver: SliverGrid(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 12,
+                    crossAxisSpacing: 12,
+                    childAspectRatio: 1.1,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) => Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.bgSurface,
+                        borderRadius: BorderRadius.circular(AppRadius.md),
+                        border: Border.all(color: AppColors.borderGlass),
                       ),
-                      Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: AppColors.shimmer,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          LucideIcons.arrowRight,
-                          size: 16,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
+                    ),
+                    childCount: 4,
                   ),
-                ],
+                ),
+              ),
+              error: (_, __) => const SliverToBoxAdapter(),
+            ),
+
+            const SliverToBoxAdapter(child: SizedBox(height: 32)),
+
+            // Trending Section Header
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Text(
+                  'Trending Now',
+                  style: AppTextStyles.h3.copyWith(color: Colors.white),
+                ),
               ),
             ),
-          ],
-        ),
-      ),
-    );
-  }
 
-  Widget _buildThreeSmallCards(Trip trip1, Trip trip2, Trip trip3) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-      child: Row(
-        children: [
-          Expanded(child: _buildSmallCard(trip1)),
-          const SizedBox(width: 8),
-          Expanded(child: _buildSmallCard(trip2)),
-          const SizedBox(width: 8),
-          Expanded(child: _buildSmallCard(trip3)),
+            // Trending List
+            trendingTripsAsync.when(
+              data: (trips) {
+                if (trips.isEmpty) {
+                  return const SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Text('No trending trips yet.', style: TextStyle(color: Colors.white54)),
+                    ),
+                  );
+                }
+                return SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        final trip = trips[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: TripCard(
+                            tripId: trip.tripId,
+                            title: trip.title,
+                            imageUrl: trip.imageUrl,
+                            duration: '${trip.duration} Days',
+                            location: trip.location,
+                            price: trip.price,
+                            rating: trip.rating,
+                          ),
+                        );
+                      },
+                      childCount: trips.length,
+                    ),
+                  ),
+                );
+              },
+              loading: () => SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) => const Padding(
+                      padding: EdgeInsets.only(bottom: 16),
+                      child: TripCardSkeleton(),
+                    ),
+                    childCount: 3,
+                  ),
+                ),
+              ),
+              error: (err, stack) => SliverToBoxAdapter(child: Text('Error: $err')),
+            ),
+            
+            const SliverToBoxAdapter(child: SizedBox(height: 80)),
+          ], // End of else block
         ],
       ),
-    );
-  }
-
-  Widget _buildSmallCard(Trip trip) {
-    return GestureDetector(
-      onTap: () => context.push('/trip/${trip.tripId}'),
-      child: Container(
-        height: 140,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(AppRadius.md),
-          border: Border.all(color: AppColors.borderGlass),
-        ),
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(AppRadius.md),
-              child: Image.network(
-                trip.imageUrl,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
-                  color: AppColors.bgSurface,
-                ),
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(AppRadius.md),
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.transparent,
-                    AppColors.scrim,
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: 8,
-              left: 8,
-              right: 8,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    trip.location,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    '₹${(trip.price / 1000).toStringAsFixed(0)}k',
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildHorizontalScroll(List<Trip> trips) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
-            'Quick Escapes',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-              letterSpacing: 0.2,
-            ),
-          ),
-        ),
-        const SizedBox(height: 12),
-        SizedBox(
-          height: 140,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            itemCount: trips.length,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: EdgeInsets.only(right: index < trips.length - 1 ? 12 : 0),
-                child: SizedBox(
-                  width: 120,
-                  child: _buildSmallCard(trips[index]),
-                ),
-              );
-            },
-          ),
-        ),
-        const SizedBox(height: 16),
-      ],
     );
   }
 }

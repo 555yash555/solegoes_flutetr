@@ -14,6 +14,7 @@ class AppTextField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final bool readOnly;
   final VoidCallback? onTap;
+  final FocusNode? focusNode;
 
   const AppTextField({
     super.key,
@@ -28,6 +29,7 @@ class AppTextField extends StatelessWidget {
     this.inputFormatters,
     this.readOnly = false,
     this.onTap,
+    this.focusNode,
   });
 
   @override
@@ -47,6 +49,7 @@ class AppTextField extends StatelessWidget {
           ),
           child: TextField(
             controller: controller,
+            focusNode: focusNode,
             obscureText: obscureText,
             keyboardType: keyboardType,
             style: AppTextStyles.body.copyWith(color: AppColors.textPrimary),

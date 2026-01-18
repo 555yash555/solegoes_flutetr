@@ -26,6 +26,7 @@ import '../features/payments/presentation/payment_method_screen.dart';
 import '../features/payments/presentation/payment_confirmation_screen.dart';
 import '../features/bookings/presentation/trip_booking_screen.dart';
 import '../features/explore/presentation/explore_screen.dart';
+import '../features/explore/presentation/category_trips_screen.dart';
 import '../features/demo/presentation/design_demo_screen.dart';
 import '../features/admin/presentation/seed_trips_screen.dart';
 
@@ -65,6 +66,9 @@ enum AppRoute {
   settings,
   notifications,
   editProfile,
+  
+  // Category Trips
+  categoryTrips,
 }
 
 @riverpod
@@ -305,6 +309,14 @@ GoRouter goRouter(Ref ref) {
         path: '/edit-profile',
         name: AppRoute.editProfile.name,
         builder: (context, state) => const EditProfileScreen(),
+      ),
+      GoRoute(
+        path: '/category/:category',
+        name: AppRoute.categoryTrips.name,
+        builder: (context, state) {
+          final category = state.pathParameters['category']!;
+          return CategoryTripsScreen(category: category);
+        },
       ),
     ],
   );
