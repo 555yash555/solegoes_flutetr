@@ -371,7 +371,7 @@ class HomeScreen extends ConsumerWidget {
         ),
         // Horizontal trip cards
         SizedBox(
-          height: 290,
+          height: 280, // Adjusted to accommodate improved padding
           child: trendingTripsAsync.when(
             data: (trips) {
               if (trips.isEmpty) {

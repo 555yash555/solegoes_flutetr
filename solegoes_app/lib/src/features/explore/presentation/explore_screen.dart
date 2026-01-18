@@ -18,13 +18,28 @@ class ExploreScreen extends ConsumerStatefulWidget {
   ConsumerState<ExploreScreen> createState() => _ExploreScreenState();
 }
 
-class _ExploreScreenState extends ConsumerState<ExploreScreen> {
+class _ExploreScreenState extends ConsumerState<ExploreScreen> with RouteAware {
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _searchFocusNode = FocusNode();
+  bool _shouldAutofocus = false;
 
   @override
   void initState() {
     super.initState();
+    
+    // Check for autofocus on initial load
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkAutofocus();
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Check if we should autofocus when dependencies change (e.g., route changes)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkAutofocus();
+    });
   }
 
   @override
@@ -34,26 +49,45 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
     super.dispose();
   }
 
+  void _checkAutofocus() {
+    try {
+      final state = GoRouterState.of(context);
+      final shouldAutofocus = state.uri.queryParameters['autofocus'] == 'true';
+      
+      if (shouldAutofocus && !_shouldAutofocus) {
+        _shouldAutofocus = true;
+        _searchFocusNode.requestFocus();
+        
+        // Clear the query parameter after using it to prevent re-focusing
+        Future.microtask(() {
+          if (mounted) {
+            context.go('/explore'); // Remove the autofocus parameter
+          }
+        });
+      } else if (!shouldAutofocus && _shouldAutofocus) {
+        // Reset the flag when the parameter is removed
+        _shouldAutofocus = false;
+      }
+    } catch (_) {
+      // Ignore if valid context/state not found
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Check for autofocus query param (handles navigation from Home even if widget is alive)
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-       try {
-         final state = GoRouterState.of(context);
-         if (state.uri.queryParameters['autofocus'] == 'true' && !_searchFocusNode.hasFocus) {
-           _searchFocusNode.requestFocus();
-         }
-       } catch (_) {
-         // Ignore if valid context/state not found
-       }
-    });
-
     final allTripsAsync = ref.watch(allTripsProvider);
     final trendingTripsAsync = ref.watch(trendingTripsProvider);
 
     final isSearching = _searchController.text.isNotEmpty;
 
-    return Scaffold(
+    return GestureDetector(
+      onTap: () {
+        // Unfocus when tapping outside the search field
+        if (_searchFocusNode.hasFocus) {
+          _searchFocusNode.unfocus();
+        }
+      },
+      child: Scaffold(
       backgroundColor: AppColors.bgDeep,
       body: CustomScrollView(
         slivers: [
@@ -292,6 +326,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
           ], // End of else block
         ],
       ),
-    );
+      ), // Scaffold
+    ); // GestureDetector
   }
 }

@@ -103,7 +103,7 @@ class TripCard extends StatelessWidget {
             ),
             // Content section
             Padding(
-              padding: const EdgeInsets.fromLTRB(10, 8, 10, 10),
+              padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -118,7 +118,7 @@ class TripCard extends StatelessWidget {
                     maxLines: 2, 
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 2),
+                  const SizedBox(height: 4),
                   // Details
                   Text(
                     [
@@ -134,13 +134,11 @@ class TripCard extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 8),
                   
                   // Start Date badge (if available)
                   if (startDate != null)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 6),
-                    child: Container(
+                    Container(
                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                       decoration: BoxDecoration(
                         color: AppColors.surfaceHover,
@@ -164,7 +162,8 @@ class TripCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                  ),
+                  if (startDate != null)
+                    const SizedBox(height: 8),
 
                   // Price and arrow
                   Row(
