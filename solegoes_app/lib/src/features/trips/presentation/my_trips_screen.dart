@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../common_widgets/skeletons/trip_card_skeleton.dart';
+import '../../bookings/presentation/booking_card.dart';
 import '../../../common_widgets/app_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -194,7 +195,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
           itemCount: upcomingBookings.length,
           itemBuilder: (context, index) =>
-              _buildTripCard(upcomingBookings[index]),
+              BookingCard(booking: upcomingBookings[index]),
         );
       },
       loading: () => ListView.builder(
@@ -229,7 +230,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
         return ListView.builder(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
           itemCount: pastBookings.length,
-          itemBuilder: (context, index) => _buildTripCard(pastBookings[index]),
+          itemBuilder: (context, index) => BookingCard(booking: pastBookings[index]),
         );
       },
       loading: () => ListView.builder(
@@ -252,215 +253,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
     );
   }
 
-  Widget _buildTripCard(Booking booking) {
-    final isPast = booking.status == BookingStatus.completed ||
-        booking.status == BookingStatus.cancelled;
 
-    return GestureDetector(
-      onTap: () => context.push('/trip/${booking.tripId}'),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 16),
-        decoration: BoxDecoration(
-          color: AppColors.surfaceOverlay,
-          borderRadius: BorderRadius.circular(AppRadius.md),
-          border: Border.all(color: AppColors.borderSubtle),
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Image
-            Stack(
-              children: [
-                SizedBox(
-                  height: 160,
-                  width: double.infinity,
-                  child: AppImage(
-                    imageUrl: booking.tripImageUrl,
-                    height: 160,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    color: isPast ? Colors.grey : null,
-                    colorBlendMode: isPast ? BlendMode.saturation : null,
-                  ),
-                ),
-                // Status badge
-                Positioned(
-                  top: 12,
-                  right: 12,
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: _getStatusColor(booking.status),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: Text(
-                      _getStatusText(booking.status),
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            // Content
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Title and duration
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          booking.tripTitle,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Text(
-                        '${booking.tripDuration} Days',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: AppColors.textMuted,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  // Date and location
-                  Row(
-                    children: [
-                      Icon(
-                        LucideIcons.calendar,
-                        size: 16,
-                        color: AppColors.textMuted,
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        _formatDate(booking.bookingDate),
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: AppColors.textMuted,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Icon(
-                        LucideIcons.mapPin,
-                        size: 16,
-                        color: AppColors.textMuted,
-                      ),
-                      const SizedBox(width: 6),
-                      Expanded(
-                        child: Text(
-                          booking.tripLocation,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: AppColors.textMuted,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  // Action buttons
-                  if (!isPast) _buildActionButtons(booking),
-                  if (isPast) _buildPastActionButtons(booking),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildActionButtons(Booking booking) {
-    return Row(
-      children: [
-        Expanded(
-          child: AppButton(
-            text: 'View Details',
-            onPressed: () => context.push('/trip/${booking.tripId}'),
-            variant: AppButtonVariant.secondary,
-            shape: AppButtonShape.pill,
-            size: AppButtonSize.small,
-            isFullWidth: true,
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: AppButton(
-            text: 'Chat',
-            onPressed: () {
-              // TODO: Navigate to trip chat
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Chat coming soon!'),
-                  backgroundColor: AppColors.primary,
-                  behavior: SnackBarBehavior.floating,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-              );
-            },
-            variant: AppButtonVariant.primary,
-            shape: AppButtonShape.pill,
-            size: AppButtonSize.small,
-            isFullWidth: true,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildPastActionButtons(Booking booking) {
-    return Row(
-      children: [
-        Expanded(
-          child: AppButton(
-            text: 'View Details',
-            onPressed: () => context.push('/trip/${booking.tripId}'),
-            variant: AppButtonVariant.secondary,
-            shape: AppButtonShape.pill,
-            size: AppButtonSize.small,
-            isFullWidth: true,
-          ),
-        ),
-        if (booking.status == BookingStatus.completed) ...[
-          const SizedBox(width: 12),
-          Expanded(
-            child: AppButton(
-              text: 'Book Again',
-              onPressed: () {
-                // TODO: Book again functionality
-                context.push('/trip/${booking.tripId}');
-              },
-              variant: AppButtonVariant.primary,
-              shape: AppButtonShape.pill,
-              size: AppButtonSize.small,
-              isFullWidth: true,
-            ),
-          ),
-        ],
-      ],
-    );
-  }
 
   Widget _buildEmptyState({
     required IconData icon,

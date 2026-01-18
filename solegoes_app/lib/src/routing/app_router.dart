@@ -27,8 +27,12 @@ import '../features/payments/presentation/payment_confirmation_screen.dart';
 import '../features/bookings/presentation/trip_booking_screen.dart';
 import '../features/explore/presentation/explore_screen.dart';
 import '../features/explore/presentation/category_trips_screen.dart';
+import '../features/explore/presentation/category_trips_screen.dart';
 import '../features/demo/presentation/design_demo_screen.dart';
 import '../features/admin/presentation/seed_trips_screen.dart';
+import '../features/search/presentation/search_filter_screen.dart';
+import '../features/search/presentation/search_results_screen.dart';
+import '../features/search/domain/trip_filter.dart';
 
 part 'app_router.g.dart';
 
@@ -69,6 +73,8 @@ enum AppRoute {
   
   // Category Trips
   categoryTrips,
+  searchFilter,
+  searchResults,
 }
 
 @riverpod
@@ -316,6 +322,19 @@ GoRouter goRouter(Ref ref) {
         builder: (context, state) {
           final category = state.pathParameters['category']!;
           return CategoryTripsScreen(category: category);
+        },
+      ),
+      GoRoute(
+        path: '/search/filter',
+        name: AppRoute.searchFilter.name,
+        builder: (context, state) => const SearchFilterScreen(),
+      ),
+      GoRoute(
+        path: '/search/results',
+        name: AppRoute.searchResults.name,
+        builder: (context, state) {
+          final filter = state.extra as TripFilter;
+          return SearchResultsScreen(filter: filter);
         },
       ),
     ],

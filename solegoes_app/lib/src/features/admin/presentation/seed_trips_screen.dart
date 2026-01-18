@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../theme/app_theme.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 /// Admin screen to seed sample trips to Firestore
 /// This is a one-time use screen to populate the database
@@ -7830,6 +7831,8 @@ class _SeedTripsScreenState extends ConsumerState<SeedTripsScreen> {
         'updatedAt': FieldValue.serverTimestamp()},
     ];
 
+      final List<String> generatedTripIds = [];
+
       for (var i = 0; i < sampleTrips.length; i++) {
         final tripData = sampleTrips[i];
         final title = tripData['title'] as String;
@@ -7838,13 +7841,63 @@ class _SeedTripsScreenState extends ConsumerState<SeedTripsScreen> {
           _status = 'Adding trip ${i + 1}/${sampleTrips.length}: $title';
         });
 
-        await firestore.collection('trips').add(tripData);
+        final docRef = await firestore.collection('trips').add(tripData);
+        generatedTripIds.add(docRef.id);
 
         setState(() {
           _logs.add('✅ Added trip: $title');
         });
 
         await Future.delayed(const Duration(milliseconds: 500));
+      }
+
+      // ============================================
+      // STEP 3: Seed Bookings
+      // ============================================
+      setState(() {
+        _status = 'Step 3/3: Seeding bookings...';
+      });
+
+      // Clear existing bookings
+      final existingBookings = await firestore.collection('bookings').get();
+      for (var doc in existingBookings.docs) {
+        await doc.reference.delete();
+      }
+
+      // Create reference booking for Ladakh (Trip 2 -> Index 1)
+      if (generatedTripIds.length > 1) {
+        final ladakhTripId = generatedTripIds[1];
+        final ladakhTrip = sampleTrips[1];
+        final currentUser = FirebaseAuth.instance.currentUser;
+        final userId = currentUser?.uid ?? 'demo-user-123';
+        
+        final bookingData = {
+          'tripId': ladakhTripId,
+          'userId': userId,
+          'tripTitle': ladakhTrip['title'],
+          'tripImageUrl': ladakhTrip['imageUrl'],
+          'tripLocation': ladakhTrip['location'],
+          'tripDuration': ladakhTrip['duration'],
+          'amount': ladakhTrip['price'],
+          'paymentId': 'pay_demo_${DateTime.now().millisecondsSinceEpoch}',
+          'paymentMethod': 'card',
+          'status': 'confirmed',
+          'paymentStatus': 'success',
+          'failureReason': null,
+          'bookingDate': FieldValue.serverTimestamp(),
+          'tripStartDate': ladakhTrip['startDate'],
+          'userEmail': currentUser?.email ?? 'demo@example.com',
+          'userName': currentUser?.displayName ?? 'Demo User',
+          'selectedStyleId': 'standard',
+          'selectedStyleName': 'Standard Rider',
+          'selectedBoardingPoint': null,
+          'selectedDroppingPoint': null,
+        };
+
+        await firestore.collection('bookings').add(bookingData);
+        setState(() {
+            _logs.add('✅ Added reference booking: Ladakh Bike Trip');
+        });
       }
 
       setState(() {

@@ -12,6 +12,7 @@ class AppColors {
   static const Color bgSurface = Color(0xFF18181B);   // --bg-surface (Zinc 900)
   static const Color bgGlass = Color(0xB318181B);     // --bg-glass (70% opacity)
   static const Color bgGlassLight = Color(0x08FFFFFF); // rgba(255,255,255,0.03)
+  static const Color bgCard = Color(0xFF111111);      // Card background
 
   // Text
   static const Color textPrimary = Color(0xFFFAFAFA);   // --text-primary (Zinc 50)

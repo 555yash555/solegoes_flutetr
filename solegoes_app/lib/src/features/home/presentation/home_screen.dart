@@ -198,7 +198,7 @@ class HomeScreen extends ConsumerWidget {
           context.go(Uri(path: '/explore', queryParameters: {'autofocus': 'true'}).toString());
         },
         suffixIcon: GestureDetector(
-          onTap: () => context.push('/preferences'),
+          onTap: () => context.push('/search/filter'),
           child: Container(
             margin: const EdgeInsets.all(8),
             padding: const EdgeInsets.all(6),
@@ -371,7 +371,7 @@ class HomeScreen extends ConsumerWidget {
         ),
         // Horizontal trip cards
         SizedBox(
-          height: 280,
+          height: 290,
           child: trendingTripsAsync.when(
             data: (trips) {
               if (trips.isEmpty) {
@@ -394,6 +394,7 @@ class HomeScreen extends ConsumerWidget {
                     location: trip.location,
                     price: trip.price,
                     rating: trip.rating,
+                    startDate: trip.startDate,
                   );
                 },
               );
@@ -453,6 +454,7 @@ class HomeScreen extends ConsumerWidget {
                     price: trip.price,
                     rating: trip.rating,
                     width: double.infinity, // Full width vertical cards
+                    startDate: trip.startDate,
                   ),
                 )).toList(),
               );

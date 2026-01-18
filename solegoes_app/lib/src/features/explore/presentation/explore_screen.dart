@@ -25,12 +25,6 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final state = GoRouterState.of(context);
-      if (state.uri.queryParameters['autofocus'] == 'true') {
-        _searchFocusNode.requestFocus();
-      }
-    });
   }
 
   @override
@@ -42,6 +36,18 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Check for autofocus query param (handles navigation from Home even if widget is alive)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+       try {
+         final state = GoRouterState.of(context);
+         if (state.uri.queryParameters['autofocus'] == 'true' && !_searchFocusNode.hasFocus) {
+           _searchFocusNode.requestFocus();
+         }
+       } catch (_) {
+         // Ignore if valid context/state not found
+       }
+    });
+
     final allTripsAsync = ref.watch(allTripsProvider);
     final trendingTripsAsync = ref.watch(trendingTripsProvider);
 
@@ -139,6 +145,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                               price: trip.price,
                               rating: trip.rating,
                               width: double.infinity,
+                              startDate: trip.startDate,
                             ),
                           );
                         },
@@ -257,6 +264,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                             location: trip.location,
                             price: trip.price,
                             rating: trip.rating,
+                            startDate: trip.startDate,
                           ),
                         );
                       },

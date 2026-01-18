@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:intl/intl.dart';
 import '../theme/app_theme.dart';
 import 'app_card.dart';
 import 'app_image.dart';
@@ -17,6 +18,7 @@ class TripCard extends StatelessWidget {
   final double price;
   final double rating;
   final double? width;
+  final DateTime? startDate;
 
   const TripCard({
     super.key,
@@ -30,6 +32,7 @@ class TripCard extends StatelessWidget {
     required this.price,
     required this.rating,
     this.width = 260,
+    this.startDate,
   });
 
   @override
@@ -38,7 +41,7 @@ class TripCard extends StatelessWidget {
       onTap: () => context.push('/trip/$tripId'),
         padding: EdgeInsets.zero,
         borderRadius: AppRadius.md,
-        backgroundColor: const Color(0xFF111111),
+        backgroundColor: AppColors.bgCard,
         border: Border.all(color: AppColors.borderSubtle),
         child: SizedBox(
           width: width,
@@ -56,7 +59,7 @@ class TripCard extends StatelessWidget {
                   // Image
                   AppImage(
                     imageUrl: imageUrl,
-                    height: 135,
+                    height: 120, // Reduced height
                     width: double.infinity,
                     fit: BoxFit.cover,
                   ),
@@ -100,15 +103,19 @@ class TripCard extends StatelessWidget {
             ),
             // Content section
             Padding(
-              padding: const EdgeInsets.fromLTRB(14, 10, 14, 10),
+              padding: const EdgeInsets.fromLTRB(10, 8, 10, 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Title
                   Text(
-                    title.replaceAll(r'\n', ' '), // Use space instead of newline for card titles
-                    style: AppTextStyles.h5.copyWith(color: AppColors.textPrimary),
-                    maxLines: 2, // Allow 2 lines
+                    title.replaceAll(r'\n', ' '), 
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textPrimary,
+                    ),
+                    maxLines: 2, 
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 2),
@@ -127,7 +134,38 @@ class TripCard extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 6),
+                  
+                  // Start Date badge (if available)
+                  if (startDate != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 6),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: AppColors.surfaceHover,
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(color: AppColors.borderGlass),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                           // Calendar icon
+                           const Icon(LucideIcons.calendar, size: 10, color: AppColors.textSecondary),
+                           const SizedBox(width: 4),
+                           Text(
+                             'Starts ${DateFormat('MMM d').format(startDate!)}',
+                             style: AppTextStyles.labelSmall.copyWith(
+                               color: AppColors.textSecondary,
+                               fontSize: 10,
+                               fontWeight: FontWeight.w600,
+                             ),
+                           ),
+                        ],
+                      ),
+                    ),
+                  ),
+
                   // Price and arrow
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

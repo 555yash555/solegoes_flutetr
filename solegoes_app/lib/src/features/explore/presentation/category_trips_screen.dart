@@ -72,7 +72,7 @@ class CategoryTripsScreen extends ConsumerWidget {
                     crossAxisCount: 2,
                     mainAxisSpacing: 16,
                     crossAxisSpacing: 16,
-                    childAspectRatio: 0.65, // Adjust based on card content
+                    childAspectRatio: 0.6, // Adjust based on card content
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
@@ -86,6 +86,7 @@ class CategoryTripsScreen extends ConsumerWidget {
                         price: trip.price,
                         rating: trip.rating,
                         width: null, // Allow expanding to grid cell
+                        startDate: trip.startDate,
                       );
                     },
                     childCount: categoryTrips.length,
@@ -100,7 +101,7 @@ class CategoryTripsScreen extends ConsumerWidget {
                   crossAxisCount: 2,
                   mainAxisSpacing: 16,
                   crossAxisSpacing: 16,
-                  childAspectRatio: 0.65,
+                  childAspectRatio: 0.6,
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) => const TripCardSkeleton(),
