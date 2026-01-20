@@ -112,9 +112,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   const SizedBox(height: 4),
                   Text(
                     'Sign in to continue',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: AppColors.textPrimary.withValues(alpha: 0.5),
+                    style: AppTextStyles.bodyMedium.copyWith(
+                      color: AppColors.textSecondary,
                     ),
                   ),
                   const SizedBox(height: 32),
@@ -216,9 +215,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           onTap: () => context.go('/signup'),
                           child: Text(
                             'Sign Up',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
+                            style: AppTextStyles.labelLarge.copyWith(
                               color: AppColors.primary,
                             ),
                           ),
@@ -295,7 +292,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 child: const Icon(
                   LucideIcons.chevronLeft,
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   size: 20,
                 ),
               ),
@@ -312,24 +309,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               children: [
                 Text(
                   'Embark on Your',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                    height: 1.2,
-                  ),
+                  style: AppTextStyles.heroTitleMedium,
                 ),
                 ShaderMask(
                   shaderCallback: (bounds) =>
                       AppColors.primaryGradient.createShader(bounds),
                   child: Text(
                     'Next Journey',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                      height: 1.2,
-                    ),
+                    style: AppTextStyles.heroTitleMedium,
                   ),
                 ),
                 const SizedBox(height: 8),

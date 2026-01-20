@@ -331,7 +331,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                       ),
                     ),
                   ),
@@ -411,7 +411,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
               style: const TextStyle(
                 fontSize: 36,
                 fontWeight: FontWeight.w800,
-                color: Colors.white,
+                color: AppColors.textPrimary,
                 height: 1.1,
               ),
             ),
@@ -481,14 +481,14 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
-                color: Colors.white,
+                color: AppColors.textPrimary,
               ),
             ),
             const SizedBox(width: 8),
             Icon(
               isLastSlide ? LucideIcons.rocket : LucideIcons.arrowRight,
               size: 20,
-              color: Colors.white,
+              color: AppColors.textPrimary,
             ),
           ],
         ),

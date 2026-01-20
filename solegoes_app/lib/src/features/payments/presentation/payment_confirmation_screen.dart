@@ -576,7 +576,7 @@ $boardingInfo$droppingInfo''';
                         child: const Icon(
                           LucideIcons.x,
                           size: 20,
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                         ),
                       ),
                     ),
@@ -675,7 +675,7 @@ $boardingInfo$droppingInfo''';
                         child: const Icon(
                           LucideIcons.x,
                           size: 20,
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                         ),
                       ),
                     ),
@@ -690,7 +690,7 @@ $boardingInfo$droppingInfo''';
 
                 Text(
                   'Payment Successful!',
-                  style: AppTextStyles.h2.copyWith(color: Colors.white),
+                  style: AppTextStyles.h2,
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -1020,7 +1020,7 @@ $boardingInfo$droppingInfo''';
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -1041,7 +1041,7 @@ $boardingInfo$droppingInfo''';
                     title: Text(
                       'Download PDF',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -1069,13 +1069,13 @@ $boardingInfo$droppingInfo''';
                       ),
                       child: const Icon(
                         LucideIcons.share2,
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                       ),
                     ),
                     title: Text(
                       'Share as Text',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -1103,13 +1103,13 @@ $boardingInfo$droppingInfo''';
                       ),
                       child: const Icon(
                         LucideIcons.copy,
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                       ),
                     ),
                     title: Text(
                       'Copy to Clipboard',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -1146,12 +1146,12 @@ $boardingInfo$droppingInfo''';
             Icon(
               LucideIcons.download,
               size: 20,
-              color: Colors.white,
+              color: AppColors.textPrimary,
             ),
             SizedBox(width: 8),
             Text(
               'Download Receipt',
-              style: AppTextStyles.h5.copyWith(color: Colors.white),
+              style: AppTextStyles.h5,
             ),
           ],
         ),
@@ -1188,7 +1188,7 @@ $boardingInfo$droppingInfo''';
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w700,
-            color: Colors.white,
+            color: AppColors.textPrimary,
           ),
         ),
       ),

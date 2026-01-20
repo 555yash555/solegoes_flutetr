@@ -175,7 +175,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                   child: const Icon(
                     LucideIcons.chevronLeft,
                     size: 24,
-                    color: Colors.white,
+                    color: AppColors.textPrimary,
                   ),
                 ),
               ),
@@ -201,7 +201,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                 child: const Icon(
                   LucideIcons.users,
                   size: 20,
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                 ),
               ),
               const SizedBox(width: 12),
@@ -215,7 +215,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                       ),
                     ),
                     const SizedBox(height: 2),
@@ -338,7 +338,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                           child: Text(
                             message.senderName[0],
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -351,7 +351,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                         child: Text(
                           message.senderName[0],
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -397,7 +397,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                     message.content,
                     style: const TextStyle(
                       fontSize: 15,
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                       height: 1.4,
                     ),
                   ),
@@ -442,7 +442,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                 message.content,
                 style: const TextStyle(
                   fontSize: 15,
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   height: 1.4,
                 ),
               ),
@@ -512,7 +512,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                           controller: _messageController,
                           style: const TextStyle(
                             fontSize: 15,
-                            color: Colors.white,
+                            color: AppColors.textPrimary,
                           ),
                           maxLines: null,
                           decoration: InputDecoration(
@@ -569,7 +569,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                   child: const Icon(
                     LucideIcons.send,
                     size: 18,
-                    color: Colors.white,
+                    color: AppColors.textPrimary,
                   ),
                 ),
               ),

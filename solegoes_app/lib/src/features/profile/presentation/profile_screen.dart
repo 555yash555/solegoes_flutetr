@@ -63,11 +63,7 @@ class ProfileScreen extends ConsumerWidget {
           const SizedBox(width: 40), // Spacer for balance
           Text(
             'Profile',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
-            ),
+            style: AppTextStyles.h4,
           ),
           GestureDetector(
             onTap: () => context.push('/settings'),
@@ -82,7 +78,7 @@ class ProfileScreen extends ConsumerWidget {
               child: const Icon(
                 LucideIcons.settings,
                 size: 20,
-                color: Colors.white,
+                color: AppColors.textPrimary,
               ),
             ),
           ),
@@ -138,7 +134,7 @@ class ProfileScreen extends ConsumerWidget {
                     style: const TextStyle(
                       fontSize: 36,
                       fontWeight: FontWeight.w800,
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ),
@@ -161,7 +157,7 @@ class ProfileScreen extends ConsumerWidget {
                     child: const Icon(
                       LucideIcons.pencil,
                       size: 16,
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ),
@@ -172,7 +168,7 @@ class ProfileScreen extends ConsumerWidget {
           // Name
           Text(
             displayName,
-            style: AppTextStyles.h2.copyWith(color: Colors.white),
+            style: AppTextStyles.h2,
           ),
           const SizedBox(height: 4),
           // Email
@@ -220,17 +216,12 @@ class ProfileScreen extends ConsumerWidget {
         children: [
           Text(
             value,
-            style: AppTextStyles.h2.copyWith(color: Colors.white),
+            style: AppTextStyles.h2,
           ),
           const SizedBox(height: 4),
           Text(
             label.toUpperCase(),
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w700,
-              color: AppColors.textHint,
-              letterSpacing: 1,
-            ),
+            style: AppTextStyles.statLabel,
           ),
         ],
       ),

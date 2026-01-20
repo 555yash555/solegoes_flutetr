@@ -294,7 +294,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                                 width: 8,
                                 height: 8,
                                 decoration: const BoxDecoration(
-                                  color: Color(0xFF4ADE80),
+                                  color: AppColors.badgeGreen,
                                   shape: BoxShape.circle,
                                 ),
                               ),
@@ -304,7 +304,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w700,
-                                  color: Colors.white,
+                                  color: AppColors.textPrimary,
                                 ),
                               ),
                             ],
@@ -317,7 +317,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                         style: const TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.w700,
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                           height: 1.1,
                         ),
                       ),
@@ -332,7 +332,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                             style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textPrimary),
                           ),
                           const SizedBox(width: 16),
-                          Icon(LucideIcons.calendar, size: 16, color: const Color(0xFFEC4899)),
+                          Icon(LucideIcons.calendar, size: 16, color: AppColors.accentPink),
                           const SizedBox(width: 4),
                           Text(
                             '${trip.duration} Days',
@@ -397,7 +397,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
                     trip.title.replaceAll('\\n', ' '),
-                    style: AppTextStyles.h5.copyWith(color: Colors.white),
+                    style: AppTextStyles.h5,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
@@ -500,7 +500,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                 children: [
                   Text(
                     trip.rating.toString(),
-                    style: AppTextStyles.h2.copyWith(color: Colors.white),
+                    style: AppTextStyles.h2,
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -524,7 +524,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                 children: [
                   Text(
                     spots,
-                    style: AppTextStyles.h2.copyWith(color: Colors.white),
+                    style: AppTextStyles.h2,
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -548,7 +548,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                 children: [
                   Text(
                     'Easy',
-                    style: AppTextStyles.h2.copyWith(color: Colors.white),
+                    style: AppTextStyles.h2,
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -581,7 +581,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   letterSpacing: 0.2,
                 ),
               ),
@@ -641,7 +641,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w700,
-                                color: Colors.white,
+                                color: AppColors.textPrimary,
                               ),
                             ),
                           ),
@@ -664,7 +664,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                     ),
                     child: Text(
                       'Join Chat',
-                      style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
+                      style: AppTextStyles.labelLarge,
                     ),
                   ),
                 ),
@@ -687,7 +687,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: Colors.white,
+              color: AppColors.textPrimary,
               letterSpacing: 0.2,
             ),
           ),
@@ -718,7 +718,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: Colors.white,
+              color: AppColors.textPrimary,
               letterSpacing: 0.2,
             ),
           ),
@@ -731,9 +731,9 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
             // Colors for day badges
             final colors = [
               const Color(0xFFA855F7), // Purple
-              const Color(0xFFEC4899), // Pink
+              AppColors.accentPink, // Pink
               const Color(0xFF06B6D4), // Cyan
-              const Color(0xFF22C55E), // Green
+              AppColors.statusConfirmed, // Green
               const Color(0xFFF59E0B), // Amber
               const Color(0xFF3B82F6), // Blue
               const Color(0xFFEF4444), // Red
@@ -772,7 +772,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white,
+                    color: AppColors.textPrimary,
                     letterSpacing: 0.2,
                   ),
                 ),
@@ -856,7 +856,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: Colors.white,
+              color: AppColors.textPrimary,
               letterSpacing: 0.2,
             ),
           ),
@@ -902,7 +902,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                       child: const Icon(
                         LucideIcons.play,
                         size: 24,
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                       ),
                     ),
                   ),
@@ -919,7 +919,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                       ),
                       child: Text(
                         'Watch Experience',
-                        style: AppTextStyles.labelSmall.copyWith(color: Colors.white),
+                        style: AppTextStyles.labelSmall,
                       ),
                     ),
                   ),
@@ -1002,10 +1002,10 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
     ];
 
     final iconColors = [
-      const Color(0xFF22C55E),
+      AppColors.statusConfirmed,
       const Color(0xFFF59E0B),
       const Color(0xFF3B82F6),
-      const Color(0xFFEC4899),
+      AppColors.accentPink,
       const Color(0xFF06B6D4),
       const Color(0xFFA855F7),
       const Color(0xFFEF4444),
@@ -1021,7 +1021,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w700,
-              color: Colors.white,
+              color: AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 16),
@@ -1101,7 +1101,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w700,
-              color: Colors.white,
+              color: AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 16),
@@ -1135,18 +1135,18 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                              style: const TextStyle(
                                fontSize: 18,
                                fontWeight: FontWeight.w700,
-                               color: Colors.white,
+                               color: AppColors.textPrimary,
                              ),
                            ),
                            const SizedBox(height: 4),
                            Row(
                              children: [
                                if (trip.isVerifiedAgency) ...[
-                                 const Icon(LucideIcons.shieldCheck, size: 12, color: Color(0xFF22C55E)),
+                                 const Icon(LucideIcons.shieldCheck, size: 12, color: AppColors.statusConfirmed),
                                  const SizedBox(width: 4),
                                  Text(
                                    'Verified Agency',
-                                   style: AppTextStyles.labelSmall.copyWith(color: const Color(0xFF22C55E)),
+                                   style: AppTextStyles.labelSmall.copyWith(color: AppColors.statusConfirmed),
                                  ),
                                  const SizedBox(width: 8),
                                ],
@@ -1185,7 +1185,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                    child: Center(
                      child: Text(
                        'Contact Host',
-                       style: AppTextStyles.labelLarge.copyWith(color: Colors.white),
+                       style: AppTextStyles.labelLarge,
                      ),
                    ),
                  ),
@@ -1208,7 +1208,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w700,
-              color: Colors.white,
+              color: AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 16),
@@ -1249,7 +1249,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                           const SizedBox(width: 8),
                           Text(
                             'View on Map',
-                            style: AppTextStyles.bodyMedium.copyWith(color: Colors.white),
+                            style: AppTextStyles.bodyMedium,
                           ),
                         ],
                       ),
@@ -1387,8 +1387,8 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                     height: 8,
                     decoration: BoxDecoration(
                       color: booking.status == BookingStatus.confirmed
-                          ? const Color(0xFF22C55E)
-                          : const Color(0xFFEAB308),
+                          ? AppColors.statusConfirmed
+                          : AppColors.statusPending,
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -1403,8 +1403,8 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                         fontWeight: FontWeight.w600,
                         letterSpacing: 0.5,
                         color: booking.status == BookingStatus.confirmed
-                            ? const Color(0xFF22C55E)
-                            : const Color(0xFFEAB308),
+                            ? AppColors.statusConfirmed
+                            : AppColors.statusPending,
                       ),
                     ),
                   ),
@@ -1467,7 +1467,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                   style: const TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.w700,
-                    color: Colors.white,
+                    color: AppColors.textPrimary,
                     height: 1.1,
                   ),
                 ),

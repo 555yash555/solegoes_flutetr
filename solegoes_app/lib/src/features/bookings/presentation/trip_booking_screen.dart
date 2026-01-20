@@ -755,7 +755,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
               ),
               child: Text(
                 isLastStep ? 'Proceed to Payment' : 'Continue',
-                style: AppTextStyles.h5.copyWith(color: Colors.white),
+                style: AppTextStyles.h5,
               ),
             ),
           ),

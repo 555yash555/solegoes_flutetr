@@ -144,18 +144,14 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
                       ),
                       child: const Icon(
                         LucideIcons.chevronLeft,
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                         size: 20,
                       ),
                     ),
                   ),
                   Text(
                     'Step 4 of 4',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimary.withValues(alpha: 0.6),
-                    ),
+                    style: AppTextStyles.stepIndicator,
                   ),
                   GestureDetector(
                     onTap: _skipSetup,
@@ -278,11 +274,7 @@ class _PreferencesScreenState extends ConsumerState<PreferencesScreen> {
                 : Text(
                     'Finish Setup',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
+                    style: AppTextStyles.button,
                   ),
           ),
         ),

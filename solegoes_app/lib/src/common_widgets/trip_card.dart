@@ -6,7 +6,13 @@ import '../theme/app_theme.dart';
 import 'app_card.dart';
 import 'app_image.dart';
 
-/// Horizontal scrollable trip card
+/// Layout mode for TripCard
+enum TripCardLayout {
+  horizontal, // For horizontal scrolling lists
+  grid,       // For 2-column grids
+}
+
+/// Flexible trip card that adapts to different layout contexts
 class TripCard extends StatelessWidget {
   final String tripId;
   final String title;
@@ -17,8 +23,9 @@ class TripCard extends StatelessWidget {
   final String? groupSize;
   final double price;
   final double rating;
-  final double? width;
   final DateTime? startDate;
+  final TripCardLayout layout;
+  final double? width;  // Optional width, defaults to 260 for horizontal, null for full-width
 
   const TripCard({
     super.key,
@@ -31,8 +38,71 @@ class TripCard extends StatelessWidget {
     this.groupSize,
     required this.price,
     required this.rating,
-    this.width = 260,
     this.startDate,
+    this.layout = TripCardLayout.horizontal, // Default to horizontal
+    this.width,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    switch (layout) {
+      case TripCardLayout.horizontal:
+        return _HorizontalTripCard(
+          tripId: tripId,
+          title: title,
+          imageUrl: imageUrl,
+          duration: duration,
+          location: location,
+          category: category,
+          groupSize: groupSize,
+          price: price,
+          rating: rating,
+          startDate: startDate,
+          width: width,
+        );
+      case TripCardLayout.grid:
+        return _GridTripCard(
+          tripId: tripId,
+          title: title,
+          imageUrl: imageUrl,
+          duration: duration,
+          location: location,
+          category: category,
+          groupSize: groupSize,
+          price: price,
+          rating: rating,
+          startDate: startDate,
+        );
+    }
+  }
+}
+
+/// Horizontal scrolling trip card with intrinsic sizing
+class _HorizontalTripCard extends StatelessWidget {
+  final String tripId;
+  final String title;
+  final String imageUrl;
+  final String duration;
+  final String? location;
+  final String? category;
+  final String? groupSize;
+  final double price;
+  final double rating;
+  final DateTime? startDate;
+  final double? width;
+
+  const _HorizontalTripCard({
+    required this.tripId,
+    required this.title,
+    required this.imageUrl,
+    required this.duration,
+    this.location,
+    this.category,
+    this.groupSize,
+    required this.price,
+    required this.rating,
+    this.startDate,
+    this.width,
   });
 
   @override
@@ -44,7 +114,7 @@ class TripCard extends StatelessWidget {
         backgroundColor: AppColors.bgCard,
         border: Border.all(color: AppColors.borderSubtle),
         child: SizedBox(
-          width: width,
+          width: width ?? 260,  // Default to 260 if not specified
           child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -197,6 +267,51 @@ class TripCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Grid trip card (for 2-column layouts)
+class _GridTripCard extends StatelessWidget {
+  final String tripId;
+  final String title;
+  final String imageUrl;
+  final String duration;
+  final String? location;
+  final String? category;
+  final String? groupSize;
+  final double price;
+  final double rating;
+  final DateTime? startDate;
+
+  const _GridTripCard({
+    required this.tripId,
+    required this.title,
+    required this.imageUrl,
+    required this.duration,
+    this.location,
+    this.category,
+    this.groupSize,
+    required this.price,
+    required this.rating,
+    this.startDate,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // For now, use horizontal card layout
+    // TODO: Implement grid-specific layout
+    return _HorizontalTripCard(
+      tripId: tripId,
+      title: title,
+      imageUrl: imageUrl,
+      duration: duration,
+      location: location,
+      category: category,
+      groupSize: groupSize,
+      price: price,
+      rating: rating,
+      startDate: startDate,
     );
   }
 }

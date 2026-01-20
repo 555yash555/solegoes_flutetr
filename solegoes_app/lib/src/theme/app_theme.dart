@@ -27,6 +27,8 @@ class AppColors {
   static const Color accentTeal = Color(0xFF14B8A6);    // --accent-teal
   static const Color accentRose = Color(0xFFF43F5E);    // --accent-rose
   static const Color accentGreen = Color(0xFF4CAF50);   // --accent-green
+  static const Color accentPink = Color(0xFFEC4899);    // Pink 500 - Calendar icons
+  static const Color accentYellow = Color(0xFFFACC15);  // Yellow 400 - Sparkles, highlights
 
   // Error states
   static const Color error = Color(0xFFEF4444);         // Red 500
@@ -39,6 +41,13 @@ class AppColors {
   static const Color successBg = Color(0xFF141C17);     // Dark green tint
   static const Color successBorder = Color(0xFF14532D); // Green border
   static const Color successIcon = Color(0xFF4ADE80);   // Green 400
+  
+  // Status colors (booking states)
+  static const Color statusPending = Color(0xFFEAB308);  // Yellow - Pending bookings
+  static const Color statusConfirmed = Color(0xFF22C55E); // Green - Confirmed bookings
+  
+  // Badge colors
+  static const Color badgeGreen = Color(0xFF4ADE80);    // Green - "Filling Fast" badges
 
   // Borders
   static const Color borderSubtle = Color(0x0FFFFFFF);  // 6% white
@@ -77,9 +86,15 @@ class AppColors {
   static final Color pillActiveBg = primary.withValues(alpha: 0.15);  // 15% primary
   static const Color pillInactiveBg = Color(0x08FFFFFF);    // 3% white
 
-  // Gradient
+  // Gradients
   static const LinearGradient primaryGradient = LinearGradient(
     colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+  
+  static const LinearGradient darkGradient = LinearGradient(
+    colors: [Color(0xFF1A1A1A), Color(0xFF0A0A0A)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
@@ -195,6 +210,21 @@ class AppTextStyles {
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
     height: 1.4,
+  );
+  
+  // Hero section titles (auth screens, detail pages)
+  static const TextStyle heroTitle = TextStyle(
+    fontSize: 32,
+    fontWeight: FontWeight.w700,
+    color: AppColors.textPrimary,
+    height: 1.1,
+  );
+  
+  static const TextStyle heroTitleMedium = TextStyle(
+    fontSize: 28,
+    fontWeight: FontWeight.w700,
+    color: AppColors.textPrimary,
+    height: 1.2,
   );
 
   // Body
@@ -336,6 +366,40 @@ class AppTextStyles {
     fontSize: 12,
     fontWeight: FontWeight.w500,
     color: AppColors.primary,
+  );
+  
+  // Step indicator (onboarding, setup flows)
+  static const TextStyle stepIndicator = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w700,
+    color: Color(0x99FAFAFA), // textPrimary with 60% opacity
+  );
+  
+  // Empty states
+  static const TextStyle emptyStateTitle = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.w700,
+    color: AppColors.textPrimary,
+  );
+  
+  static const TextStyle emptyStateSubtitle = TextStyle(
+    fontSize: 14,
+    color: AppColors.textMuted,
+  );
+  
+  // Stat labels (uppercase, compact)
+  static const TextStyle statLabel = TextStyle(
+    fontSize: 10,
+    fontWeight: FontWeight.w700,
+    color: AppColors.textHint,
+    letterSpacing: 1.0,
+  );
+  
+  // Badge text (status badges, pills)
+  static const TextStyle badgeText = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w700,
+    color: AppColors.textPrimary,
   );
 }
 

@@ -7932,7 +7932,7 @@ class _SeedTripsScreenState extends ConsumerState<SeedTripsScreen> {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 8),
@@ -7992,7 +7992,7 @@ class _SeedTripsScreenState extends ConsumerState<SeedTripsScreen> {
                 child: Text(
                   _status,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: AppColors.textPrimary,
                     fontSize: 14,
                   ),
                 ),

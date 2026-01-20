@@ -221,7 +221,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                         children: [
                           Text(
                             'Select Payment Method',
-                            style: AppTextStyles.h2.copyWith(color: Colors.white),
+                            style: AppTextStyles.h2,
                           ),
                           const SizedBox(height: 8),
                           // Razorpay test mode indicator
@@ -320,7 +320,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
               child: const Icon(
                 LucideIcons.chevronLeft,
                 size: 20,
-                color: Colors.white,
+                color: AppColors.textPrimary,
               ),
             ),
           ),
@@ -331,7 +331,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
-                color: Colors.white,
+                color: AppColors.textPrimary,
               ),
             ),
           ),
@@ -399,7 +399,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
             Expanded(
               child: Text(
                 method.name,
-                style: AppTextStyles.h5.copyWith(color: Colors.white),
+                style: AppTextStyles.h5,
               ),
             ),
             // Radio
@@ -471,7 +471,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                         RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
                         (Match m) => '${m[1]},',
                       )}',
-                  style: AppTextStyles.h2.copyWith(color: Colors.white),
+                  style: AppTextStyles.h2,
                 ),
               ],
             ),
@@ -505,7 +505,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                             height: 20,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                             ),
                           ),
                           SizedBox(width: 12),
@@ -514,7 +514,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                             ),
                           ),
                         ],
@@ -525,7 +525,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                         ),
                       ),
               ),

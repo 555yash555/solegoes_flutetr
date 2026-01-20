@@ -118,7 +118,7 @@ class NotificationsScreen extends ConsumerWidget {
                   child: const Icon(
                     LucideIcons.chevronLeft,
                     size: 20,
-                    color: Colors.white,
+                    color: AppColors.textPrimary,
                   ),
                 ),
               ),
@@ -128,7 +128,7 @@ class NotificationsScreen extends ConsumerWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                 ),
               ),
             ],
@@ -234,7 +234,7 @@ class NotificationsScreen extends ConsumerWidget {
         text: notification.title,
         style: const TextStyle(
           fontWeight: FontWeight.w700,
-          color: Colors.white,
+          color: AppColors.textPrimary,
         ),
       ));
       if (notification.message.isNotEmpty || notification.highlightText != null) {
@@ -246,7 +246,7 @@ class NotificationsScreen extends ConsumerWidget {
       spans.add(TextSpan(
         text: notification.message,
         style: const TextStyle(
-          color: Colors.white,
+          color: AppColors.textPrimary,
         ),
       ));
       if (notification.highlightText != null) {
@@ -268,7 +268,7 @@ class NotificationsScreen extends ConsumerWidget {
         spans.add(const TextSpan(
           text: ' has been confirmed.',
           style: TextStyle(
-            color: Colors.white,
+            color: AppColors.textPrimary,
           ),
         ));
       }

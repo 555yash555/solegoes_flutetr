@@ -163,18 +163,14 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
                       ),
                       child: const Icon(
                         LucideIcons.chevronLeft,
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                         size: 20,
                       ),
                     ),
                   ),
                   Text(
                     'Step 3 of 4',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimary.withValues(alpha: 0.6),
-                    ),
+                    style: AppTextStyles.stepIndicator,
                   ),
                   GestureDetector(
                     onTap: () => _skipToHome(),
@@ -207,9 +203,8 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
                   Center(
                     child: Text(
                       'Let others get to know the real you',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: AppColors.textPrimary.withValues(alpha: 0.5),
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        color: AppColors.textSecondary,
                       ),
                     ),
                   ),
@@ -357,11 +352,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
                 : Text(
                     'Continue',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
+                    style: AppTextStyles.button,
                   ),
           ),
         ),
@@ -424,7 +415,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
                 child: const Icon(
                   LucideIcons.camera,
                   size: 16,
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                 ),
               ),
             ),

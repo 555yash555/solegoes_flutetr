@@ -40,7 +40,7 @@ class CategoryTripsScreen extends ConsumerWidget {
             ),
             title: Text(
               '$displayTitle Trips',
-              style: AppTextStyles.h3.copyWith(color: Colors.white),
+              style: AppTextStyles.h3,
             ),
             pinned: true,
           ),
@@ -72,7 +72,7 @@ class CategoryTripsScreen extends ConsumerWidget {
                     crossAxisCount: 2,
                     mainAxisSpacing: 16,
                     crossAxisSpacing: 16,
-                    mainAxisExtent: 280, // Increased to prevent overflow
+                    mainAxisExtent: 294, // Increased to prevent overflow
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
@@ -85,8 +85,8 @@ class CategoryTripsScreen extends ConsumerWidget {
                         location: trip.location,
                         price: trip.price,
                         rating: trip.rating,
-                        width: null, // Allow expanding to grid cell
                         startDate: trip.startDate,
+                        layout: TripCardLayout.grid, // Use grid layout
                       );
                     },
                     childCount: categoryTrips.length,

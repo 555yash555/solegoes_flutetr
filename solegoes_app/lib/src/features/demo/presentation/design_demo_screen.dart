@@ -81,7 +81,7 @@ class _DesignDemoScreenState extends State<DesignDemoScreen> {
                     AppColors.primaryGradient.createShader(bounds),
                 child: Text(
                   'Gradient Text',
-                  style: AppTextStyles.h2.copyWith(color: Colors.white),
+                  style: AppTextStyles.h2,
                 ),
               ),
               const SizedBox(height: AppSpacing.lg),
@@ -296,7 +296,7 @@ class _DesignDemoScreenState extends State<DesignDemoScreen> {
         shape: BoxShape.circle,
         border: Border.all(color: AppColors.borderSubtle),
       ),
-      child: Icon(icon, color: Colors.white, size: 20),
+      child: Icon(icon, color: AppColors.textPrimary, size: 20),
     );
   }
 
@@ -663,7 +663,7 @@ class _DesignDemoScreenState extends State<DesignDemoScreen> {
                   ),
                 ],
               ),
-              child: const Icon(LucideIcons.plus, color: Colors.white, size: 22),
+              child: const Icon(LucideIcons.plus, color: AppColors.textPrimary, size: 22),
             ),
           ),
         ],

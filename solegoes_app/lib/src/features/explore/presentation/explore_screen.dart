@@ -97,14 +97,14 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> with RouteAware {
             backgroundColor: AppColors.bgDeep,
             title: Text(
               'Explore',
-              style: AppTextStyles.h2.copyWith(color: Colors.white),
+              style: AppTextStyles.h2,
             ),
             actions: [
               IconButton(
                 onPressed: () {
                   // TODO: Open map view
                 },
-                icon: const Icon(LucideIcons.map, color: Colors.white),
+                icon: const Icon(LucideIcons.map, color: AppColors.textPrimary),
               ),
             ],
           ),
@@ -123,7 +123,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> with RouteAware {
                 },
                 suffixIcon: isSearching
                   ? IconButton(
-                      icon: const Icon(LucideIcons.x, size: 16, color: Colors.white),
+                      icon: const Icon(LucideIcons.x, size: 16, color: AppColors.textPrimary),
                       onPressed: () {
                         _searchController.clear();
                         setState(() {});
@@ -150,7 +150,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> with RouteAware {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(LucideIcons.search, size: 48, color: Colors.white24),
+                            const Icon(LucideIcons.search, size: 48, color: AppColors.textDisabled),
                             const SizedBox(height: 16),
                             Text(
                               'No matching trips found',
@@ -164,7 +164,13 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> with RouteAware {
 
                  return SliverPadding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    sliver: SliverList(
+                    sliver: SliverGrid(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 16,
+                        crossAxisSpacing: 16,
+                        mainAxisExtent: 294,
+                      ),
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
                           final trip = results[index];
@@ -178,8 +184,8 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> with RouteAware {
                               location: trip.location,
                               price: trip.price,
                               rating: trip.rating,
-                              width: double.infinity,
                               startDate: trip.startDate,
+                              layout: TripCardLayout.grid,
                             ),
                           );
                         },
@@ -266,7 +272,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> with RouteAware {
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Text(
                   'Trending Now',
-                  style: AppTextStyles.h3.copyWith(color: Colors.white),
+                  style: AppTextStyles.h3,
                 ),
               ),
             ),

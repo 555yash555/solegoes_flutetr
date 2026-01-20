@@ -114,10 +114,15 @@ class _SearchResultsScreenState extends ConsumerState<SearchResultsScreen> {
             );
           }
 
-          return ListView.separated(
+          return GridView.builder(
             padding: const EdgeInsets.all(16),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 16,
+              crossAxisSpacing: 16,
+              mainAxisExtent: 294,
+            ),
             itemCount: filteredTrips.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 16),
             itemBuilder: (context, index) {
               final trip = filteredTrips[index];
               return TripCard(
@@ -128,8 +133,8 @@ class _SearchResultsScreenState extends ConsumerState<SearchResultsScreen> {
                 location: trip.location,
                 price: trip.price,
                 rating: trip.rating,
-                width: double.infinity,
                 startDate: trip.startDate,
+                layout: TripCardLayout.grid,
               );
             },
           );

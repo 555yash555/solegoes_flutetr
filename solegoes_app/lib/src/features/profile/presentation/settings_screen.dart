@@ -67,7 +67,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               child: const Icon(
                 LucideIcons.chevronLeft,
                 size: 20,
-                color: Colors.white,
+                color: AppColors.textPrimary,
               ),
             ),
           ),
@@ -77,7 +77,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w700,
-              color: Colors.white,
+              color: AppColors.textPrimary,
             ),
           ),
         ],
@@ -241,14 +241,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               child: Icon(
                 icon,
                 size: 20,
-                color: Colors.white,
+                color: AppColors.textPrimary,
               ),
             ),
             const SizedBox(width: 16),
             Expanded(
               child: Text(
                 label,
-                style: AppTextStyles.bodyLarge.copyWith(color: Colors.white),
+                style: AppTextStyles.bodyLarge,
               ),
             ),
             Icon(
@@ -286,14 +286,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             child: Icon(
               icon,
               size: 20,
-              color: Colors.white,
+              color: AppColors.textPrimary,
             ),
           ),
           const SizedBox(width: 16),
           Expanded(
             child: Text(
               label,
-              style: AppTextStyles.bodyLarge.copyWith(color: Colors.white),
+              style: AppTextStyles.bodyLarge,
             ),
           ),
           Text(
@@ -333,14 +333,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             child: Icon(
               icon,
               size: 20,
-              color: Colors.white,
+              color: AppColors.textPrimary,
             ),
           ),
           const SizedBox(width: 16),
           Expanded(
             child: Text(
               label,
-              style: AppTextStyles.bodyLarge.copyWith(color: Colors.white),
+              style: AppTextStyles.bodyLarge,
             ),
           ),
           // Custom toggle switch
@@ -362,7 +362,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   width: 20,
                   height: 20,
                   decoration: const BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.textPrimary,
                     shape: BoxShape.circle,
                   ),
                 ),

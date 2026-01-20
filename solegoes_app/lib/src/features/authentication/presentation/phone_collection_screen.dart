@@ -87,7 +87,7 @@ class _PhoneCollectionScreenState extends ConsumerState<PhoneCollectionScreen> {
                       ),
                       child: const Icon(
                         LucideIcons.chevronLeft,
-                        color: Colors.white,
+                        color: AppColors.textPrimary,
                         size: 20,
                       ),
                     ),
@@ -121,7 +121,7 @@ class _PhoneCollectionScreenState extends ConsumerState<PhoneCollectionScreen> {
                 ),
                 child: const Icon(
                   LucideIcons.phone,
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   size: 32,
                 ),
               ),

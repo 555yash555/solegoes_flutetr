@@ -163,7 +163,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                   child: const Icon(
                     LucideIcons.x,
                     size: 20,
-                    color: Colors.white,
+                    color: AppColors.textPrimary,
                   ),
                 ),
               ),
@@ -173,7 +173,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                 ),
               ),
             ],
@@ -238,7 +238,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                           errorBuilder: (_, __, ___) => Center(
                             child: Text(
                               initials,
-                              style: AppTextStyles.h1.copyWith(color: Colors.white),
+                              style: AppTextStyles.h1,
                             ),
                           ),
                         ),
@@ -246,7 +246,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                     : Center(
                         child: Text(
                           initials,
-                          style: AppTextStyles.h1.copyWith(color: Colors.white),
+                          style: AppTextStyles.h1,
                         ),
                       ),
               ),
@@ -261,7 +261,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                     child: Icon(
                       LucideIcons.camera,
                       size: 24,
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ),
@@ -320,7 +320,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             maxLines: maxLines,
             style: const TextStyle(
               fontSize: 16,
-              color: Colors.white,
+              color: AppColors.textPrimary,
             ),
             decoration: InputDecoration(
               hintText: hint,

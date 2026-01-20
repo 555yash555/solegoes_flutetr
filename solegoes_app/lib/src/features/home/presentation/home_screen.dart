@@ -125,7 +125,7 @@ class HomeScreen extends ConsumerWidget {
                           width: 8,
                           height: 8,
                           decoration: BoxDecoration(
-                            color: Colors.red,
+                            color: AppColors.error,
                             shape: BoxShape.circle,
                             border: Border.all(
                               color: AppColors.bgDeep,
@@ -178,7 +178,7 @@ class HomeScreen extends ConsumerWidget {
         child: Text(
           initial,
           style: AppTextStyles.h3.copyWith(
-            color: Colors.white,
+            color: AppColors.textPrimary,
           ),
         ),
       ),
@@ -256,14 +256,7 @@ class HomeScreen extends ConsumerWidget {
             child: Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    const Color(0xFF1A1A1A),
-                    const Color(0xFF0A0A0A),
-                  ],
-                ),
+                gradient: AppColors.darkGradient,
                 borderRadius: BorderRadius.circular(AppRadius.md),
                 border: Border.all(color: AppColors.borderGlass),
               ),
@@ -277,17 +270,13 @@ class HomeScreen extends ConsumerWidget {
                         children: [
                           Text(
                             'Spin the Globe',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                            ),
+                            style: AppTextStyles.h4,
                           ),
                           const SizedBox(width: 8),
                           Icon(
                             LucideIcons.sparkles,
                             size: 16,
-                            color: const Color(0xFFFACC15),
+                            color: AppColors.accentYellow,
                           ),
                         ],
                       ),
@@ -371,7 +360,7 @@ class HomeScreen extends ConsumerWidget {
         ),
         // Horizontal trip cards
         SizedBox(
-          height: 280, // Minimum height for horizontal scroll
+          height: 280,
           child: trendingTripsAsync.when(
             data: (trips) {
               if (trips.isEmpty) {
@@ -414,8 +403,8 @@ class HomeScreen extends ConsumerWidget {
             ),
           ),
         ),
-      ],
-    );
+        ],
+      );
   }
   
   Widget _buildWeekendGetaways(BuildContext context, WidgetRef ref) {
@@ -442,10 +431,19 @@ class HomeScreen extends ConsumerWidget {
               // Show first 4
               final displayTrips = trips.take(4).toList();
               
-              return Column(
-                children: displayTrips.map((trip) => Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: TripCard(
+              return GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 16,
+                  crossAxisSpacing: 16,
+                  mainAxisExtent: 294,
+                ),
+                itemCount: displayTrips.length,
+                itemBuilder: (context, index) {
+                  final trip = displayTrips[index];
+                  return TripCard(
                     tripId: trip.tripId,
                     title: trip.title,
                     imageUrl: trip.imageUrl,
@@ -453,10 +451,10 @@ class HomeScreen extends ConsumerWidget {
                     location: trip.location,
                     price: trip.price,
                     rating: trip.rating,
-                    width: double.infinity, // Full width vertical cards
                     startDate: trip.startDate,
-                  ),
-                )).toList(),
+                    layout: TripCardLayout.grid,
+                  );
+                },
               );
             },
             loading: () => Column(

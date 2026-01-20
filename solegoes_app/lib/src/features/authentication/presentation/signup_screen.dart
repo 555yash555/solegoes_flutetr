@@ -136,9 +136,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   const SizedBox(height: 4),
                   Text(
                     'Join the community of solo travelers',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: AppColors.textPrimary.withValues(alpha: 0.5),
+                    style: AppTextStyles.bodyMedium.copyWith(
+                      color: AppColors.textSecondary,
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -268,9 +267,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           onTap: () => context.go('/login'),
                           child: Text(
                             'Sign In',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
+                            style: AppTextStyles.labelLarge.copyWith(
                               color: AppColors.primary,
                             ),
                           ),
@@ -347,7 +344,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 ),
                 child: const Icon(
                   LucideIcons.chevronLeft,
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   size: 20,
                 ),
               ),
@@ -364,24 +361,14 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               children: [
                 Text(
                   'Start Your',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                    height: 1.2,
-                  ),
+                  style: AppTextStyles.heroTitleMedium,
                 ),
                 ShaderMask(
                   shaderCallback: (bounds) =>
                       AppColors.primaryGradient.createShader(bounds),
                   child: Text(
                     'Adventure',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                      height: 1.2,
-                    ),
+                    style: AppTextStyles.heroTitleMedium,
                   ),
                 ),
               ],
@@ -533,7 +520,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 ? const Icon(
                     LucideIcons.check,
                     size: 14,
-                    color: Colors.white,
+                    color: AppColors.textPrimary,
                   )
                 : null,
           ),

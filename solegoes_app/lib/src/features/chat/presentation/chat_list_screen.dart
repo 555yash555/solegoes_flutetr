@@ -104,7 +104,7 @@ class ChatListScreen extends ConsumerWidget {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w700,
-              color: Colors.white,
+              color: AppColors.textPrimary,
             ),
           ),
           GestureDetector(
@@ -122,7 +122,7 @@ class ChatListScreen extends ConsumerWidget {
               child: const Icon(
                 LucideIcons.edit,
                 size: 20,
-                color: Colors.white,
+                color: AppColors.textPrimary,
               ),
             ),
           ),
@@ -200,7 +200,7 @@ class ChatListScreen extends ConsumerWidget {
                       Expanded(
                         child: Text(
                           chat.name,
-                          style: AppTextStyles.h5.copyWith(color: Colors.white),
+                          style: AppTextStyles.h5,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -242,7 +242,7 @@ class ChatListScreen extends ConsumerWidget {
                     style: const TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ),
@@ -278,7 +278,7 @@ class ChatListScreen extends ConsumerWidget {
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                 ),
               ),
             ),
@@ -333,7 +333,7 @@ class ChatListScreen extends ConsumerWidget {
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w700,
-            color: Colors.white,
+            color: AppColors.textPrimary,
           ),
         ),
       ),

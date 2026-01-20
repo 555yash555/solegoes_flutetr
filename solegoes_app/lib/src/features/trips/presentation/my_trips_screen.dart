@@ -58,9 +58,9 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
   Color _getStatusColor(BookingStatus status) {
     switch (status) {
       case BookingStatus.confirmed:
-        return const Color(0xFF22C55E); // Green
+        return AppColors.statusConfirmed;
       case BookingStatus.pending:
-        return const Color(0xFFEAB308); // Yellow
+        return AppColors.statusPending;
       case BookingStatus.cancelled:
         return AppColors.accentRose;
       case BookingStatus.completed:
@@ -154,10 +154,7 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
           dividerColor: Colors.transparent,
           labelColor: Colors.white,
           unselectedLabelColor: AppColors.textMuted,
-          labelStyle: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
-          ),
+          labelStyle: AppTextStyles.labelLarge,
           unselectedLabelStyle: AppTextStyles.bodyMedium,
           tabs: const [
             Tab(text: 'Upcoming'),
@@ -284,20 +281,13 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
             const SizedBox(height: 24),
             Text(
               title,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-                color: Colors.white,
-              ),
+              style: AppTextStyles.emptyStateTitle,
             ),
             const SizedBox(height: 8),
             Text(
               subtitle,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14,
-                color: AppColors.textMuted,
-              ),
+              style: AppTextStyles.emptyStateSubtitle,
             ),
             if (actionText != null && onAction != null) ...[
               const SizedBox(height: 24),
@@ -331,20 +321,13 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
             const SizedBox(height: 16),
             Text(
               'Something went wrong',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: Colors.white,
-              ),
+              style: AppTextStyles.h4,
             ),
             const SizedBox(height: 8),
             Text(
               error,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14,
-                color: AppColors.textMuted,
-              ),
+              style: AppTextStyles.emptyStateSubtitle,
             ),
           ],
         ),
