@@ -83,6 +83,8 @@ class _GlobeSpinAnimationScreenState extends State<GlobeSpinAnimationScreen>
     // Navigate after 2.5 seconds
     Future.delayed(const Duration(milliseconds: 2500), () {
       if (mounted) {
+        // Use go instead of push to replace the animation screen in the navigation stack
+        // This ensures that when user presses back from trip detail, they go to home
         context.go('/trip/${widget.tripId}');
       }
     });
