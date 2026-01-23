@@ -33,6 +33,7 @@ import '../features/admin/presentation/seed_trips_screen.dart';
 import '../features/search/presentation/search_filter_screen.dart';
 import '../features/search/presentation/search_results_screen.dart';
 import '../features/search/domain/trip_filter.dart';
+import '../features/home/presentation/globe_spin_animation_screen.dart';
 
 part 'app_router.g.dart';
 
@@ -261,6 +262,13 @@ GoRouter goRouter(Ref ref) {
       // ===========================================
       // DETAIL ROUTES (Full screen, no bottom nav)
       // ===========================================
+      GoRoute(
+        path: '/globe-spin/:tripId',
+        builder: (context, state) {
+          final tripId = state.pathParameters['tripId']!;
+          return GlobeSpinAnimationScreen(tripId: tripId);
+        },
+      ),
       GoRoute(
         path: '/trip/:tripId',
         name: AppRoute.tripDetail.name,

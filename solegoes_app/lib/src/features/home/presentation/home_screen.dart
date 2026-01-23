@@ -247,10 +247,26 @@ class HomeScreen extends ConsumerWidget {
           padding: const EdgeInsets.all(16),
           child: GestureDetector(
             onTap: () {
-              final allTrips = ref.read(allTripsProvider).asData?.value;
-              if (allTrips != null && allTrips.isNotEmpty) {
-                final randomTrip = (allTrips..shuffle()).first;
-                context.push('/trip/${randomTrip.tripId}');
+              // Combine trending and featured trips for variety
+              final trendingTrips = ref.read(trendingTripsProvider).asData?.value ?? [];
+              final featuredTrips = ref.read(featuredTripsProvider).asData?.value ?? [];
+              final allAvailableTrips = [...trendingTrips, ...featuredTrips].toSet().toList();
+              
+              print('DEBUG: Spin the Globe tapped');
+              print('DEBUG: Available trips count: ${allAvailableTrips.length}');
+              
+              if (allAvailableTrips.isNotEmpty) {
+                final randomTrip = (allAvailableTrips..shuffle()).first;
+                print('DEBUG: Selected trip: ${randomTrip.tripId} - ${randomTrip.title}');
+                context.push('/globe-spin/${randomTrip.tripId}');
+              } else {
+                print('DEBUG: No trips available');
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('No trips available. Please wait for trips to load.'),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
               }
             },
             child: Container(
