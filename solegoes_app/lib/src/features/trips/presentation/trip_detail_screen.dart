@@ -378,7 +378,11 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
           children: [
             // Back button
             GestureDetector(
-              onTap: () => context.pop(),
+              onTap: () {
+                // Use go instead of pop to safely navigate home
+                // This handles the case when coming from globe spin animation
+                context.go('/');
+              },
               child: Container(
                 width: 40,
                 height: 40,
