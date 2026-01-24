@@ -10,6 +10,7 @@ import '../../payments/data/razorpay_service.dart';
 import '../../authentication/data/auth_repository.dart';
 import '../data/booking_repository.dart';
 import '../domain/booking.dart';
+import '../presentation/booking_controller.dart';
 import '../../../common_widgets/app_snackbar.dart';
 import '../../../utils/app_exception.dart';
 import '../../shared/global_error_controller.dart';
@@ -35,7 +36,6 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
   TripPoint? _selectedDroppingPoint;
   
   late RazorpayService _razorpayService;
-  bool _isProcessing = false;
   Trip? _currentTrip;
   
   @override
@@ -809,8 +809,8 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
     
     final price = selectedStyle?.price ?? trip.price;
     
+    // Save trip for callbacks
     setState(() {
-      _isProcessing = true;
       _currentTrip = trip;
     });
     
@@ -826,223 +826,185 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
   Future<void> _handlePaymentSuccess(PaymentSuccessResponse response) async {
     final paymentId = response.paymentId ?? 'pay_${DateTime.now().millisecondsSinceEpoch}';
     
-    try {
-      final userAsync = ref.read(authStateChangesProvider);
-      final user = userAsync.value;
-      final trip = _currentTrip;
-      
-      if (user != null && trip != null) {
-        final bookingRepo = ref.read(bookingRepositoryProvider);
-        
-        final selectedStyle = trip.pricingStyles.isNotEmpty && _selectedStyleId != null
-            ? trip.pricingStyles.firstWhere((s) => s.styleId == _selectedStyleId)
-            : null;
-        
-        final price = selectedStyle?.price ?? trip.price;
-        
-        // Convert TripPoint to SelectedTripPoint
-        SelectedTripPoint? boardingPoint;
-        if (_selectedBoardingPoint != null) {
-          boardingPoint = SelectedTripPoint(
-            name: _selectedBoardingPoint!.name,
-            address: _selectedBoardingPoint!.address,
-            dateTime: _selectedBoardingPoint!.dateTime,
-          );
-        }
-        
-        SelectedTripPoint? droppingPoint;
-        if (_selectedDroppingPoint != null) {
-          droppingPoint = SelectedTripPoint(
-            name: _selectedDroppingPoint!.name,
-            address: _selectedDroppingPoint!.address,
-            dateTime: _selectedDroppingPoint!.dateTime,
-          );
-        }
-        
-        // Create booking
-        final booking = await bookingRepo.createBooking(
-          tripId: trip.tripId,
-          userId: user.uid,
-          tripTitle: trip.title,
-          tripImageUrl: trip.imageUrl,
-          tripLocation: trip.location,
-          tripDuration: trip.duration,
-          amount: price,
-          paymentId: paymentId,
-          paymentMethod: 'razorpay',
-          userEmail: user.email,
-          userName: user.displayName,
-          selectedStyleId: selectedStyle?.styleId,
-          selectedStyleName: selectedStyle?.name,
-          selectedBoardingPoint: boardingPoint,
-          selectedDroppingPoint: droppingPoint,
-        );
-        
-        setState(() => _isProcessing = false);
-        
-        if (mounted) {
-          // Navigate to confirmation
-          context.go('/payment-confirmation/${booking.bookingId}');
-        }
-      }
-    } catch (e) {
-      debugPrint('Error creating booking: $e');
-      setState(() => _isProcessing = false);
-      
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error creating booking: $e')),
-        );
-      }
+    final userAsync = ref.read(authStateChangesProvider);
+    final user = userAsync.value;
+    final trip = _currentTrip;
+    
+    if (user == null || trip == null) return;
+    
+    final selectedStyle = trip.pricingStyles.isNotEmpty && _selectedStyleId != null
+        ? trip.pricingStyles.firstWhere((s) => s.styleId == _selectedStyleId)
+        : null;
+    
+    final price = selectedStyle?.price ?? trip.price;
+    
+    // Convert TripPoint to SelectedTripPoint
+    SelectedTripPoint? boardingPoint;
+    if (_selectedBoardingPoint != null) {
+      boardingPoint = SelectedTripPoint(
+        name: _selectedBoardingPoint!.name,
+        address: _selectedBoardingPoint!.address,
+        dateTime: _selectedBoardingPoint!.dateTime,
+      );
+    }
+    
+    SelectedTripPoint? droppingPoint;
+    if (_selectedDroppingPoint != null) {
+      droppingPoint = SelectedTripPoint(
+        name: _selectedDroppingPoint!.name,
+        address: _selectedDroppingPoint!.address,
+        dateTime: _selectedDroppingPoint!.dateTime,
+      );
+    }
+    
+    // Create booking using controller
+    final booking = await ref.read(bookingControllerProvider.notifier).createBooking(
+      trip: trip,
+      userId: user.uid,
+      userEmail: user.email ?? '',
+      userName: user.displayName,
+      paymentId: paymentId,
+      amount: price,
+      selectedStyleId: selectedStyle?.styleId,
+      selectedStyleName: selectedStyle?.name,
+      boardingPoint: boardingPoint,
+      droppingPoint: droppingPoint,
+    );
+    
+    // Navigate to confirmation if successful
+    if (booking != null && mounted) {
+      context.go('/payment-confirmation/${booking.bookingId}');
     }
   }
+
   
   
   Future<void> _handlePaymentError(PaymentFailureResponse response) async {
-    setState(() => _isProcessing = false);
-    
     final errorCode = response.code;
     
     // Debug: Log the actual error details
     debugPrint('Razorpay Error - Code: $errorCode, Message: ${response.message}');
     
-    if (mounted) {
-      // User cancelled - detect by:
-      // 1. PAYMENT_CANCELLED error code
-      // 2. Error code 2 (NETWORK_ERROR) with "undefined" message (this happens on back button press)
-      final isCancelled = errorCode == Razorpay.PAYMENT_CANCELLED ||
-                         (errorCode == Razorpay.NETWORK_ERROR && response.message == 'undefined');
-      
-      if (isCancelled) {
-        AppSnackbar.showInfo(context, 'Payment cancelled');
-        return;
-      }
+    if (!mounted) return;
+    
+    // User cancelled - detect by:
+    // 1. PAYMENT_CANCELLED error code
+    // 2. Error code 2 (NETWORK_ERROR) with "undefined" message (this happens on back button press)
+    final isCancelled = errorCode == Razorpay.PAYMENT_CANCELLED ||
+                       (errorCode == Razorpay.NETWORK_ERROR && response.message == 'undefined');
+    
+    if (isCancelled) {
+      AppSnackbar.showInfo(context, 'Payment cancelled');
+      return;
+    }
 
-      // Convert to centralized exception
-      final exception = AppException.fromError(response);
-      final errorMessage = exception.message;
-      
-      // For all other errors, create a pending booking for retry
-      try {
-        final trip = _currentTrip;
-        if (trip == null) return;
-        
-        final userAsync = ref.read(authStateChangesProvider);
-        final user = userAsync.value;
-        if (user == null) return;
-        
-        final bookingRepo = ref.read(bookingRepositoryProvider);
-        
-        final selectedStyle = trip.pricingStyles.isNotEmpty && _selectedStyleId != null
-            ? trip.pricingStyles.firstWhere((s) => s.styleId == _selectedStyleId)
-            : null;
-        
-        final price = selectedStyle?.price ?? trip.price;
-        
-        SelectedTripPoint? boardingPoint;
-        if (_selectedBoardingPoint != null) {
-          boardingPoint = SelectedTripPoint(
-            name: _selectedBoardingPoint!.name,
-            address: _selectedBoardingPoint!.address,
-            dateTime: _selectedBoardingPoint!.dateTime,
-          );
-        }
-        
-        SelectedTripPoint? droppingPoint;
-        if (_selectedDroppingPoint != null) {
-          droppingPoint = SelectedTripPoint(
-            name: _selectedDroppingPoint!.name,
-            address: _selectedDroppingPoint!.address,
-            dateTime: _selectedDroppingPoint!.dateTime,
-          );
-        }
-        
-        // Create pending booking with error details
-        final booking = await bookingRepo.createBooking(
-          tripId: trip.tripId,
-          userId: user.uid,
-          tripTitle: trip.title,
-          tripImageUrl: trip.imageUrl,
-          tripLocation: trip.location,
-          tripDuration: trip.duration,
-          amount: price,
-          paymentId: 'pending_${DateTime.now().millisecondsSinceEpoch}',
-          paymentMethod: 'razorpay',
-          userEmail: user.email,
-          userName: user.displayName,
-          selectedStyleId: selectedStyle?.styleId,
-          selectedStyleName: selectedStyle?.name,
-          selectedBoardingPoint: boardingPoint,
-          selectedDroppingPoint: droppingPoint,
-          status: BookingStatus.pending, // Mark as pending for retry
-          paymentStatus: PaymentStatus.failed,
-          failureReason: errorMessage,
-        );
-        
-        // Show error with retry option
-        final shouldRetry = await showDialog<bool>(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) => AlertDialog(
-            backgroundColor: AppColors.bgSurface,
-            title: Text(
-              'Payment Failed',
-              style: TextStyle(color: AppColors.textPrimary),
+    // Convert to centralized exception
+    final exception = AppException.fromError(response);
+    final errorMessage = exception.message;
+    
+    // For all other errors, create a pending booking for retry
+    final trip = _currentTrip;
+    if (trip == null) return;
+    
+    final userAsync = ref.read(authStateChangesProvider);
+    final user = userAsync.value;
+    if (user == null) return;
+    
+    final selectedStyle = trip.pricingStyles.isNotEmpty && _selectedStyleId != null
+        ? trip.pricingStyles.firstWhere((s) => s.styleId == _selectedStyleId)
+        : null;
+    
+    final price = selectedStyle?.price ?? trip.price;
+    
+    SelectedTripPoint? boardingPoint;
+    if (_selectedBoardingPoint != null) {
+      boardingPoint = SelectedTripPoint(
+        name: _selectedBoardingPoint!.name,
+        address: _selectedBoardingPoint!.address,
+        dateTime: _selectedBoardingPoint!.dateTime,
+      );
+    }
+    
+    SelectedTripPoint? droppingPoint;
+    if (_selectedDroppingPoint != null) {
+      droppingPoint = SelectedTripPoint(
+        name: _selectedDroppingPoint!.name,
+        address: _selectedDroppingPoint!.address,
+        dateTime: _selectedDroppingPoint!.dateTime,
+      );
+    }
+    
+    // Create pending booking using controller
+    final booking = await ref.read(bookingControllerProvider.notifier).createPendingBooking(
+      trip: trip,
+      userId: user.uid,
+      userEmail: user.email ?? '',
+      userName: user.displayName,
+      amount: price,
+      failureReason: errorMessage,
+      selectedStyleId: selectedStyle?.styleId,
+      selectedStyleName: selectedStyle?.name,
+      boardingPoint: boardingPoint,
+      droppingPoint: droppingPoint,
+    );
+    
+    if (booking == null || !mounted) return;
+    
+    // Show error with retry option
+    final shouldRetry = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        backgroundColor: AppColors.bgSurface,
+        title: Text(
+          'Payment Failed',
+          style: TextStyle(color: AppColors.textPrimary),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              errorMessage,
+              style: const TextStyle(color: AppColors.textSecondary),
             ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  errorMessage,
-                  style: const TextStyle(color: AppColors.textSecondary),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  'We\'ve saved your booking. You can retry payment anytime from your bookings page.',
-                  style: TextStyle(
-                    color: AppColors.textSecondary.withValues(alpha: 0.7),
-                    fontSize: 14,
-                  ),
-                ),
-              ],
+            const SizedBox(height: 16),
+            Text(
+              'We\'ve saved your booking. You can retry payment anytime from your bookings page.',
+              style: TextStyle(
+                color: AppColors.textSecondary.withValues(alpha: 0.7),
+                fontSize: 14,
+              ),
             ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: Text('View Bookings', style: TextStyle(color: AppColors.textSecondary)),
-              ),
-              ElevatedButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                ),
-                child: Text('Retry Payment', style: TextStyle(color: Colors.white)),
-              ),
-            ],
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text('View Bookings', style: TextStyle(color: AppColors.textSecondary)),
           ),
-        );
-        
-        if (shouldRetry == true && mounted) {
-          // Retry payment
-          setState(() => _isProcessing = true);
-          _razorpayService.openCheckout(
-            amount: price,
-            tripTitle: trip.title.replaceAll('\n', ' ').trim(),
-            userEmail: user.email ?? 'guest@solegoes.com',
-            userPhone: user.phoneNumber,
-          );
-        } else if (mounted) {
-          // Go to bookings page
-          context.go('/bookings');
-        }
-      } catch (e) {
-        debugPrint('Error creating pending booking: $e');
-        if (mounted) {
-          // Use Global Error for critical failures
-          ref.read(globalErrorProvider.notifier).setException(e);
-        }
-      }
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+            ),
+            child: Text('Retry Payment', style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+    
+    if (shouldRetry == true && mounted) {
+      // Retry payment
+      _razorpayService.openCheckout(
+        amount: price,
+        tripTitle: trip.title.replaceAll('\n', ' ').trim(),
+        userEmail: user.email ?? 'guest@solegoes.com',
+        userPhone: user.phoneNumber,
+      );
+    } else if (mounted) {
+      // Go to bookings page
+      context.go('/bookings');
     }
   }
 
