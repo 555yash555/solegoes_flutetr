@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../theme/app_theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7900,9 +7901,139 @@ class _SeedTripsScreenState extends ConsumerState<SeedTripsScreen> {
         });
       }
 
+      // ============================================
+      // STEP 4: Seed Chats and Messages
+      // ============================================
+      setState(() {
+        _status = 'Step 4/4: Seeding chats and messages...';
+      });
+
+      final realtimeDb = FirebaseDatabase.instance.ref();
+
+      // Clear existing chats
+      await realtimeDb.child('trip_chats').remove();
+      setState(() {
+        _logs.add('🗑️ Cleared existing chats');
+      });
+
+      // Create sample chat for Ladakh trip (Trip 2 - Index 1)
+      if (generatedTripIds.length > 1) {
+        final ladakhTripId = generatedTripIds[1];
+        final ladakhTrip = sampleTrips[1];
+        final currentUser = FirebaseAuth.instance.currentUser;
+        final userId = currentUser?.uid ?? 'demo-user-123';
+        final userName = currentUser?.displayName ?? 'Demo User';
+
+        // Create the chat
+        final chatRef = realtimeDb.child('trip_chats').push();
+        final chatId = chatRef.key!;
+
+        final chatData = {
+          'tripId': ladakhTripId,
+          'tripTitle': ladakhTrip['title'],
+          'tripLocation': ladakhTrip['location'],
+          'tripStartDate': (ladakhTrip['startDate'] as Timestamp).millisecondsSinceEpoch,
+          'tripEndDate': (ladakhTrip['endDate'] as Timestamp).millisecondsSinceEpoch,
+          'participantIds': {
+            userId: true,
+            'demo-user-2': true,
+            'demo-user-3': true,
+          },
+          'participantCount': 3,
+          'lastMessage': 'Looking forward to riding together! 🏍️',
+          'lastMessageTime': DateTime.now().subtract(Duration(minutes: 10)).millisecondsSinceEpoch,
+          'lastMessageSenderId': 'demo-user-2',
+          'createdAt': DateTime.now().subtract(Duration(days: 2)).millisecondsSinceEpoch,
+        };
+
+        await chatRef.set(chatData);
+
+        setState(() {
+          _logs.add('✅ Created chat for: Ladakh Bike Trip');
+        });
+
+        // Add sample messages
+        final messagesRef = chatRef.child('messages');
+        
+        final sampleMessages = [
+          {
+            'senderId': userId,
+            'senderName': userName,
+            'senderAvatar': currentUser?.photoURL ?? '',
+            'content': 'Hey everyone! So excited for this trip! 🎉',
+            'timestamp': DateTime.now().subtract(Duration(days: 2)).millisecondsSinceEpoch,
+            'type': 'text',
+          },
+          {
+            'senderId': 'demo-user-2',
+            'senderName': 'Rahul Kumar',
+            'senderAvatar': 'https://i.pravatar.cc/150?img=12',
+            'content': 'Same here! First time in Ladakh. Any tips?',
+            'timestamp': DateTime.now().subtract(Duration(days: 1, hours: 20)).millisecondsSinceEpoch,
+            'type': 'text',
+          },
+          {
+            'senderId': 'demo-user-3',
+            'senderName': 'Priya Sharma',
+            'senderAvatar': 'https://i.pravatar.cc/150?img=5',
+            'content': 'Make sure to carry warm clothes! It gets really cold at night.',
+            'timestamp': DateTime.now().subtract(Duration(days: 1, hours: 18)).millisecondsSinceEpoch,
+            'type': 'text',
+          },
+          {
+            'senderId': userId,
+            'senderName': userName,
+            'senderAvatar': currentUser?.photoURL ?? '',
+            'content': 'Thanks for the tip! Should we create a packing list?',
+            'timestamp': DateTime.now().subtract(Duration(days: 1, hours: 12)).millisecondsSinceEpoch,
+            'type': 'text',
+          },
+          {
+            'senderId': 'demo-user-2',
+            'senderName': 'Rahul Kumar',
+            'senderAvatar': 'https://i.pravatar.cc/150?img=12',
+            'content': 'Great idea! I\'ll start one and share the link.',
+            'timestamp': DateTime.now().subtract(Duration(days: 1, hours: 10)).millisecondsSinceEpoch,
+            'type': 'text',
+          },
+          {
+            'senderId': 'demo-user-3',
+            'senderName': 'Priya Sharma',
+            'senderAvatar': 'https://i.pravatar.cc/150?img=5',
+            'content': 'Has anyone been to Pangong Lake before? Is it worth the ride?',
+            'timestamp': DateTime.now().subtract(Duration(hours: 8)).millisecondsSinceEpoch,
+            'type': 'text',
+          },
+          {
+            'senderId': userId,
+            'senderName': userName,
+            'senderAvatar': currentUser?.photoURL ?? '',
+            'content': 'Absolutely! The views are breathtaking. Totally worth it!',
+            'timestamp': DateTime.now().subtract(Duration(hours: 6)).millisecondsSinceEpoch,
+            'type': 'text',
+          },
+          {
+            'senderId': 'demo-user-2',
+            'senderName': 'Rahul Kumar',
+            'senderAvatar': 'https://i.pravatar.cc/150?img=12',
+            'content': 'Looking forward to riding together! 🏍️',
+            'timestamp': DateTime.now().subtract(Duration(minutes: 10)).millisecondsSinceEpoch,
+            'type': 'text',
+          },
+        ];
+
+        for (var i = 0; i < sampleMessages.length; i++) {
+          await messagesRef.push().set(sampleMessages[i]);
+          setState(() {
+            _logs.add('  💬 Added message ${i + 1}/${sampleMessages.length}');
+          });
+          await Future.delayed(const Duration(milliseconds: 100));
+        }
+      }
+
       setState(() {
         _status =
-            '🎉 Success! Added ${sampleAgencies.length} agencies and ${sampleTrips.length} trips to Firestore';
+            '🎉 Success! Added ${sampleAgencies.length} agencies, ${sampleTrips.length} trips, and sample chat data';
         _isSeeding = false;
       });
     } catch (e) {
@@ -7937,7 +8068,7 @@ class _SeedTripsScreenState extends ConsumerState<SeedTripsScreen> {
             ),
             const SizedBox(height: 8),
             Text(
-              'This will add 4 agencies and 4 sample trips to your Firestore database.',
+              'This will add 4 agencies, 4 sample trips, bookings, and sample chat conversations to your Firebase database.',
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.white60,

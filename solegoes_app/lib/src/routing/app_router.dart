@@ -293,6 +293,14 @@ GoRouter goRouter(Ref ref) {
           return ChatDetailScreen(chatId: chatId);
         },
       ),
+      // Trip chat route - navigate with tripId for instant feedback
+      GoRoute(
+        path: '/trip-chat/:tripId',
+        builder: (context, state) {
+          final tripId = state.pathParameters['tripId']!;
+          return ChatDetailScreen.fromTripId(tripId: tripId);
+        },
+      ),
       GoRoute(
         path: '/payment-method/:tripId',
         name: AppRoute.paymentMethod.name,

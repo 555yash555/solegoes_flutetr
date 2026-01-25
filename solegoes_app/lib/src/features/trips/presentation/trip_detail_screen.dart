@@ -9,6 +9,8 @@ import '../../../theme/app_theme.dart';
 import '../../authentication/data/auth_repository.dart';
 import '../../bookings/data/booking_repository.dart';
 import '../../bookings/domain/booking.dart' show Booking, BookingStatus, PaymentStatus, SelectedTripPoint;
+import '../../chat/data/chat_access_service.dart';
+import '../../chat/data/chat_providers.dart';
 import '../../payments/data/razorpay_service.dart';
 import '../data/trip_repository.dart';
 import '../domain/trip.dart';
@@ -148,6 +150,109 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
 
     // Navigate to booking screen
     context.push('/trip/${trip.tripId}/book');
+  }
+
+  /// Handles Join Chat button tap with booking validation
+  Future<void> _handleJoinChat(Trip trip) async {
+    final userAsync = ref.read(authStateChangesProvider);
+    final user = userAsync.value;
+
+    if (user == null) {
+      // Redirect to login
+      context.push('/login');
+      return;
+    }
+
+    // Show loading dialog
+    if (!mounted) return;
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(color: AppColors.primary),
+      ),
+    );
+
+    try {
+      // Check if user has booked this trip
+      final chatAccessService = ref.read(chatAccessServiceProvider);
+      final hasAccess = await chatAccessService.canJoinChat(user.uid, trip.tripId);
+
+      if (!mounted) return;
+      Navigator.of(context).pop(); // Close loading dialog
+
+      if (!hasAccess) {
+        // Show dialog: must book trip first
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            backgroundColor: AppColors.bgSurface,
+            title: Text(
+              'Book This Trip First',
+              style: TextStyle(color: AppColors.textPrimary),
+            ),
+            content: Text(
+              'You need to book this trip before you can join the chat.',
+              style: TextStyle(color: AppColors.textMuted),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('Cancel', style: TextStyle(color: AppColors.textMuted)),
+              ),
+              AppButton(
+                text: 'Book Now',
+                size: AppButtonSize.small,
+                onPressed: () {
+                  Navigator.pop(context);
+                  _proceedToPay(trip);
+                },
+              ),
+            ],
+          ),
+        );
+        return;
+      }
+
+      // User has booking - get or create chat
+ final chatRepository = ref.read(chatRepositoryProvider);
+      var chat = await chatRepository.getChatForTrip(trip.tripId);
+
+      if (chat == null) {
+        // Create new chat
+        chat = await chatRepository.createTripChat(
+          tripId: trip.tripId,
+          tripTitle: trip.title.replaceAll('\\n', ' '),
+          tripLocation: trip.location,
+          tripStartDate: trip.startDate ?? DateTime.now(),
+          tripEndDate: trip.endDate ?? DateTime.now().add(const Duration(days: 7)),
+          userId: user.uid,
+          userName: user.displayName ?? 'User',
+        );
+      } else {
+        // Add user as participant if not already
+        final isParticipant = chat.participantIds.containsKey(user.uid);
+        if (!isParticipant) {
+          await chatRepository.addParticipant(chat.chatId, user.uid);
+        }
+      }
+
+      // Navigate to chat
+      if (mounted) {
+        context.push('/chat/${chat.chatId}');
+      }
+    } catch (e) {
+      if (!mounted) return;
+      Navigator.of(context).pop(); // Close loading if still open
+      
+      // Show error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error joining chat: $e'),
+          backgroundColor: AppColors.error,
+        ),
+      );
+    }
   }
 
   @override
@@ -572,6 +677,9 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
   }
 
   Widget _buildWhosGoing(Trip trip) {
+    // Watch the trip chat to get real participant count
+    final chatAsync = ref.watch(tripChatProvider(trip.tripId));
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -589,9 +697,16 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                   letterSpacing: 0.2,
                 ),
               ),
-              Text(
-                'See All',
-                style: AppTextStyles.bodyMedium.copyWith(color: AppColors.primary),
+              // Only show "See All" if there's a chat with participants
+              chatAsync.when(
+                data: (chat) => chat != null && chat.participantCount > 0
+                    ? Text(
+                        'See All',
+                        style: AppTextStyles.bodyMedium.copyWith(color: AppColors.primary),
+                      )
+                    : const SizedBox.shrink(),
+                loading: () => const SizedBox.shrink(),
+                error: (_, __) => const SizedBox.shrink(),
               ),
             ],
           ),
@@ -603,79 +718,159 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
               borderRadius: BorderRadius.circular(AppRadius.lg),
               border: Border.all(color: AppColors.borderGlass),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Avatar stack
-                SizedBox(
-                  width: 140,
-                  height: 40,
-                  child: Stack(
-                    children: List.generate(4, (index) {
-                      return Positioned(
-                        left: index * 28.0,
-                        child: Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: AppColors.bgDeep, width: 2),
-                          ),
-                          child: AppImage(
-                            imageUrl: 'https://i.pravatar.cc/150?img=${index + 1}',
-                            shape: BoxShape.circle,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      );
-                    })..add(
-                      Positioned(
-                        left: 4 * 28.0,
-                        child: Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: AppColors.surfacePressed,
-                            shape: BoxShape.circle,
-                            border: Border.all(color: AppColors.bgDeep, width: 2),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '+8',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.textPrimary,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                // Join Chat button
-                GestureDetector(
-                  onTap: () {
-                    // TODO: Navigate to trip chat
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: chatAsync.when(
+              loading: () => Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Loading skeleton
+                  Container(
+                    width: 140,
+                    height: 40,
                     decoration: BoxDecoration(
-                      color: AppColors.surfaceOverlay,
+                      color: AppColors.surfacePressed,
                       borderRadius: BorderRadius.circular(AppRadius.full),
-                      border: Border.all(color: AppColors.borderGlass),
-                    ),
-                    child: Text(
-                      'Join Chat',
-                      style: AppTextStyles.labelLarge,
                     ),
                   ),
-                ),
-              ],
+                  _buildJoinChatButton(trip),
+                ],
+              ),
+              error: (_, __) => Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // No chat yet - show placeholder
+                  Row(
+                    children: [
+                      Icon(LucideIcons.users, size: 20, color: AppColors.textHint),
+                      const SizedBox(width: 8),
+                      Text(
+                        'No participants yet',
+                        style: TextStyle(color: AppColors.textMuted, fontSize: 14),
+                      ),
+                    ],
+                  ),
+                  _buildJoinChatButton(trip),
+                ],
+              ),
+              data: (chat) {
+                if (chat == null) {
+                  // Chat doesn't exist yet
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(LucideIcons.users, size: 20, color: AppColors.textHint),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Be the first to join!',
+                            style: TextStyle(color: AppColors.textMuted, fontSize: 14),
+                          ),
+                        ],
+                      ),
+                      _buildJoinChatButton(trip),
+                    ],
+                  );
+                }
+
+                // Chat exists - show real participant info
+                final participantCount = chat.participantCount;
+                final displayCount = participantCount > 4 ? 4 : participantCount;
+                
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Avatar stack with real count
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: displayCount * 28.0 + 12,
+                          height: 40,
+                          child: Stack(
+                            children: [
+                              // Show up to 4 avatars
+                              for (int i = 0; i < displayCount; i++)
+                                Positioned(
+                                  left: i * 28.0,
+                                  child: Container(
+                                    width: 40,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(color: AppColors.bgDeep, width: 2),
+                                    ),
+                                    child: AppImage(
+                                      imageUrl: 'https://i.pravatar.cc/150?img=${i + 1}',
+                                      shape: BoxShape.circle,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              // "+X" badge if more than 4
+                              if (participantCount > 4)
+                                Positioned(
+                                  left: 4 * 28.0,
+                                  child: Container(
+                                    width: 40,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.surfacePressed,
+                                      shape: BoxShape.circle,
+                                      border: Border.all(color: AppColors.bgDeep, width: 2),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        '+${participantCount - 4}',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w700,
+                                          color: AppColors.textPrimary,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        // Participant count text
+                        Text(
+                          '$participantCount ${participantCount == 1 ? 'person' : 'people'}',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: AppColors.textMuted,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                    _buildJoinChatButton(trip),
+                  ],
+                );
+              },
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildJoinChatButton(Trip trip) {
+    return GestureDetector(
+      onTap: () async {
+        await _handleJoinChat(trip);
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        decoration: BoxDecoration(
+          color: AppColors.surfaceOverlay,
+          borderRadius: BorderRadius.circular(AppRadius.full),
+          border: Border.all(color: AppColors.borderGlass),
+        ),
+        child: Text(
+          'Join Chat',
+          style: AppTextStyles.labelLarge,
+        ),
       ),
     );
   }

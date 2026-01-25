@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../common_widgets/app_button.dart';
@@ -6,9 +7,11 @@ import '../../../common_widgets/app_card.dart';
 import '../../../common_widgets/app_image.dart';
 import '../../../theme/app_theme.dart';
 import '../../bookings/domain/booking.dart';
+import '../../chat/data/chat_providers.dart';
+import '../../../utils/chat_helper.dart';
 import 'dart:ui';
 
-class BookingCard extends StatelessWidget {
+class BookingCard extends ConsumerWidget {
   final Booking booking;
 
   const BookingCard({
@@ -65,7 +68,7 @@ class BookingCard extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return AppCard(
       onTap: () => context.push('/trip/${booking.tripId}'),
       padding: EdgeInsets.zero,
@@ -208,16 +211,8 @@ class BookingCard extends StatelessWidget {
                         child: AppButton(
                           text: 'Chat',
                           onPressed: () {
-                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: const Text('Chat feature coming soon!'),
-                                backgroundColor: AppColors.primary,
-                                behavior: SnackBarBehavior.floating,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                            );
+                            // Navigate immediately to chat with tripId
+                            context.push('/trip-chat/${booking.tripId}');
                           },
                           variant: AppButtonVariant.primary, // Emphasis
                           size: AppButtonSize.small,
