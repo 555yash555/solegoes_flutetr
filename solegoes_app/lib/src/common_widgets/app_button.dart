@@ -6,6 +6,8 @@ enum AppButtonVariant {
   secondary,
   outline,
   text,
+  destructive,  // NEW: For logout/delete actions (rose color)
+  ghost,        // NEW: For cancel/skip buttons (transparent, muted text)
 }
 
 enum AppButtonShape {
@@ -24,10 +26,12 @@ class AppButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final bool isLoading;
   final IconData? icon;
+  final IconData? trailingIcon;  // NEW: For trailing icons (e.g., arrow →)
   final AppButtonVariant variant;
   final AppButtonShape shape;
   final AppButtonSize size;
   final bool isFullWidth;
+  final Color? textColor;  // NEW: Override text color for special cases
 
   const AppButton({
     super.key,
@@ -35,10 +39,12 @@ class AppButton extends StatelessWidget {
     this.onPressed,
     this.isLoading = false,
     this.icon,
+    this.trailingIcon,
     this.variant = AppButtonVariant.primary,
     this.shape = AppButtonShape.rounded,
     this.size = AppButtonSize.large,
     this.isFullWidth = true,
+    this.textColor,
   });
 
   @override
@@ -94,6 +100,14 @@ class AppButton extends StatelessWidget {
             color: _getTextColor(),
           ),
         ),
+        if (trailingIcon != null) ...[
+          const SizedBox(width: 8),
+          Icon(
+            trailingIcon,
+            size: 20,
+            color: _getTextColor(),
+          ),
+        ],
       ],
     );
   }
@@ -129,6 +143,9 @@ class AppButton extends StatelessWidget {
   }
 
   Color _getTextColor() {
+    // Allow manual override
+    if (textColor != null) return textColor!;
+    
     if (onPressed == null) return AppColors.textDisabled;
     
     switch (variant) {
@@ -140,6 +157,10 @@ class AppButton extends StatelessWidget {
         return AppColors.textPrimary;
       case AppButtonVariant.text:
         return AppColors.primary;
+      case AppButtonVariant.destructive:
+        return AppColors.accentRose;
+      case AppButtonVariant.ghost:
+        return AppColors.textSecondary;
     }
   }
 
@@ -178,6 +199,16 @@ class AppButton extends StatelessWidget {
         );
       case AppButtonVariant.text:
         return BoxDecoration(
+          borderRadius: _getBorderRadius(),
+        );
+      case AppButtonVariant.destructive:
+        return BoxDecoration(
+          color: Colors.transparent,
+          borderRadius: _getBorderRadius(),
+        );
+      case AppButtonVariant.ghost:
+        return BoxDecoration(
+          color: Colors.transparent,
           borderRadius: _getBorderRadius(),
         );
     }

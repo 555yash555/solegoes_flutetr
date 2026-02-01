@@ -24,11 +24,13 @@ class AppColors {
   static const Color primary = Color(0xFF6366F1);       // --primary (Indigo 500)
   static const Color violet = Color(0xFF8B5CF6);        // Violet 500
   static const Color accentBlue = Color(0xFF3B82F6);    // --accent-blue
+  static const Color accentCyan = Color(0xFF06B6D4);    // --accent-cyan (Cyan 500) - Itinerary badges
   static const Color accentTeal = Color(0xFF14B8A6);    // --accent-teal
   static const Color accentRose = Color(0xFFF43F5E);    // --accent-rose
   static const Color accentGreen = Color(0xFF4CAF50);   // --accent-green
   static const Color accentPink = Color(0xFFEC4899);    // Pink 500 - Calendar icons
   static const Color accentYellow = Color(0xFFFACC15);  // Yellow 400 - Sparkles, highlights
+  static const Color textOnAccent = Color(0xFF000000);  // Black text on bright accent backgrounds
 
   // Error states
   static const Color error = Color(0xFFEF4444);         // Red 500

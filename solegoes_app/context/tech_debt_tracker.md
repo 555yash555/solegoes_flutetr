@@ -10,11 +10,11 @@
 
 Before touching screens, upgrade shared widgets and tokens:
 
-- [ ] Add `accentCyan`, `textOnAccent` to `AppColors` in `app_theme.dart`
-- [ ] Add `maxLines`, `label`, `textPrefix`, `onSubmitted` params to `AppTextField`
-- [ ] Add `destructive` + `ghost` variants + `textColor` + `trailingIcon` to `AppButton`
-- [ ] Create `AppConfirmDialog` in `common_widgets/`
-- [ ] Create `PdfTextStyles` class in `lib/src/theme/`
+- [x] Add `accentCyan`, `textOnAccent` to `AppColors` in `app_theme.dart`
+- [x] Add `maxLines`, `label`, `textPrefix`, `onSubmitted` params to `AppTextField`
+- [x] Add `destructive` + `ghost` variants + `textColor` + `trailingIcon` to `AppButton`
+- [x] Create `AppConfirmDialog` in `common_widgets/`
+- [x] Create `PdfTextStyles` class in `lib/src/theme/`
 
 ---
 
