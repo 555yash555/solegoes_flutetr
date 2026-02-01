@@ -11,6 +11,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../../theme/app_theme.dart';
+import '../../../common_widgets/app_snackbar.dart';
 import '../../bookings/data/booking_repository.dart';
 import '../../bookings/domain/booking.dart';
 
@@ -120,19 +121,7 @@ Status: ${booking.status.name.toUpperCase()}
 $boardingInfo$droppingInfo''';
 
     Clipboard.setData(ClipboardData(text: receiptText));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'Receipt copied to clipboard',
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: AppColors.primary,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-      ),
-    );
+    AppSnackbar.showSuccess(context, 'Receipt copied to clipboard');
   }
 
   Future<void> _generateAndSharePdf(BuildContext context, Booking booking) async {
@@ -598,10 +587,10 @@ $boardingInfo$droppingInfo''';
                           ? 'Payment Pending'
                           : 'Payment Successful!',
                   style: AppTextStyles.h2.copyWith(color: isFailed
-                        ? const Color(0xFFEF4444)
+                        ? AppColors.error
                         : isPending
-                            ? const Color(0xFFEAB308)
-                            : Colors.white,
+                            ? AppColors.statusPending
+                            : AppColors.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -611,8 +600,7 @@ $boardingInfo$droppingInfo''';
                       : isPending
                           ? 'Your payment is being processed'
                           : 'Your booking has been confirmed',
-                  style: TextStyle(
-                    fontSize: 14,
+                  style: AppTextStyles.bodyMedium.copyWith(
                     color: AppColors.textMuted,
                   ),
                   textAlign: TextAlign.center,
@@ -695,8 +683,7 @@ $boardingInfo$droppingInfo''';
                 const SizedBox(height: 8),
                 Text(
                   'Your booking has been confirmed',
-                  style: TextStyle(
-                    fontSize: 14,
+                  style: AppTextStyles.bodyMedium.copyWith(
                     color: AppColors.textMuted,
                   ),
                 ),
@@ -716,10 +703,7 @@ $boardingInfo$droppingInfo''';
                     children: [
                       Text(
                         'TRANSACTION DETAILS',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.textHint,
+                        style: AppTextStyles.overline.copyWith(
                           letterSpacing: 1,
                         ),
                       ),
@@ -727,11 +711,10 @@ $boardingInfo$droppingInfo''';
                       _buildDetailRow(
                         'Transaction ID',
                         bookingId,
-                        valueStyle: const TextStyle(
-                          fontSize: 12,
+                        valueStyle: AppTextStyles.caption.copyWith(
                           fontWeight: FontWeight.w600,
                           fontFamily: 'monospace',
-                          color: Colors.white70,
+                          color: AppColors.textMuted,
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -765,10 +748,10 @@ $boardingInfo$droppingInfo''';
     final isPending = status == PaymentStatus.pending;
 
     final color = isFailed
-        ? const Color(0xFFEF4444)
+        ? AppColors.error
         : isPending
-            ? const Color(0xFFEAB308)
-            : const Color(0xFF4CAF50);
+            ? AppColors.statusPending
+            : AppColors.accentGreen;
 
     final icon = isFailed
         ? LucideIcons.x

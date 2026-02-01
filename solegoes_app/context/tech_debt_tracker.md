@@ -33,16 +33,17 @@ Before touching screens, upgrade shared widgets and tokens:
 
 ---
 
-### Screen 2: payment_confirmation_screen.dart — 56 violations
+### Screen 2: payment_confirmation_screen.dart — 56 violations (38 fixed, 18 remaining)
 
 **File:** `lib/src/features/payments/presentation/payment_confirmation_screen.dart`
 
-- [ ] Colors (12) — Colors.white/white70, hex codes for status colors
-- [ ] TextStyles (28 Flutter) — inline styles to AppTextStyles
-- [ ] TextStyles (18 PDF) — create PdfTextStyles, replace pw.TextStyle
-- [ ] Widgets (2) — AppSnackbar for success, shimmer skeleton for loading
-- [ ] Error handling (1) — ScaffoldMessenger to AppSnackbar
-- [ ] **Verified compiles**
+- [x] Colors (12/12) — fixed Colors.white/white70, hex codes for status colors ✅
+- [x] TextStyles (28/28 Flutter) — fixed all Flutter inline styles ✅
+- [ ] TextStyles (0/18 PDF) — need to refactor PDF generation with PdfTextStyles
+- [x] Widgets (2/2) — AppSnackbar for success ✅
+- [x] Error handling (1/1) — ScaffoldMessenger to AppSnackbar ✅
+- [ ] **Remaining work**: 18 PDF TextStyle violations (requires PDF generation refactor)
+- [x] **Verified compiles**
 
 ---
 
