@@ -19,8 +19,10 @@ import '../../../common_widgets/image_gallery_screen.dart';
 import '../../../utils/app_exception.dart';
 import '../../../common_widgets/app_button.dart';
 import '../../../common_widgets/app_card.dart';
+import '../../../common_widgets/app_confirm_dialog.dart';
 import '../../../common_widgets/app_expansion_tile.dart';
 import '../../../common_widgets/app_image.dart';
+import '../../../common_widgets/app_snackbar.dart';
 
 /// Trip detail screen showing full trip information
 /// Reference: designs/option15_trip_detail.html
@@ -63,7 +65,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
     };
 
     _razorpayService.onExternalWallet = (ExternalWalletResponse response) {
-      debugPrint('External wallet selected: ${response.walletName}');
+      // External wallet selected - handled by Razorpay
     };
   }
 
@@ -71,8 +73,6 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
   Future<void> _handlePaymentSuccess(PaymentSuccessResponse response) async {
     // This handler is kept for backward compatibility but shouldn't be called
     // since we now use the booking screen flow
-    debugPrint('Payment success: ${response.paymentId}');
-    
     setState(() {
       _isProcessing = false;
     });
@@ -124,7 +124,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
         return;
       }
     } catch (e) {
-      debugPrint('Error saving failed booking: $e');
+      // Error saving failed booking - will show fallback error
     }
 
     setState(() => _isProcessing = false);
@@ -183,33 +183,13 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
 
       if (!hasAccess) {
         // Show dialog: must book trip first
-        showDialog(
+        AppConfirmDialog.show(
           context: context,
-          builder: (context) => AlertDialog(
-            backgroundColor: AppColors.bgSurface,
-            title: Text(
-              'Book This Trip First',
-              style: TextStyle(color: AppColors.textPrimary),
-            ),
-            content: Text(
-              'You need to book this trip before you can join the chat.',
-              style: TextStyle(color: AppColors.textMuted),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text('Cancel', style: TextStyle(color: AppColors.textMuted)),
-              ),
-              AppButton(
-                text: 'Book Now',
-                size: AppButtonSize.small,
-                onPressed: () {
-                  Navigator.pop(context);
-                  _proceedToPay(trip);
-                },
-              ),
-            ],
-          ),
+          title: 'Book This Trip First',
+          message: 'You need to book this trip before you can join the chat.',
+          confirmText: 'Book Now',
+          cancelText: 'Cancel',
+          onConfirm: () => _proceedToPay(trip),
         );
         return;
       }
@@ -246,12 +226,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
       Navigator.of(context).pop(); // Close loading if still open
       
       // Show error
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error joining chat: $e'),
-          backgroundColor: AppColors.error,
-        ),
-      );
+      AppSnackbar.showError(context, 'Failed to join chat. Please try again.');
     }
   }
 
@@ -279,7 +254,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
         data: (trip) {
           if (trip == null) {
             return Center(
-              child: Text('Trip not found', style: TextStyle(color: Colors.white)),
+              child: Text('Trip not found', style: AppTextStyles.body),
             );
           }
           return Stack(
@@ -309,13 +284,15 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(LucideIcons.alertTriangle, color: Colors.red, size: 48),
+              const Icon(LucideIcons.alertTriangle, color: AppColors.error, size: 48),
               const SizedBox(height: 16),
-              Text('Failed to load trip', style: TextStyle(color: Colors.white)),
+              Text('Failed to load trip', style: AppTextStyles.body),
               const SizedBox(height: 16),
-              ElevatedButton(
+              AppButton(
+                text: 'Retry',
+                size: AppButtonSize.medium,
+                isFullWidth: false,
                 onPressed: () => ref.invalidate(tripProvider(widget.tripId)),
-                child: Text('Retry'),
               ),
             ],
           ),
@@ -406,11 +383,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                               const SizedBox(width: 8),
                               Text(
                                 'Filling Fast',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColors.textPrimary,
-                                ),
+                                style: AppTextStyles.badgeText,
                               ),
                             ],
                           ),
@@ -419,12 +392,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                       // Title
                       Text(
                         trip.title.replaceAll('\\n', '\n'),
-                        style: const TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimary,
-                          height: 1.1,
-                        ),
+                        style: AppTextStyles.heroTitle.copyWith(height: 1.1),
                       ),
                       const SizedBox(height: 12),
                       // Location & Duration
@@ -496,7 +464,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                   shape: BoxShape.circle,
                   border: Border.all(color: AppColors.surfacePressed),
                 ),
-                child: const Icon(LucideIcons.arrowLeft, size: 20, color: Colors.white),
+                child: const Icon(LucideIcons.arrowLeft, size: 20, color: AppColors.textPrimary),
               ),
             ),
             // Title (only when scrolled)
@@ -536,7 +504,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
         shape: BoxShape.circle,
         border: Border.all(color: AppColors.surfacePressed),
       ),
-      child: Icon(icon, size: 20, color: Colors.white),
+      child: Icon(icon, size: 20, color: AppColors.textPrimary),
     );
   }
 

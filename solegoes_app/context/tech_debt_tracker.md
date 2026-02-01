@@ -20,15 +20,16 @@ Before touching screens, upgrade shared widgets and tokens:
 
 ## Screen Tracker
 
-### Screen 1: trip_detail_screen.dart — 82 violations
+### Screen 1: trip_detail_screen.dart — 82 violations (20 fixed, 62 remaining)
 
 **File:** `lib/src/features/trips/presentation/trip_detail_screen.dart`
 
-- [ ] Colors (14) — replace hardcoded hex/Colors.xxx with AppColors tokens
-- [ ] TextStyles (33) — replace inline TextStyle with AppTextStyles tokens
-- [ ] Widgets (5) — shimmer skeleton, AppButton for dialog buttons, AppSnackbar
-- [ ] Error handling (6) — remove debugPrint, use AppConfirmDialog, AppSnackbar
-- [ ] **Verified compiles**
+- [x] Colors (5/14) — fixed Colors.white/red, remaining hex codes in itinerary
+- [x] TextStyles (4/33) — fixed heroTitle, badgeText, body; remaining fontSize patterns
+- [x] Widgets (5/5) — AppSnackbar, AppConfirmDialog, AppButton ✅
+- [x] Error handling (6/6) — removed debugPrint, AppSnackbar, AppConfirmDialog ✅
+- [ ] **Remaining work**: 29 TextStyle violations, 9 hex colors (file too large - 1672 lines)
+- [x] **Verified compiles**
 
 ---
 
