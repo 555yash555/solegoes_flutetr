@@ -30,6 +30,7 @@ import '../features/explore/presentation/category_trips_screen.dart';
 import '../features/explore/presentation/category_trips_screen.dart';
 import '../features/demo/presentation/design_demo_screen.dart';
 import '../features/admin/presentation/seed_trips_screen.dart';
+import '../features/admin/presentation/seed_lite_screen.dart';
 import '../features/search/presentation/search_filter_screen.dart';
 import '../features/search/presentation/search_results_screen.dart';
 import '../features/search/domain/trip_filter.dart';
@@ -158,6 +159,12 @@ GoRouter goRouter(Ref ref) {
       GoRoute(
         path: '/seed-trips',
         builder: (context, state) => const SeedTripsScreen(),
+      ),
+
+      // Seed Lite screen (agency dev tool)
+      GoRoute(
+        path: '/seed-lite',
+        builder: (context, state) => const SeedLiteScreen(),
       ),
 
       // ===========================================
