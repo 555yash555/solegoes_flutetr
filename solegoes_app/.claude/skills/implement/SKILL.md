@@ -101,6 +101,10 @@ Before writing any code, read and follow all rules below.
 - Breakpoints: mobile (<600px), tablet (600-900px), desktop (>900px).
 - Content grids should reflow at any width, not just at breakpoint boundaries.
 
+### Verification
+- Run `flutter analyze` after making changes — fix all warnings/errors before considering the task done.
+- Never run the app without passing `flutter analyze` first.
+
 ### General
 - Dark theme only — no light theme variants.
 - Always use `SafeArea` for screens with custom backgrounds.

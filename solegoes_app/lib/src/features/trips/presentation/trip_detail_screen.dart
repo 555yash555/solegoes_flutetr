@@ -582,8 +582,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                   const SizedBox(height: 4),
                   Text(
                     'Rating',
-                    style: TextStyle(
-                      fontSize: 12,
+                    style: AppTextStyles.caption.copyWith(
                       color: AppColors.textMuted,
                     ),
                   ),
@@ -606,8 +605,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                   const SizedBox(height: 4),
                   Text(
                     'Spots',
-                    style: TextStyle(
-                      fontSize: 12,
+                    style: AppTextStyles.caption.copyWith(
                       color: AppColors.textMuted,
                     ),
                   ),
@@ -630,8 +628,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                   const SizedBox(height: 4),
                   Text(
                     'Level',
-                    style: TextStyle(
-                      fontSize: 12,
+                    style: AppTextStyles.caption.copyWith(
                       color: AppColors.textMuted,
                     ),
                   ),
@@ -658,10 +655,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
             children: [
               Text(
                 "Who's Going",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimary,
+                style: AppTextStyles.h4.copyWith(
                   letterSpacing: 0.2,
                 ),
               ),
@@ -712,7 +706,9 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                       const SizedBox(width: 8),
                       Text(
                         'No participants yet',
-                        style: TextStyle(color: AppColors.textMuted, fontSize: 14),
+                        style: AppTextStyles.bodyMedium.copyWith(
+                          color: AppColors.textMuted,
+                        ),
                       ),
                     ],
                   ),
@@ -731,7 +727,9 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                           const SizedBox(width: 8),
                           Text(
                             'Be the first to join!',
-                            style: TextStyle(color: AppColors.textMuted, fontSize: 14),
+                            style: AppTextStyles.bodyMedium.copyWith(
+                              color: AppColors.textMuted,
+                            ),
                           ),
                         ],
                       ),
@@ -788,11 +786,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                                     child: Center(
                                       child: Text(
                                         '+${participantCount - 4}',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w700,
-                                          color: AppColors.textPrimary,
-                                        ),
+                                        style: AppTextStyles.badgeText,
                                       ),
                                     ),
                                   ),
@@ -804,9 +798,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                         // Participant count text
                         Text(
                           '$participantCount ${participantCount == 1 ? 'person' : 'people'}',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: AppColors.textMuted,
+                          style: AppTextStyles.bodySmall.copyWith(
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -851,20 +843,15 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
         children: [
           Text(
             'About This Trip',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textPrimary,
+            style: AppTextStyles.h4.copyWith(
               letterSpacing: 0.2,
             ),
           ),
           const SizedBox(height: 12),
           Text(
             trip.description,
-            style: TextStyle(
-              fontSize: 14,
+            style: AppTextStyles.bodyMedium.copyWith(
               height: 1.6,
-              color: AppColors.textPrimary,
             ),
           ),
         ],
@@ -882,10 +869,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
         children: [
           Text(
             'Itinerary',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textPrimary,
+            style: AppTextStyles.h4.copyWith(
               letterSpacing: 0.2,
             ),
           ),
@@ -897,13 +881,13 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
 
             // Colors for day badges
             final colors = [
-              const Color(0xFFA855F7), // Purple
-              AppColors.accentPink, // Pink
-              const Color(0xFF06B6D4), // Cyan
-              AppColors.statusConfirmed, // Green
-              const Color(0xFFF59E0B), // Amber
-              const Color(0xFF3B82F6), // Blue
-              const Color(0xFFEF4444), // Red
+              AppColors.accentPurple,
+              AppColors.accentPink,
+              AppColors.accentCyan,
+              AppColors.statusConfirmed,
+              AppColors.accentAmber,
+              AppColors.accentBlue,
+              AppColors.error,
             ];
             final dayColor = colors[index % colors.length];
 
@@ -936,20 +920,16 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                 ),
                 title: Text(
                   day['title'] ?? 'Day ${index + 1}',
-                  style: const TextStyle(
-                    fontSize: 15,
+                  style: AppTextStyles.bodyLarge.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimary,
                     letterSpacing: 0.2,
                   ),
                 ),
                 children: [
                   Text(
                     day['description'] ?? '',
-                    style: TextStyle(
-                      fontSize: 14,
+                    style: AppTextStyles.bodyMedium.copyWith(
                       height: 1.6,
-                      color: AppColors.textPrimary,
                     ),
                   ),
                   if (day['activities'] != null) ...[
@@ -966,10 +946,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                           ),
                           child: Text(
                             activity.toString(),
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: AppColors.textPrimary,
-                            ),
+                            style: AppTextStyles.caption,
                           ),
                         );
                       }).toList(),
@@ -1020,10 +997,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
         children: [
           Text(
             'Vibes',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textPrimary,
+            style: AppTextStyles.h4.copyWith(
               letterSpacing: 0.2,
             ),
           ),
@@ -1170,12 +1144,12 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
 
     final iconColors = [
       AppColors.statusConfirmed,
-      const Color(0xFFF59E0B),
-      const Color(0xFF3B82F6),
+      AppColors.accentAmber,
+      AppColors.accentBlue,
       AppColors.accentPink,
-      const Color(0xFF06B6D4),
-      const Color(0xFFA855F7),
-      const Color(0xFFEF4444),
+      AppColors.accentCyan,
+      AppColors.accentPurple,
+      AppColors.error,
     ];
 
     return Padding(
@@ -1185,10 +1159,8 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
         children: [
           Text(
             "What's Included",
-            style: TextStyle(
-              fontSize: 18,
+            style: AppTextStyles.h4.copyWith(
               fontWeight: FontWeight.w700,
-              color: AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 16),
@@ -1265,10 +1237,8 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
         children: [
           Text(
             'Meet Your Host',
-            style: TextStyle(
-              fontSize: 18,
+            style: AppTextStyles.h4.copyWith(
               fontWeight: FontWeight.w700,
-              color: AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 16),
@@ -1297,14 +1267,12 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                        child: Column(
                          crossAxisAlignment: CrossAxisAlignment.start,
                          children: [
-                           Text(
-                             trip.agencyName,
-                             style: const TextStyle(
-                               fontSize: 18,
-                               fontWeight: FontWeight.w700,
-                               color: AppColors.textPrimary,
-                             ),
-                           ),
+                            Text(
+                              trip.agencyName,
+                              style: AppTextStyles.h4.copyWith(
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
                            const SizedBox(height: 4),
                            Row(
                              children: [
@@ -1317,13 +1285,12 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                                  ),
                                  const SizedBox(width: 8),
                                ],
-                               Text(
-                                 '${trip.rating} Rating',
-                                 style: TextStyle(
-                                   fontSize: 12,
-                                   color: AppColors.textMuted,
-                                 ),
-                               ),
+                                Text(
+                                  '${trip.rating} Rating',
+                                  style: AppTextStyles.caption.copyWith(
+                                    color: AppColors.textMuted,
+                                  ),
+                                ),
                              ],
                            ),
                          ],
@@ -1332,14 +1299,12 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                    ],
                  ),
                  const SizedBox(height: 16),
-                 Text(
-                   'We specialize in curating immersive travel experiences for solo travelers. Our guides are locals who know the hidden gems.',
-                   style: TextStyle(
-                     fontSize: 14,
-                     height: 1.5,
-                     color: AppColors.textPrimary,
-                   ),
-                 ),
+                  Text(
+                    'We specialize in curating immersive travel experiences for solo travelers. Our guides are locals who know the hidden gems.',
+                    style: AppTextStyles.bodyMedium.copyWith(
+                      height: 1.5,
+                    ),
+                  ),
                  const SizedBox(height: 16),
                  Container(
                    width: double.infinity,
@@ -1372,10 +1337,8 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
         children: [
           Text(
             'Location',
-            style: TextStyle(
-              fontSize: 18,
+            style: AppTextStyles.h4.copyWith(
               fontWeight: FontWeight.w700,
-              color: AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 16),
@@ -1393,7 +1356,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                     width: double.infinity,
                     height: double.infinity,
                     colorBlendMode: BlendMode.saturation,
-                    color: Colors.grey,
+                    color: AppColors.textMuted,
                   ),
                   Container(
                     decoration: BoxDecoration(
@@ -1434,8 +1397,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
               Expanded(
                 child: Text(
                   '${trip.location} (Exact location provided after booking)',
-                  style: TextStyle(
-                    fontSize: 13,
+                  style: AppTextStyles.bodySmall.copyWith(
                     color: AppColors.textMuted,
                   ),
                 ),
@@ -1457,7 +1419,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
           children: [
             Row(
               children: [
-                const Icon(LucideIcons.info, size: 16, color: Color(0xFF3B82F6)),
+                const Icon(LucideIcons.info, size: 16, color: AppColors.accentBlue),
                 const SizedBox(width: 8),
                 Text(
                   'Cancellation Policy',
@@ -1468,8 +1430,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
             const SizedBox(height: 8),
             Text(
               'Free cancellation up to 14 days before the trip start date. 50% refund up to 7 days before. No refund within 7 days.',
-              style: TextStyle(
-                fontSize: 12,
+              style: AppTextStyles.caption.copyWith(
                 height: 1.5,
                 color: AppColors.textMuted,
               ),
@@ -1514,7 +1475,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
               bottom: MediaQuery.of(context).padding.bottom + 16,
             ),
             decoration: BoxDecoration(
-              color: const Color(0xFF050505).withValues(alpha: 0.85),
+              color: AppColors.scrim,
               border: const Border(
                 top: BorderSide(color: AppColors.borderGlass),
               ),
@@ -1565,8 +1526,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                       booking.status == BookingStatus.confirmed
                           ? 'Booking Confirmed'
                           : 'Booking Pending',
-                      style: TextStyle(
-                        fontSize: 11,
+                      style: AppTextStyles.overline.copyWith(
                         fontWeight: FontWeight.w600,
                         letterSpacing: 0.5,
                         color: booking.status == BookingStatus.confirmed
@@ -1580,8 +1540,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
               const SizedBox(height: 4),
               Text(
                 'You have already booked this trip',
-                style: TextStyle(
-                  fontSize: 14,
+                style: AppTextStyles.bodyMedium.copyWith(
                   color: AppColors.textMuted,
                 ),
                 overflow: TextOverflow.ellipsis,
@@ -1614,8 +1573,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
           children: [
             Text(
               'Total Price',
-              style: TextStyle(
-                fontSize: 11,
+              style: AppTextStyles.overline.copyWith(
                 fontWeight: FontWeight.w500,
                 letterSpacing: 0.5,
                 color: AppColors.textMuted,
@@ -1641,8 +1599,7 @@ class _TripDetailScreenState extends ConsumerState<TripDetailScreen> {
                 const SizedBox(width: 6),
                 Text(
                   formatPrice(trip.price * 1.2),
-                  style: TextStyle(
-                    fontSize: 14,
+                  style: AppTextStyles.bodyMedium.copyWith(
                     color: AppColors.textHint,
                     decoration: TextDecoration.lineThrough,
                   ),

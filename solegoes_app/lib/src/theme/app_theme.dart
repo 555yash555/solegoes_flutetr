@@ -25,6 +25,8 @@ class AppColors {
   static const Color violet = Color(0xFF8B5CF6);        // Violet 500
   static const Color accentBlue = Color(0xFF3B82F6);    // --accent-blue
   static const Color accentCyan = Color(0xFF06B6D4);    // --accent-cyan (Cyan 500) - Itinerary badges
+  static const Color accentPurple = Color(0xFFA855F7);  // Purple 500 - Itinerary badges
+  static const Color accentAmber = Color(0xFFF59E0B);   // Amber 500 - Itinerary badges
   static const Color accentTeal = Color(0xFF14B8A6);    // --accent-teal
   static const Color accentRose = Color(0xFFF43F5E);    // --accent-rose
   static const Color accentGreen = Color(0xFF4CAF50);   // --accent-green
