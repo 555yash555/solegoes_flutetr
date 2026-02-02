@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../theme/app_theme.dart';
+import '../../../common_widgets/sole_goes_logo.dart';
+import '../../../common_widgets/sole_goes_logo.dart';
 import '../../authentication/data/auth_repository.dart';
 import '../../onboarding/data/onboarding_repository.dart';
 
@@ -75,7 +77,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
             // Logo
             ClipOval(
               child: Image.asset(
-                'assets/images/logo.png',
+                'assets/images/logo_symbol.png',
                 width: 120,
                 height: 120,
                 fit: BoxFit.cover,
@@ -83,14 +85,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
             ),
             const SizedBox(height: 24),
             // App name
-            Text(
-              'SoleGoes',
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.w700,
-                color: AppColors.textPrimary,
-                letterSpacing: -0.5,
-              ),
+            const SoleGoesLogo(
+              fontSize: 32,
+              centered: true,
             ),
             const SizedBox(height: 8),
             Text(

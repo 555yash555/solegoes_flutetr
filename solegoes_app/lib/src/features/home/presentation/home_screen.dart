@@ -14,6 +14,7 @@ import '../../../common_widgets/app_shimmer.dart';
 import '../../../common_widgets/app_shimmer.dart';
 import '../../../common_widgets/app_image.dart';
 import 'featured_trip_slideshow.dart';
+import '../../../common_widgets/sole_goes_logo.dart';
 
 /// Home screen with trip cards and search
 /// Reference: designs/option15_mobile.html
@@ -80,18 +81,16 @@ class HomeScreen extends ConsumerWidget {
             children: [
               ClipOval(
                 child: Image.asset(
-                  'assets/images/logo.png',
+                  'assets/images/logo_symbol.png',
                   width: 44,
                   height: 44,
                   fit: BoxFit.cover,
                 ),
               ),
               const SizedBox(width: 12),
-              Text(
-                'SoleGoes',
-                style: AppTextStyles.h3.copyWith(
-                  letterSpacing: -0.5,
-                ),
+              const SoleGoesLogo(
+                fontSize: 22,
+                centered: false,
               ),
             ],
           ),

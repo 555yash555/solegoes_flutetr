@@ -131,7 +131,7 @@ $boardingInfo$droppingInfo''';
     final fontBold = await PdfGoogleFonts.notoSansBold();
 
     // Load the app logo
-    final logoData = await rootBundle.load('assets/images/logo.png');
+    final logoData = await rootBundle.load('assets/images/logo_symbol.png');
     final logoImage = pw.MemoryImage(logoData.buffer.asUint8List());
 
     final pdf = pw.Document();
