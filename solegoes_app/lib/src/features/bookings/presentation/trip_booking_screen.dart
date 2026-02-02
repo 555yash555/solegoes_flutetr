@@ -12,6 +12,8 @@ import '../data/booking_repository.dart';
 import '../domain/booking.dart';
 import '../presentation/booking_controller.dart';
 import '../../../common_widgets/app_snackbar.dart';
+import '../../../common_widgets/app_shimmer.dart';
+import '../../../common_widgets/app_button.dart';
 import '../../../utils/app_exception.dart';
 import '../../shared/global_error_controller.dart';
 
@@ -56,7 +58,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
     };
     
     _razorpayService.onExternalWallet = (ExternalWalletResponse response) {
-      debugPrint('External wallet: ${response.walletName}');
+      // External wallet selected - handled by Razorpay
     };
   }
   
@@ -134,7 +136,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
           // This ensures users see the confirmation page before payment
           return _buildBookingFlow(trip);
         },
-        loading: () => Center(child: CircularProgressIndicator()),
+        loading: () => const AppShimmer(width: double.infinity, height: 400),
         error: (err, stack) => Center(child: Text('Error: $err')),
       ),
     );
@@ -242,8 +244,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
         const SizedBox(height: 4),
         Text(
           label,
-          style: TextStyle(
-            fontSize: 11,
+          style: AppTextStyles.overline.copyWith(
             fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
             color: isActive ? AppColors.primary : AppColors.textTertiary,
           ),
@@ -289,8 +290,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
         const SizedBox(height: 8),
         Text(
           'Select the package that suits your preferences',
-          style: TextStyle(
-            fontSize: 14,
+          style: AppTextStyles.bodyMedium.copyWith(
             color: AppColors.textSecondary,
           ),
         ),
@@ -329,17 +329,14 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
                     children: [
                       Text(
                         style.name,
-                        style: const TextStyle(
-                          fontSize: 18,
+                        style: AppTextStyles.h4.copyWith(
                           fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimary,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         style.description,
-                        style: TextStyle(
-                          fontSize: 13,
+                        style: AppTextStyles.bodySmall.copyWith(
                           color: AppColors.textSecondary,
                         ),
                       ),
@@ -360,8 +357,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
                     ),
                     Text(
                       'per person',
-                      style: TextStyle(
-                        fontSize: 11,
+                      style: AppTextStyles.overline.copyWith(
                         color: AppColors.textTertiary,
                       ),
                     ),
@@ -394,8 +390,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
                       Expanded(
                         child: Text(
                           inclusion,
-                          style: TextStyle(
-                            fontSize: 13,
+                          style: AppTextStyles.bodySmall.copyWith(
                             color: AppColors.textSecondary,
                           ),
                         ),
@@ -408,8 +403,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
                 padding: const EdgeInsets.only(top: 4),
                 child: Text(
                   '+${style.inclusions.length - 3} more',
-                  style: TextStyle(
-                    fontSize: 12,
+                  style: AppTextStyles.caption.copyWith(
                     color: AppColors.primary,
                     fontWeight: FontWeight.w600,
                   ),
@@ -468,8 +462,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
         const SizedBox(height: 8),
         Text(
           'Choose where you\'ll join the trip',
-          style: TextStyle(
-            fontSize: 14,
+          style: AppTextStyles.bodyMedium.copyWith(
             color: AppColors.textSecondary,
           ),
         ),
@@ -495,8 +488,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
         const SizedBox(height: 8),
         Text(
           'Choose where you\'ll end the trip',
-          style: TextStyle(
-            fontSize: 14,
+          style: AppTextStyles.bodyMedium.copyWith(
             color: AppColors.textSecondary,
           ),
         ),
@@ -550,25 +542,21 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
                 children: [
                   Text(
                     point.name,
-                    style: const TextStyle(
-                      fontSize: 15,
+                    style: AppTextStyles.bodyLarge.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     point.address,
-                    style: TextStyle(
-                      fontSize: 12,
+                    style: AppTextStyles.caption.copyWith(
                       color: AppColors.textSecondary,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     _formatDateTime(point.dateTime),
-                    style: TextStyle(
-                      fontSize: 12,
+                    style: AppTextStyles.caption.copyWith(
                       color: AppColors.primary,
                       fontWeight: FontWeight.w500,
                     ),
@@ -667,10 +655,8 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
         children: [
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 14,
+            style: AppTextStyles.bodyMedium.copyWith(
               fontWeight: FontWeight.w700,
-              color: AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 12),
@@ -688,15 +674,13 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
         children: [
           Text(
             label,
-            style: TextStyle(
-              fontSize: 13,
+            style: AppTextStyles.bodySmall.copyWith(
               color: isSubdued ? AppColors.textTertiary : AppColors.textSecondary,
             ),
           ),
           Text(
             value,
-            style: TextStyle(
-              fontSize: 13,
+            style: AppTextStyles.bodySmall.copyWith(
               fontWeight: isBold ? FontWeight.w700 : FontWeight.w500,
               color: isBold ? AppColors.primary : AppColors.textPrimary,
             ),
@@ -724,39 +708,25 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
         children: [
           if (currentIndex > 0)
             Expanded(
-              child: OutlinedButton(
+              child: AppButton(
+                text: 'Back',
                 onPressed: () {
                   setState(() {
                     _currentStep = availableSteps[currentIndex - 1];
                   });
                 },
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  side: BorderSide(color: AppColors.borderSubtle),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text('Back'),
+                variant: AppButtonVariant.secondary,
+                isFullWidth: true,
               ),
             ),
           if (currentIndex > 0) const SizedBox(width: 12),
           Expanded(
             flex: 2,
-            child: ElevatedButton(
+            child: AppButton(
+              text: isLastStep ? 'Proceed to Payment' : 'Continue',
               onPressed: canProceed ? () => _handleNextStep(trip) : null,
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                backgroundColor: AppColors.primary,
-                disabledBackgroundColor: AppColors.primary.withValues(alpha: 0.3),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: Text(
-                isLastStep ? 'Proceed to Payment' : 'Continue',
-                style: AppTextStyles.h5,
-              ),
+              variant: AppButtonVariant.primary,
+              isFullWidth: true,
             ),
           ),
         ],
@@ -881,9 +851,7 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
   
   Future<void> _handlePaymentError(PaymentFailureResponse response) async {
     final errorCode = response.code;
-    
-    // Debug: Log the actual error details
-    debugPrint('Razorpay Error - Code: $errorCode, Message: ${response.message}');
+    // Payment error occurred - handle based on error code
     
     if (!mounted) return;
     
@@ -979,16 +947,17 @@ class _TripBookingScreenState extends ConsumerState<TripBookingScreen> {
           ],
         ),
         actions: [
-          TextButton(
+          AppButton(
+            text: 'View Bookings',
             onPressed: () => Navigator.of(context).pop(false),
-            child: Text('View Bookings', style: TextStyle(color: AppColors.textSecondary)),
+            variant: AppButtonVariant.secondary,
+            isFullWidth: false,
           ),
-          ElevatedButton(
+          AppButton(
+            text: 'Retry Payment',
             onPressed: () => Navigator.of(context).pop(true),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-            ),
-            child: Text('Retry Payment', style: TextStyle(color: Colors.white)),
+            variant: AppButtonVariant.primary,
+            isFullWidth: false,
           ),
         ],
       ),
