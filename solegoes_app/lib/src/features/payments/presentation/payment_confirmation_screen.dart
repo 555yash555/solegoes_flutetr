@@ -11,6 +11,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../../theme/app_theme.dart';
+import '../../../theme/pdf_text_styles.dart';
 import '../../../common_widgets/app_snackbar.dart';
 import '../../bookings/data/booking_repository.dart';
 import '../../bookings/domain/booking.dart';
@@ -167,16 +168,13 @@ $boardingInfo$droppingInfo''';
                       children: [
                         pw.Text(
                           'SoleGoes',
-                          style: pw.TextStyle(
-                            fontSize: 28,
-                            fontWeight: pw.FontWeight.bold,
+                          style: PdfTextStyles.h1().copyWith(
                             color: PdfColors.white,
                           ),
                         ),
                         pw.Text(
                           'Booking Confirmation',
-                          style: const pw.TextStyle(
-                            fontSize: 14,
+                          style: PdfTextStyles.bodyMedium().copyWith(
                             color: PdfColors.white,
                           ),
                         ),
@@ -204,9 +202,7 @@ $boardingInfo$droppingInfo''';
                       child: pw.Center(
                         child: pw.Text(
                           'OK',
-                          style: pw.TextStyle(
-                            fontSize: 20,
-                            fontWeight: pw.FontWeight.bold,
+                          style: PdfTextStyles.h3().copyWith(
                             color: PdfColor.fromHex('#4CAF50'),
                           ),
                         ),
@@ -215,10 +211,7 @@ $boardingInfo$droppingInfo''';
                     pw.SizedBox(height: 12),
                     pw.Text(
                       'Payment Successful!',
-                      style: pw.TextStyle(
-                        fontSize: 22,
-                        fontWeight: pw.FontWeight.bold,
-                      ),
+                      style: PdfTextStyles.h2(),
                     ),
                   ],
                 ),
@@ -238,11 +231,8 @@ $boardingInfo$droppingInfo''';
                   children: [
                     pw.Text(
                       'TRIP DETAILS',
-                      style: pw.TextStyle(
-                        fontSize: 12,
-                        fontWeight: pw.FontWeight.bold,
+                      style: PdfTextStyles.overline().copyWith(
                         color: PdfColors.grey600,
-                        letterSpacing: 1,
                       ),
                     ),
                     pw.SizedBox(height: 16),
@@ -270,11 +260,8 @@ $boardingInfo$droppingInfo''';
                     children: [
                       pw.Text(
                         'PICKUP & DROP DETAILS',
-                        style: pw.TextStyle(
-                          fontSize: 12,
-                          fontWeight: pw.FontWeight.bold,
+                        style: PdfTextStyles.overline().copyWith(
                           color: PdfColors.grey600,
-                          letterSpacing: 1,
                         ),
                       ),
                       pw.SizedBox(height: 16),
@@ -290,33 +277,28 @@ $boardingInfo$droppingInfo''';
                             children: [
                               pw.Text(
                                 'Boarding Point',
-                                style: pw.TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: pw.FontWeight.bold,
+                                style: PdfTextStyles.overline().copyWith(
                                   color: PdfColor.fromHex('#2E7D32'),
                                 ),
                               ),
                               pw.SizedBox(height: 6),
                               pw.Text(
                                 booking.selectedBoardingPoint!.name,
-                                style: pw.TextStyle(
-                                  fontSize: 12,
+                                style: PdfTextStyles.bodySmall().copyWith(
                                   fontWeight: pw.FontWeight.bold,
                                 ),
                               ),
                               pw.SizedBox(height: 2),
                               pw.Text(
                                 booking.selectedBoardingPoint!.address,
-                                style: const pw.TextStyle(
-                                  fontSize: 10,
+                                style: PdfTextStyles.caption().copyWith(
                                   color: PdfColors.grey700,
                                 ),
                               ),
                               pw.SizedBox(height: 4),
                               pw.Text(
                                 _formatDate(booking.selectedBoardingPoint!.dateTime),
-                                style: pw.TextStyle(
-                                  fontSize: 10,
+                                style: PdfTextStyles.caption().copyWith(
                                   fontWeight: pw.FontWeight.bold,
                                   color: PdfColor.fromHex('#2E7D32'),
                                 ),
@@ -338,33 +320,28 @@ $boardingInfo$droppingInfo''';
                             children: [
                               pw.Text(
                                 'Dropping Point',
-                                style: pw.TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: pw.FontWeight.bold,
+                                style: PdfTextStyles.overline().copyWith(
                                   color: PdfColor.fromHex('#C62828'),
                                 ),
                               ),
                               pw.SizedBox(height: 6),
                               pw.Text(
                                 booking.selectedDroppingPoint!.name,
-                                style: pw.TextStyle(
-                                  fontSize: 12,
+                                style: PdfTextStyles.bodySmall().copyWith(
                                   fontWeight: pw.FontWeight.bold,
                                 ),
                               ),
                               pw.SizedBox(height: 2),
                               pw.Text(
                                 booking.selectedDroppingPoint!.address,
-                                style: const pw.TextStyle(
-                                  fontSize: 10,
+                                style: PdfTextStyles.caption().copyWith(
                                   color: PdfColors.grey700,
                                 ),
                               ),
                               pw.SizedBox(height: 4),
                               pw.Text(
                                 _formatDate(booking.selectedDroppingPoint!.dateTime),
-                                style: pw.TextStyle(
-                                  fontSize: 10,
+                                style: PdfTextStyles.caption().copyWith(
                                   fontWeight: pw.FontWeight.bold,
                                   color: PdfColor.fromHex('#C62828'),
                                 ),
@@ -391,11 +368,8 @@ $boardingInfo$droppingInfo''';
                   children: [
                     pw.Text(
                       'PAYMENT DETAILS',
-                      style: pw.TextStyle(
-                        fontSize: 12,
-                        fontWeight: pw.FontWeight.bold,
+                      style: PdfTextStyles.overline().copyWith(
                         color: PdfColors.grey600,
-                        letterSpacing: 1,
                       ),
                     ),
                     pw.SizedBox(height: 16),
@@ -438,16 +412,14 @@ $boardingInfo$droppingInfo''';
                   children: [
                     pw.Text(
                       'Thank you for booking with SoleGoes!',
-                      style: pw.TextStyle(
-                        fontSize: 14,
+                      style: PdfTextStyles.bodyMedium().copyWith(
                         fontWeight: pw.FontWeight.bold,
                       ),
                     ),
                     pw.SizedBox(height: 4),
                     pw.Text(
                       'Your adventure awaits!',
-                      style: const pw.TextStyle(
-                        fontSize: 12,
+                      style: PdfTextStyles.bodySmall().copyWith(
                         color: PdfColors.grey700,
                       ),
                     ),
@@ -488,18 +460,16 @@ $boardingInfo$droppingInfo''';
       children: [
         pw.Text(
           label,
-          style: pw.TextStyle(
+          style: PdfTextStyles.bodySmall().copyWith(
             font: font,
-            fontSize: 12,
             color: PdfColors.grey700,
           ),
         ),
         pw.Expanded(
           child: pw.Text(
             value,
-            style: pw.TextStyle(
+            style: PdfTextStyles.bodySmall().copyWith(
               font: isBold ? fontBold : font,
-              fontSize: 12,
               color: valueColor ?? PdfColors.black,
             ),
             textAlign: pw.TextAlign.right,
