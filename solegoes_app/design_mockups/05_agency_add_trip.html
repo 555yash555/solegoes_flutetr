@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Trip — SoleGoes Agency</title>
+    <link rel="stylesheet" href="shared/design-system.css" />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <style>
+        /*
+         * SCREEN: AgencyAddTripScreen (Wizard)
+         * Exits the DashboardScaffold, runs in full screen.
+         */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* ══ HEADER ══ */
+        .wizard-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 16px 24px; border-bottom: 1px solid var(--border-subtle);
+            background: rgba(9,9,11,.85); backdrop-filter: blur(12px);
+            position: sticky; top: 0; z-index: 10;
+        }
+        .header-left { display: flex; align-items: center; gap: 16px; }
+        .back-btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 36px; height: 36px; border-radius: var(--r-md);
+            background: transparent; border: 1px solid transparent;
+            color: var(--text-secondary); cursor: pointer; transition: all 150ms ease;
+        }
+        .back-btn:hover { background: rgba(255,255,255,.05); border-color: var(--border-subtle); color: var(--text-primary); }
+        .header-title { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+        .draft-badge { font-size: 11px; padding: 3px 8px; background: rgba(255,255,255,.1); border-radius: var(--r-sm); color: var(--text-tertiary); font-weight: 600; }
+        .header-right { display: flex; gap: 12px; }
+
+        /* ══ MAIN WIZARD LAYOUT ══ */
+        .wizard-body { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
+        
+        .wizard-container { width: 100%; max-width: 720px; }
+
+        /* ══ STEPPER ══ */
+        /* FLUTTER: Custom Row generating step indicators */
+        .stepper {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 40px; position: relative;
+        }
+        .stepper::before {
+            content: ''; position: absolute; top: 14px; left: 0; right: 0; height: 1px;
+            background: var(--border-subtle); z-index: 1;
+        }
+        .step { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 8px; width: 60px; }
+        .step-circle {
+            width: 28px; height: 28px; border-radius: 50%;
+            background: var(--bg-deep); border: 1px solid var(--border-subtle);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 11px; font-weight: 700; color: var(--text-tertiary); transition: all 200ms;
+        }
+        .step.active .step-circle { background: var(--primary); border-color: var(--primary); color: #fff; box-shadow: 0 0 0 4px rgba(99,102,241,.15); }
+        .step.completed .step-circle { background: var(--status-success); border-color: var(--status-success); color: #fff; }
+        .step-label { font-size: 11px; font-weight: 600; color: var(--text-tertiary); text-align: center; white-space: nowrap; transition: color 200ms; }
+        .step.active .step-label { color: var(--primary-light); }
+        .step.completed .step-label { color: var(--text-primary); }
+
+        /* Responsive Mobile Stepper */
+        .mobile-stepper { display: none; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+        .ms-text { font-size: 14px; font-weight: 700; }
+        .ms-bar { flex: 1; height: 4px; background: var(--border-subtle); border-radius: 2px; margin: 0 16px; overflow: hidden; }
+        .ms-fill { height: 100%; background: var(--primary); width: 16.6%; border-radius: 2px; }
+
+        @media (max-width: 768px) {
+            .stepper { display: none; }
+            .mobile-stepper { display: flex; }
+            .wizard-body { padding: 24px 20px 100px; }
+            .header-title { font-size: 15px; }
+            .draft-badge { display: none; }
+        }
+
+        /* ══ FORM CONTENT ══ */
+        .step-content {
+            background: var(--bg-surface); border: 1px solid var(--border-subtle);
+            border-radius: var(--r-xl); padding: 32px;
+        }
+        .step-title { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+        .step-desc { font-size: 14px; color: var(--text-secondary); margin-bottom: 28px; }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+        @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+        
+        .input-group.full-width { grid-column: 1 / -1; }
+
+        /* Chips for Multi-select */
+        .chip-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+        .chip {
+            padding: 8px 16px; background: rgba(255,255,255,.03); border: 1px solid var(--border-subtle);
+            border-radius: var(--r-full); font-size: 13px; font-weight: 500; cursor: pointer;
+            transition: all 150ms ease; user-select: none; display: flex; align-items: center; gap: 6px;
+        }
+        .chip:hover { background: rgba(255,255,255,.08); }
+        .chip.selected { background: rgba(99,102,241,.15); border-color: var(--primary); color: var(--primary-light); }
+
+        /* ══ BOTTOM NAVIGATION ══ */
+        .bottom-nav {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border-subtle);
+        }
+        /* Mobile Sticky Footer */
+        @media (max-width: 600px) {
+            .bottom-nav {
+                position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg-surface);
+                margin-top: 0; padding: 16px 20px; border-top: 1px solid var(--border-subtle);
+                z-index: 20; box-shadow: 0 -4px 24px rgba(0,0,0,0.5);
+            }
+        }
+
+        /* ══ MULTI-STEP TOGGLES ══ */
+        .step-pane { display: none; }
+        .step-pane.active { display: block; animation: fadeSlideUp 300ms ease; }
+
+        /* Step 2 specific styles */
+        .upload-zone { border: 2px dashed var(--border-glass); border-radius: var(--r-md); padding: 40px; text-align: center; cursor: pointer; background: rgba(255,255,255,.02); transition: all 150ms ease; }
+        .upload-zone:hover { border-color: var(--primary); background: rgba(99,102,241,.05); }
+        .upload-icon { color: var(--primary); margin-bottom: 12px; }
+        .upload-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; margin-top: 20px; }
+        .gallery-item { aspect-ratio: 1; background: var(--border-subtle); border-radius: var(--r-sm); }
+        
+        /* Step 3 & 4 List Items */
+        .list-item-card { background: rgba(255,255,255,.02); border: 1px solid var(--border-subtle); border-radius: var(--r-md); padding: 20px; margin-bottom: 16px; position:relative;}
+        .list-item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 12px;}
+        .list-item-title { font-weight: 700; font-size: 15px; display:flex; align-items:center; gap:8px;}
+        .btn-remove { background:rgba(239,68,68,.1); color:var(--status-error); border:none; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer;}
+        .btn-add-item { width:100%; padding:14px; border:1px dashed var(--border-subtle); background:transparent; color:var(--text-secondary); border-radius:var(--r-md); font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;}
+        .btn-add-item:hover { border-color:var(--primary); color:var(--primary); background:rgba(99,102,241,.05);}
+        
+        /* Review Summary */
+        .review-section { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--border-subtle); }
+        .review-section:last-child { border-bottom: none; margin-bottom:0; padding-bottom:0;}
+        .review-title { font-size: 16px; font-weight: 700; color: var(--text-secondary); margin-bottom: 16px;}
+        .review-kv { display: flex; margin-bottom: 8px;}
+        .review-k { width: 140px; color: var(--text-tertiary); font-size: 13px;}
+        .review-v { flex: 1; font-weight: 500;}
+    </style>
+</head>
+<body>
+
+<header class="wizard-header">
+    <div class="header-left">
+        <button class="back-btn" onclick="window.location.href='04_agency_trips.html'" title="Exit Wizard">
+            <i data-lucide="x" width="18" height="18"></i>
+        </button>
+        <div class="header-title">
+            Publish a Trip
+            <span class="draft-badge">Unsaved Draft</span>
+        </div>
+    </div>
+    <div class="header-right">
+        <button class="btn btn-outline" style="padding: 6px 14px; font-size: 12px; font-weight: 600;" onclick="window.location.href='04_agency_trips.html'">Save Draft</button>
+    </div>
+</header>
+
+<main class="wizard-body">
+    <div class="wizard-container">
+        
+        <!-- Desktop Stepper -->
+        <div class="stepper">
+            <div class="step active">
+                <div class="step-circle">1</div>
+                <div class="step-label">Basic Info</div>
+            </div>
+            <div class="step">
+                <div class="step-circle">2</div>
+                <div class="step-label">Media</div>
+            </div>
+            <div class="step">
+                <div class="step-circle">3</div>
+                <div class="step-label">Packages</div>
+            </div>
+            <div class="step">
+                <div class="step-circle">4</div>
+                <div class="step-label">Itinerary</div>
+            </div>
+            <div class="step">
+                <div class="step-circle">5</div>
+                <div class="step-label">Logistics</div>
+            </div>
+            <div class="step">
+                <div class="step-circle">6</div>
+                <div class="step-label">Review</div>
+            </div>
+        </div>
+
+        <!-- Mobile Stepper -->
+        <div class="mobile-stepper">
+            <div class="ms-text">Step 1 <span style="color:var(--text-tertiary);font-weight:500;">of 6</span></div>
+            <div class="ms-bar"><div class="ms-fill"></div></div>
+            <div style="font-size:12px;color:var(--primary-light);font-weight:600;">Basic Info</div>
+        </div>
+
+        <!-- Step Content Wrapper -->
+        <div class="step-content">
+            
+            <!-- STEP 1: Basic Info -->
+            <div class="step-pane active" id="pane-1">
+                <h2 class="step-title">Let's start with the basics</h2>
+                <p class="step-desc">Give your trip a catchy title and tell travelers what to expect.</p>
+
+                <div class="form-grid">
+                    <div class="input-group full-width">
+                        <label class="input-label" for="tripTitle">Trip Title</label>
+                        <input type="text" id="tripTitle" class="input" placeholder="e.g. Spiti Valley Winter Expedition" />
+                    </div>
+
+                    <div class="input-group full-width">
+                        <label class="input-label" for="tripDesc">Description</label>
+                        <textarea id="tripDesc" class="input" rows="4" placeholder="Describe the vibe, highlights, and why this trip is special..."></textarea>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label" for="location">Location / Region</label>
+                        <div style="position:relative;">
+                            <i data-lucide="map-pin" width="16" height="16" style="position:absolute;left:14px;top:12px;color:var(--text-tertiary);"></i>
+                            <input type="text" id="location" class="input" style="padding-left:40px;" placeholder="e.g. Himachal Pradesh" />
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label" for="duration">Duration (Days)</label>
+                        <input type="number" id="duration" class="input" placeholder="e.g. 7" min="1" max="30" />
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label" for="startDate">Start Date</label>
+                        <input type="date" id="startDate" class="input" />
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label" for="endDate">End Date</label>
+                        <input type="date" id="endDate" class="input" />
+                    </div>
+
+                    <div class="input-group">
+                    <label class="input-label" for="groupSize">Max Group Size</label>
+                    <input type="number" id="groupSize" class="input" placeholder="e.g. 15" min="1" />
+                </div>
+
+                <div class="input-group full-width">
+                    <label class="input-label">Categories <span style="font-weight:normal;color:var(--text-tertiary);">(Select up to 3)</span></label>
+                    <div class="chip-group">
+                        <div class="chip selected"><i data-lucide="mountain-snow" width="14" height="14"></i> Trekking</div>
+                        <div class="chip"><i data-lucide="compass" width="14" height="14"></i> Backpacking</div>
+                        <div class="chip selected"><i data-lucide="snowflake" width="14" height="14"></i> Winter Special</div>
+                        <div class="chip"><i data-lucide="bike" width="14" height="14"></i> Bike Trip</div>
+                        <div class="chip"><i data-lucide="tent" width="14" height="14"></i> Camping</div>
+                        <div class="chip"><i data-lucide="palmtree" width="14" height="14"></i> Beach</div>
+                        <div class="chip"><i data-lucide="camera" width="14" height="14"></i> Sightseeing</div>
+                        <div class="chip"><i data-lucide="users" width="14" height="14"></i> Group Tour</div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- STEP 2: Media -->
+            <div class="step-pane" id="pane-2">
+                <h2 class="step-title">Add stunning visuals</h2>
+                <p class="step-desc">High-quality photos are the #1 reason travelers book a trip.</p>
+
+                <div class="input-group full-width" style="margin-bottom: 24px;">
+                    <label class="input-label">Primary Cover Photo</label>
+                    <div class="upload-zone">
+                        <i data-lucide="image" width="32" height="32" class="upload-icon"></i>
+                        <div style="font-weight:600;">Click to upload or drag and drop</div>
+                        <div style="font-size:12px;color:var(--text-tertiary);margin-top:4px;">PNG, JPG, WEBP up to 5MB</div>
+                    </div>
+                </div>
+
+                <div class="input-group full-width">
+                    <label class="input-label">Gallery Images</label>
+                    <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">Add 4–6 additional photos to showcase the experience.</div>
+                    <div class="upload-zone" style="padding: 24px;">
+                        <i data-lucide="plus-circle" width="24" height="24" class="upload-icon"></i>
+                        <div style="font-weight:600;font-size:14px;">Add Gallery Photos</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 3: Packages (Pricing Styles) -->
+            <div class="step-pane" id="pane-3">
+                <h2 class="step-title">Pricing Packages</h2>
+                <p class="step-desc">Create different options for travelers (e.g. Standard, Premium, Solo Room).</p>
+
+                <!-- Package 1 Mock -->
+                <div class="list-item-card">
+                    <div class="list-item-header">
+                        <div class="list-item-title"><i data-lucide="tag" width="16" height="16"></i> Package Options (Default)</div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label class="input-label">Package Name</label>
+                            <input type="text" class="input" value="Standard Sharing" />
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Price (INR)</label>
+                            <input type="number" class="input" value="12500" />
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Accommodation</label>
+                            <select class="input">
+                                <option>Quad Sharing (4 per room)</option>
+                                <option selected>Triple Sharing (3 per room)</option>
+                                <option>Double Sharing (2 per room)</option>
+                                <option>Private Room</option>
+                            </select>
+                        </div>
+                        <div class="input-group full-width">
+                            <label class="input-label">Description / Inclusions</label>
+                            <textarea class="input" rows="2" placeholder="List what is included in this package..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-add-item"><i data-lucide="plus" width="16" height="16"></i> Add Another Package</button>
+            </div>
+
+            <!-- STEP 4: Itinerary -->
+            <div class="step-pane" id="pane-4">
+                <h2 class="step-title">Build Your Itinerary</h2>
+                <p class="step-desc">Break down the trip day by day.</p>
+
+                <div class="list-item-card">
+                    <div class="list-item-header">
+                        <div class="list-item-title"><span style="background:var(--primary);color:#fff;width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:12px;">1</span> Day 1</div>
+                        <button class="btn-remove" title="Remove"><i data-lucide="trash-2" width="14" height="14"></i></button>
+                    </div>
+                    <div class="form-grid">
+                        <div class="input-group full-width">
+                            <label class="input-label">Day Title</label>
+                            <input type="text" class="input" placeholder="e.g. Arrival in Manali & Acclimatization" />
+                        </div>
+                        <div class="input-group full-width">
+                            <label class="input-label">Activities & Details</label>
+                            <textarea class="input" rows="3" placeholder="Describe the activities, travel time, and evening plan..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn-add-item"><i data-lucide="plus" width="16" height="16"></i> Add Day 2</button>
+            </div>
+
+            <!-- STEP 5: Logistics -->
+            <div class="step-pane" id="pane-5">
+                <h2 class="step-title">Logistics & Points</h2>
+                <p class="step-desc">Where should travelers gather for departure?</p>
+
+                <h3 style="font-size:15px;font-weight:700;margin-bottom:12px;margin-top:20px;"><i data-lucide="map-pin" width="16" height="16" style="display:inline;vertical-align:bottom;color:var(--primary);margin-right:6px;"></i>Boarding Points</h3>
+                <div class="list-item-card" style="padding:16px;">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label class="input-label">Point Name</label>
+                            <input type="text" class="input" placeholder="e.g. Majnu Ka Tilla, Delhi" />
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Meeting Time</label>
+                            <input type="time" class="input" />
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-add-item" style="margin-bottom:32px;"><i data-lucide="plus" width="16" height="16"></i> Add Boarding Point</button>
+
+                <h3 style="font-size:15px;font-weight:700;margin-bottom:12px;"><i data-lucide="map-pin" width="16" height="16" style="display:inline;vertical-align:bottom;color:var(--status-error);margin-right:6px;"></i>Dropping Points</h3>
+                <div class="list-item-card" style="padding:16px;">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label class="input-label">Point Name</label>
+                            <input type="text" class="input" placeholder="e.g. Kashmiri Gate ISBT, Delhi" />
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Estimated Time</label>
+                            <input type="time" class="input" />
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-add-item"><i data-lucide="plus" width="16" height="16"></i> Add Dropping Point</button>
+            </div>
+
+            <!-- STEP 6: Review -->
+            <div class="step-pane" id="pane-6">
+                <h2 class="step-title">Review & Publish</h2>
+                <p class="step-desc">Make sure everything looks good before going live.</p>
+
+                <div class="list-item-card" style="padding:24px;">
+                    <div class="review-section">
+                        <div class="review-title">Basic Information</div>
+                        <div class="review-kv"><div class="review-k">Title</div><div class="review-v text-primary">Spiti Valley Winter Expedition</div></div>
+                        <div class="review-kv"><div class="review-k">Location</div><div class="review-v">Spiti Valley, HP</div></div>
+                        <div class="review-kv"><div class="review-k">Dates</div><div class="review-v">15 Dec 2026 – 22 Dec 2026</div></div>
+                        <div class="review-kv"><div class="review-k">Capacity</div><div class="review-v">15 travelers max</div></div>
+                    </div>
+                    
+                    <div class="review-section">
+                        <div class="review-title">Media</div>
+                        <div style="display:flex; gap:12px;">
+                            <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=100&q=80" style="width:64px;height:64px;border-radius:var(--r-sm);object-fit:cover;" />
+                            <div style="flex:1;font-size:13px;color:var(--text-secondary);align-self:center;">1 Cover Photo, 4 Gallery Images attached.</div>
+                        </div>
+                    </div>
+
+                    <div class="review-section">
+                        <div class="review-title">Packages</div>
+                        <div class="review-kv"><div class="review-k">Standard Sharing</div><div class="review-v text-primary" style="font-weight:700;">₹12,500</div></div>
+                    </div>
+
+                    <div class="review-section" style="border-bottom:none; margin-bottom:0; padding-bottom:0;">
+                        <div class="review-title">Itinerary & Logistics</div>
+                        <div class="review-kv"><div class="review-k">Itinerary</div><div class="review-v">7 Days planned</div></div>
+                        <div class="review-kv"><div class="review-k">Boarding</div><div class="review-v">1 point configured</div></div>
+                    </div>
+                </div>
+
+                <div style="background:rgba(16,185,129,.1); border:1px solid rgba(16,185,129,.2); padding:16px; border-radius:var(--r-md); display:flex; gap:12px; margin-top:24px;">
+                    <i data-lucide="check-circle-2" width="20" height="20" style="color:var(--status-success);flex-shrink:0;"></i>
+                    <div style="font-size:13px;color:var(--text-secondary);">Everything looks complete! By clicking publish, your trip will be reviewed by the SoleGoes team and then listed publicly.</div>
+                </div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div class="bottom-nav">
+                <button id="btn-back" class="btn btn-outline" style="visibility:hidden;" onclick="prevStep()">Back</button>
+                <button id="btn-next" class="btn btn-primary" style="gap:8px;" onclick="nextStep()">
+                    Next Step
+                    <i data-lucide="arrow-right" width="16" height="16"></i>
+                </button>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<script>
+    lucide.createIcons();
+
+    // Mock chip selection
+    document.querySelectorAll('.chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+            chip.classList.toggle('selected');
+        });
+    });
+
+    // Mock Step Navigation
+    let currentStep = 1;
+    const TOTAL_STEPS = 6;
+    
+    // Create panes dynamically for steps without explicit HTML (to prevent JS errors and show UI)
+    const stepTitles = ["Basic Info", "Media", "Packages", "Itinerary", "Logistics", "Review"];
+
+    function showStep(step) {
+        // Toggle Panes
+        for(let i=1; i<=TOTAL_STEPS; i++) {
+            const pane = document.getElementById('pane-' + i);
+            if(pane) pane.classList.remove('active');
+        }
+        
+        const targetPane = document.getElementById('pane-' + step);
+        if (targetPane) targetPane.classList.add('active');
+        
+        // Update Buttons
+        const backBtn = document.getElementById('btn-back');
+        const nextBtn = document.getElementById('btn-next');
+        
+        if (step === 1) {
+            backBtn.style.visibility = 'hidden';
+            nextBtn.innerHTML = 'Next Step <i data-lucide="arrow-right" width="16" height="16"></i>';
+        } else if (step === TOTAL_STEPS) {
+            backBtn.style.visibility = 'visible';
+            nextBtn.innerHTML = 'Publish Trip <i data-lucide="send" width="16" height="16"></i>';
+            nextBtn.onclick = function() {
+                alert("Trip published and sent for review! In the Flutter app, this will call `tripRepository.createTrip(trip)`.");
+                window.location.href = '04_agency_trips.html';
+            };
+        } else {
+            backBtn.style.visibility = 'visible';
+            nextBtn.innerHTML = 'Next Step <i data-lucide="arrow-right" width="16" height="16"></i>';
+            nextBtn.onclick = nextStep; // Restore onclick just in case
+        }
+        
+        // Update Stepper
+        const steps = document.querySelectorAll('.stepper .step');
+        steps.forEach((el, index) => {
+            el.classList.remove('active');
+            if (index + 1 === step) el.classList.add('active');
+            if (index + 1 < step) el.classList.add('completed');
+            else el.classList.remove('completed');
+        });
+
+        // Update Mobile Stepper text
+        document.querySelector('.ms-text').innerHTML = `Step ${step} <span style="color:var(--text-tertiary);font-weight:500;">of 6</span>`;
+        if(document.querySelector('.ms-fill')) {
+            document.querySelector('.ms-fill').style.width = ((step / TOTAL_STEPS) * 100) + '%';
+        }
+        if(document.querySelector('.mobile-stepper div:last-child')) {
+            document.querySelector('.mobile-stepper div:last-child').textContent = stepTitles[step-1];
+        }
+        
+        lucide.createIcons();
+    }
+
+    function nextStep() {
+        if (currentStep < TOTAL_STEPS) {
+            currentStep++;
+            showStep(currentStep);
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+    }
+
+    function prevStep() {
+        if (currentStep > 1) {
+            currentStep--;
+            showStep(currentStep);
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+    }
+</script>
+</body>
+</html>

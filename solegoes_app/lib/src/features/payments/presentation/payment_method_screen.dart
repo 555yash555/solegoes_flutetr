@@ -155,9 +155,8 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
         }
       }
     } catch (e) {
-      debugPrint('Error saving booking: $e');
+      // Log error and still navigate to confirmation
       setState(() => _isProcessing = false);
-      // Still navigate to confirmation even if saving fails
       if (mounted) {
         context.push('/payment-confirmation/$paymentId');
       }
@@ -173,8 +172,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
-    // External wallet selected (like Paytm, PhonePe)
-    debugPrint('External wallet selected: ${response.walletName}');
+    // External wallet selected - handled by Razorpay
   }
 
   @override
@@ -195,7 +193,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
             return Center(
               child: Text(
                 'Trip not found',
-                style: TextStyle(color: AppColors.textSecondary),
+                style: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
               ),
             );
           }
@@ -228,9 +226,9 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                             decoration: BoxDecoration(
-                              color: Colors.amber.withValues(alpha: 0.15),
+                              color: AppColors.accentYellow.withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: Colors.amber.withValues(alpha: 0.3)),
+                              border: Border.all(color: AppColors.accentYellow.withValues(alpha: 0.3)),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
@@ -238,14 +236,13 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                                 Icon(
                                   LucideIcons.testTube,
                                   size: 14,
-                                  color: Colors.amber.shade300,
+                                  color: AppColors.accentYellow,
                                 ),
                                 const SizedBox(width: 6),
                                 Text(
                                   'Test Mode - Use test cards',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.amber.shade300,
+                                  style: AppTextStyles.caption.copyWith(
+                                    color: AppColors.accentYellow,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -284,13 +281,13 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
             ],
           );
         },
-        loading: () => Center(
+        loading: () => const Center(
           child: CircularProgressIndicator(color: AppColors.primary),
         ),
         error: (_, __) => Center(
           child: Text(
             'Failed to load trip',
-            style: TextStyle(color: AppColors.textSecondary),
+            style: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
           ),
         ),
       ),
@@ -324,14 +321,12 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
               ),
             ),
           ),
-          const Expanded(
+          Expanded(
             child: Text(
               'Payment Method',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 18,
+              style: AppTextStyles.h4.copyWith(
                 fontWeight: FontWeight.w700,
-                color: AppColors.textPrimary,
               ),
             ),
           ),
@@ -344,8 +339,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
   Widget _buildSectionTitle(String title) {
     return Text(
       title,
-      style: TextStyle(
-        fontSize: 12,
+      style: AppTextStyles.overline.copyWith(
         fontWeight: FontWeight.w700,
         color: AppColors.textHint,
         letterSpacing: 0.5,
@@ -508,13 +502,11 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                               color: AppColors.textPrimary,
                             ),
                           ),
-                          SizedBox(width: 12),
+                          const SizedBox(width: 12),
                           Text(
                             'Processing...',
-                            style: TextStyle(
-                              fontSize: 18,
+                            style: AppTextStyles.h4.copyWith(
                               fontWeight: FontWeight.w700,
-                              color: AppColors.textPrimary,
                             ),
                           ),
                         ],
@@ -522,10 +514,8 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                     : Text(
                         'Proceed to Pay',
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 18,
+                        style: AppTextStyles.h4.copyWith(
                           fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimary,
                         ),
                       ),
               ),

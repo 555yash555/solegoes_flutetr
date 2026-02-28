@@ -362,7 +362,30 @@ Combined with `GridView.builder` or `Wrap` with calculated item widths — conte
 
 **Data:** `agencyRepository.watchAgency(agencyId)` for read, `agencyRepository.updateAgency()` for write
 
-### 5.7 Agency Signup Screen
+### 5.7 Agency Login Screen
+
+**Purpose:** Dedicated agency login, web-optimized and responsive.
+**Reference Mockup:** `design_mockups/00_agency_login.html`
+
+**Layout:**
+- Desktop (> 900px): Two-column split — left: hero image with gradient overlay + brand copy ("Scale your travel business"), right: login form in centered card (`maxWidth: 400px`)
+- Mobile (< 900px): Stacked — hero collapses to 250px top section, form below full-width
+
+**Components:**
+- Logo row with "Agency" badge (top-left on hero panel)
+- "Back to Traveler App" ghost button (top-right) → `/login`
+- "Agency Portal" title + "Sign in to your agency dashboard" subtitle
+- Email/phone + password fields with icons
+- Password visibility toggle
+- "Forgot Password?" link → `FirebaseAuth.sendPasswordResetEmail()` via dialog/bottom sheet
+- Primary gradient "Sign In" button
+- Divider: "or continue with"
+- Social buttons row: Google + Apple
+- "Not a SoleGoes partner yet? Apply now" → `/agency-signup`
+
+**Data:** Same `authRepository.signInWithEmailAndPassword()` / `signInWithGoogle()` — role-based redirect handles post-login routing.
+
+### 5.8 Agency Signup Screen
 
 **Purpose:** Self-serve agency registration (3-step wizard).
 
@@ -382,7 +405,7 @@ Combined with `GridView.builder` or `Wrap` with calculated item widths — conte
 3. Update `users/{uid}` with `role: 'agency'`, `agencyId`
 4. Navigate to `/agency-pending`
 
-### 5.8 Agency Pending Screen
+### 5.9 Agency Pending Screen
 
 **Purpose:** Shown to agency users whose verification is pending.
 
@@ -390,7 +413,7 @@ Combined with `GridView.builder` or `Wrap` with calculated item widths — conte
 
 **Behavior:** Listens to `agency.verificationStatus` stream. When it changes to `approved`, auto-redirects to `/agency`.
 
-### 5.9 Admin Home Screen
+### 5.10 Admin Home Screen
 
 **Purpose:** Platform overview.
 
@@ -398,7 +421,7 @@ Combined with `GridView.builder` or `Wrap` with calculated item widths — conte
 
 **Data:** Aggregate Firestore queries or denormalized counters doc
 
-### 5.10 Admin Agencies Screen
+### 5.11 Admin Agencies Screen
 
 **Purpose:** Agency verification queue.
 
@@ -410,7 +433,7 @@ Combined with `GridView.builder` or `Wrap` with calculated item widths — conte
 **On approve:** `agencyRepository.updateVerificationStatus(agencyId, 'approved')`
 **On reject:** Same with `'rejected'` + reason text field
 
-### 5.11 Admin Agency Detail Screen
+### 5.12 Admin Agency Detail Screen
 
 **Purpose:** Full agency details for review before approval.
 
@@ -427,6 +450,7 @@ enum AppRoute {
   // ... existing consumer routes ...
 
   // Agency
+  agencyLogin,
   agencySignup,
   agencyPending,
   agencyHome,
@@ -448,6 +472,7 @@ enum AppRoute {
 
 ```
 // Auth (no shell)
+/agency-login               → AgencyLoginScreen (web-optimized)
 /agency-signup              → AgencySignupScreen
 /agency-pending             → AgencyPendingScreen
 
@@ -700,7 +725,22 @@ All styling from existing tokens — no hardcoded values:
 
 ## 11. Phased Roadmap
 
-### Phase 1: Foundation
+### Phase 1: Agency Signup & Login
+
+**Goal:** Agency entry point from consumer app, dedicated login, self-serve registration.
+
+| Task | File | What |
+|------|------|------|
+| "Are you an agency?" link | `login_screen.dart` + `signup_screen.dart` | Link on consumer auth screens → `/agency-login` |
+| Agency Login screen | `screens/agency_login_screen.dart` | Web-optimized split layout (ref: `design_mockups/00_agency_login.html`) |
+| Signup screen | `screens/agency_signup_screen.dart` | 3-step wizard (ref: `design_mockups/01_agency_signup.html`) |
+| Pending screen | `screens/agency_pending_screen.dart` | Waiting for approval (ref: `design_mockups/02_agency_pending.html`) |
+| AuthRepository updates | `authentication/data/auth_repository.dart` | `registerAgency()` method |
+| Firebase Storage | | Document upload integration |
+| Add routes | `routing/app_router.dart` | `/agency-login`, `/agency-signup`, `/agency-pending` |
+| Checkpoint | | "Are you an agency?" → agency login → signup → pending screen. Works on web + mobile. |
+
+### Phase 2: Foundation
 
 **Goal:** Role-based auth working, agency model ready.
 
@@ -713,7 +753,7 @@ All styling from existing tokens — no hardcoded values:
 | Role-based redirect | `routing/app_router.dart` | Agency to `/agency`, Admin to `/admin`, Consumer to `/` |
 | Checkpoint | | Login with `role: 'agency'` user redirects to `/agency` (placeholder) |
 
-### Phase 2: Dashboard Shell
+### Phase 3: Dashboard Shell
 
 **Goal:** Responsive navigation working at all 3 breakpoints.
 
@@ -728,7 +768,7 @@ All styling from existing tokens — no hardcoded values:
 | Placeholder screens | All 4 agency screens | Empty `Scaffold` with title text |
 | Checkpoint | | Resize browser: shell adapts sidebar, rail, bottom nav. All 4 tabs navigate. |
 
-### Phase 3: Agency Home + Profile
+### Phase 4: Agency Home + Profile
 
 **Goal:** Real data on dashboard.
 
@@ -739,7 +779,7 @@ All styling from existing tokens — no hardcoded values:
 | Agency Profile | `screens/agency_profile_screen.dart` | Edit form with logo/cover upload |
 | Checkpoint | | Agency sees real stats from Firestore. Can edit profile and see changes. |
 
-### Phase 4: Trip Management
+### Phase 5: Trip Management
 
 **Goal:** Agency can create and manage trips.
 
@@ -751,7 +791,7 @@ All styling from existing tokens — no hardcoded values:
 | TripRepository updates | `trips/data/trip_repository.dart` | `createTrip()`, `updateTrip()` |
 | Checkpoint | | Create trip via wizard, appears in consumer Explore feed. Edit existing trip. |
 
-### Phase 5: Booking Management
+### Phase 6: Booking Management
 
 **Goal:** Agency can view bookings.
 
@@ -761,18 +801,6 @@ All styling from existing tokens — no hardcoded values:
 | Trip bookings screen | `screens/agency_trip_bookings_screen.dart` | Per-trip bookings |
 | BookingRepository updates | `bookings/data/booking_repository.dart` | `getBookingsForTrip()`, `getBookingsForAgency()` |
 | Checkpoint | | Agency views bookings across trips. Filter by status works. |
-
-### Phase 6: Agency Signup
-
-**Goal:** Self-serve agency registration.
-
-| Task | File | What |
-|------|------|------|
-| Signup screen | `screens/agency_signup_screen.dart` | 3-step wizard |
-| Pending screen | `screens/agency_pending_screen.dart` | Waiting for approval |
-| AuthRepository updates | `authentication/data/auth_repository.dart` | `registerAgency()` method |
-| Firebase Storage | | Document upload integration |
-| Checkpoint | | New user registers as agency, sees pending screen. |
 
 ### Phase 7: Superadmin
 

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Application Under Review — SoleGoes</title>
+    <link rel="stylesheet" href="shared/design-system.css" />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <style>
+        /*
+         * SCREEN: AgencyPendingScreen
+         * FLUTTER: Full-screen route, no DashboardScaffold shell.
+         *          Listens to agencyStreamProvider. When agency.verificationStatus
+         *          changes to `approved`, router.go('/agency') is called automatically.
+         *          Uses a StreamBuilder or ref.listen in routing logic.
+         */
+
+        * { box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            background: var(--bg-deep);
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient glow blobs — FLUTTER: CustomPaint on Stack */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -160px; left: 50%;
+            transform: translateX(-50%);
+            width: 900px; height: 700px;
+            background: radial-gradient(ellipse, rgba(99,102,241,.10) 0%, transparent 65%);
+            pointer-events: none; z-index: 0;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -100px; right: -100px;
+            width: 500px; height: 500px;
+            background: radial-gradient(ellipse, rgba(139,92,246,.07) 0%, transparent 65%);
+            pointer-events: none; z-index: 0;
+        }
+
+        /* ── Minimal topbar: logo + logout only ── */
+        /* FLUTTER: AppBar(leading: logo, actions: [TextButton('Sign out')]) */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 40px;
+            border-bottom: 1px solid var(--border-subtle);
+            position: relative; z-index: 1;
+            flex-shrink: 0;
+        }
+
+        /* ── Centered content area ── */
+        .page-body {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 24px;
+            position: relative; z-index: 1;
+        }
+
+        .content-card {
+            width: 100%;
+            max-width: 560px;
+            text-align: center;
+            animation: fadeSlideUp var(--anim-slower) ease both;
+        }
+
+        /* ── Status icon illustration ── */
+        /* FLUTTER: Lottie animation of spinning review indicator, or animated Stack */
+        .status-illustration {
+            width: 120px; height: 120px;
+            margin: 0 auto 32px;
+            position: relative;
+        }
+
+        /* Outer ring — spinning dashes animation */
+        .status-ring-outer {
+            width: 120px; height: 120px;
+            border-radius: 50%;
+            border: 2px dashed rgba(99,102,241,.3);
+            position: absolute; top: 0; left: 0;
+            animation: spin-slow 12s linear infinite;
+        }
+        /* Inner ring — counter-spin */
+        .status-ring-inner {
+            width: 88px; height: 88px;
+            border-radius: 50%;
+            border: 2px dashed rgba(139,92,246,.2);
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            animation: spin-slow 8s linear infinite reverse;
+        }
+        /* Core icon circle */
+        .status-core {
+            width: 64px; height: 64px;
+            background: rgba(99,102,241,.12);
+            border: 1px solid rgba(99,102,241,.25);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--primary);
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        @keyframes spin-slow { to { transform: rotate(360deg); } }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(99,102,241,0); }
+            50%       { box-shadow: 0 0 24px 4px rgba(99,102,241,.25); }
+        }
+
+        /* ── Badge ── */
+        .review-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            background: rgba(250,204,21,.10);
+            border: 1px solid rgba(250,204,21,.2);
+            border-radius: var(--r-full);
+            font-size: 12px; font-weight: 700;
+            color: var(--accent-yellow);
+            letter-spacing: .5px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+        /* Blinking dot */
+        .blink-dot {
+            width: 7px; height: 7px;
+            background: var(--accent-yellow);
+            border-radius: 50%;
+            animation: blink 1.4s ease-in-out infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50%       { opacity: 0.2; }
+        }
+
+        /* ── Typography ── */
+        .page-title {
+            font-size: 30px; font-weight: 800;
+            line-height: 1.2; margin-bottom: 12px;
+        }
+        .page-sub {
+            font-size: 15px; color: var(--text-secondary);
+            line-height: 1.65; max-width: 440px;
+            margin: 0 auto 36px;
+        }
+
+        /* ── Timeline / what happens next ── */
+        /* FLUTTER: Column of TimelineTile widgets or custom Row+line */
+        .timeline {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--r-lg);
+            padding: 24px 28px;
+            text-align: left;
+            margin-bottom: 28px;
+        }
+        .timeline-title {
+            font-size: 12px; font-weight: 700;
+            letter-spacing: 1px; text-transform: uppercase;
+            color: var(--text-tertiary); margin-bottom: 20px;
+        }
+        .timeline-item {
+            display: flex; gap: 16px; align-items: flex-start;
+            position: relative;
+        }
+        .timeline-item:not(:last-child) { padding-bottom: 20px; }
+        /* Vertical connector line */
+        .timeline-item:not(:last-child) .tl-dot-wrap::after {
+            content: '';
+            position: absolute;
+            left: 13px; top: 28px;
+            width: 2px; height: calc(100% - 8px);
+            background: var(--border-subtle);
+        }
+        .tl-dot-wrap {
+            position: relative; flex-shrink: 0;
+        }
+        .tl-dot {
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; font-weight: 700;
+            flex-shrink: 0;
+        }
+        .tl-dot.done {
+            background: rgba(16,185,129,.15);
+            border: 1px solid rgba(16,185,129,.3);
+            color: var(--status-success);
+        }
+        .tl-dot.active {
+            background: rgba(250,204,21,.15);
+            border: 1px solid rgba(250,204,21,.3);
+            color: var(--accent-yellow);
+        }
+        .tl-dot.upcoming {
+            background: rgba(255,255,255,.04);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-tertiary);
+        }
+        .tl-body-title {
+            font-size: 14px; font-weight: 600;
+            margin-bottom: 3px;
+        }
+        .tl-body-sub {
+            font-size: 13px; color: var(--text-secondary); line-height: 1.5;
+        }
+
+        /* ── Support / contact row ── */
+        .support-row {
+            display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        /* ── Divider ── */
+        .divider {
+            border: none; border-top: 1px solid var(--border-subtle);
+            margin: 20px 0;
+        }
+
+        /* ── Submitted details pill row ── */
+        .details-row {
+            display: flex; gap: 8px; flex-wrap: wrap;
+            justify-content: center; margin-bottom: 32px;
+        }
+        .detail-pill {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 5px 14px;
+            background: rgba(255,255,255,.04);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--r-full);
+            font-size: 12px; color: var(--text-secondary);
+        }
+        .detail-pill i { color: var(--text-tertiary); }
+
+        /* ── Responsive ── */
+        @media (max-width: 600px) {
+            .topbar { padding: 16px 20px; }
+            .page-body { padding: 32px 20px; align-items: flex-start; }
+            .page-title { font-size: 24px; }
+            .timeline { padding: 20px 20px; }
+            .status-illustration { width: 100px; height: 100px; margin-bottom: 24px; }
+            .status-ring-outer { width: 100px; height: 100px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ── Minimal topbar: only logo + sign out ── -->
+<header class="topbar">
+    <div style="display:flex;align-items:center;gap:10px;">
+        <div class="logo-mark">S</div>
+        <span class="logo-text">SoleGoes</span>
+        <span class="logo-role-badge">Agency</span>
+    </div>
+    <!-- FLUTTER: TextButton → authRepository.signOut() → router.go('/login') -->
+    <button class="btn btn-ghost btn-sm" style="gap:6px;color:var(--text-secondary);" onclick="window.location.href='01_agency_signup.html'">
+        <i data-lucide="log-out" width="16" height="16"></i>
+        Sign out
+    </button>
+</header>
+
+<!-- ── Main centered content ── -->
+<main class="page-body">
+    <div class="content-card">
+
+        <!-- Spinning review illustration -->
+        <!-- FLUTTER: SizedBox(120,120) Stack([spinning ring, icon]) via AnimationController -->
+        <div class="status-illustration">
+            <div class="status-ring-outer"></div>
+            <div class="status-ring-inner"></div>
+            <div class="status-core">
+                <i data-lucide="clock" width="28" height="28"></i>
+            </div>
+        </div>
+
+        <!-- Status badge -->
+        <div class="review-badge">
+            <span class="blink-dot"></span>
+            Application Under Review
+        </div>
+
+        <h1 class="page-title">
+            You're in the queue,<br />
+            <span style="background:var(--primary-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Founding Partner.</span>
+        </h1>
+        <p class="page-sub">
+            Your application has been received. Our team personally reviews every Founding Partner
+            application to maintain quality. We'll reach out within <strong style="color:var(--text-primary);">2–3 business days.</strong>
+        </p>
+
+        <!-- Summary pills showing what was submitted -->
+        <!-- FLUTTER: Read from agencyProvider to show real submitted values -->
+        <div class="details-row">
+            <div class="detail-pill">
+                <i data-lucide="building-2" width="13" height="13"></i>
+                Mountain Wanderers Pvt Ltd
+            </div>
+            <div class="detail-pill">
+                <i data-lucide="file-badge" width="13" height="13"></i>
+                GST Submitted
+            </div>
+            <div class="detail-pill">
+                <i data-lucide="image" width="13" height="13"></i>
+                3 Portfolio Photos
+            </div>
+        </div>
+
+        <!-- What happens next timeline -->
+        <!-- FLUTTER: Column with custom TimelineStep widgets and animated connectors -->
+        <div class="timeline">
+            <p class="timeline-title">What happens next</p>
+
+            <!-- Step 1: Done (submitted) -->
+            <div class="timeline-item">
+                <div class="tl-dot-wrap">
+                    <div class="tl-dot done">
+                        <i data-lucide="check" width="14" height="14"></i>
+                    </div>
+                </div>
+                <div>
+                    <p class="tl-body-title">Application Submitted</p>
+                    <p class="tl-body-sub">Your profile, documents, and bank details have been securely received.</p>
+                </div>
+            </div>
+
+            <!-- Step 2: Active right now -->
+            <div class="timeline-item">
+                <div class="tl-dot-wrap">
+                    <div class="tl-dot active">
+                        <i data-lucide="search" width="13" height="13"></i>
+                    </div>
+                </div>
+                <div>
+                    <p class="tl-body-title" style="color:var(--accent-yellow);">Manual Review in Progress</p>
+                    <p class="tl-body-sub">Our team is verifying your GST certificate and portfolio. We personally vet every partner to maintain platform quality.</p>
+                </div>
+            </div>
+
+            <!-- Step 3: Upcoming -->
+            <div class="timeline-item">
+                <div class="tl-dot-wrap">
+                    <div class="tl-dot upcoming">3</div>
+                </div>
+                <div>
+                    <p class="tl-body-title" style="color:var(--text-secondary);">Founding Partner Badge Issued</p>
+                    <p class="tl-body-sub">Once approved, your dashboard unlocks instantly. You'll receive your permanent Verified Founding Partner badge and can start publishing trips.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact / support -->
+        <hr class="divider" />
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;">
+            Have documents ready or a question about your application?
+        </p>
+        <div class="support-row">
+            <a href="mailto:partners@solegoes.com" class="btn btn-secondary btn-sm" style="gap:6px;text-decoration:none;">
+                <i data-lucide="mail" width="15" height="15"></i>
+                Email Us
+            </a>
+            <a href="#" class="btn btn-secondary btn-sm" style="gap:6px;text-decoration:none;">
+                <i data-lucide="message-circle" width="15" height="15"></i>
+                WhatsApp
+            </a>
+            <!-- FLUTTER: Sign in with a different account flow -->
+            <button class="btn btn-ghost btn-sm" style="gap:6px;color:var(--text-tertiary);" onclick="window.location.href='01_agency_signup.html'">
+                <i data-lucide="arrow-left" width="15" height="15"></i>
+                Different account?
+            </button>
+        </div>
+
+    </div>
+</main>
+
+<script>
+    lucide.createIcons();
+
+    /*
+     * FLUTTER: In the real implementation, this page listens to a Firestore
+     * stream via `ref.listen(agencyStreamProvider, ...)`.
+     * When agency.verificationStatus changes to AgencyStatus.approved,
+     * the router automatically navigates to '/agency' (dashboard).
+     *
+     * Simulated here with a short delay for demo purposes only.
+     */
+    // Demo: uncomment to simulate auto-redirect after approval
+    setTimeout(() => { window.location.href = '03_agency_dashboard.html'; }, 5000);
+</script>
+</body>
+</html>

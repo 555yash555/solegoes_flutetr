@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Trips — SoleGoes Agency</title>
+    <link rel="stylesheet" href="shared/design-system.css" />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <style>
+        /*
+         * SCREEN: AgencyTripsScreen (inside DashboardScaffold)
+         */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            background: var(--bg-deep);
+            overflow-x: hidden;
+        }
+
+        /* ══════════════════════════════════
+           SIDEBAR (Reused from Dashboard)
+           ══════════════════════════════════ */
+        .sidebar {
+            width: 240px; flex-shrink: 0; background: var(--bg-surface);
+            border-right: 1px solid var(--border-subtle); display: flex;
+            flex-direction: column; position: sticky; top: 0; height: 100vh; z-index: 20;
+        }
+        .sidebar-logo { padding: 24px 20px 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border-subtle); flex-shrink: 0; }
+        .sidebar-logo .logo-text { font-size: 18px; font-weight: 800; }
+        .sidebar-nav { flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 2px; }
+        .nav-section-label { font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-tertiary); padding: 10px 8px 6px; }
+        .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: var(--r-md); font-size: 13px; font-weight: 500; color: var(--text-secondary); cursor: pointer; text-decoration: none; }
+        .nav-item:hover:not(.active) { background: rgba(255,255,255,.05); color: var(--text-primary); }
+        .nav-item.active { background: rgba(99,102,241,.14); color: var(--primary-light); font-weight: 600; }
+        .nav-item .nav-badge { margin-left: auto; background: var(--primary); color: #fff; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: var(--r-full); min-width: 18px; text-align: center; }
+
+        /* ══════════════════════════════════
+           MAIN AREA
+           ══════════════════════════════════ */
+        .main-area { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+
+        /* Top bar */
+        .topbar {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 16px 32px; border-bottom: 1px solid var(--border-subtle);
+            background: rgba(9,9,11,.85); backdrop-filter: blur(12px);
+            position: sticky; top: 0; z-index: 10; flex-shrink: 0;
+        }
+        .topbar-right { display: flex; align-items: center; gap: 10px; }
+        .icon-btn {
+            width: 36px; height: 36px; border-radius: var(--r-md);
+            background: rgba(255,255,255,.05); border: 1px solid var(--border-subtle);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; color: var(--text-secondary);
+        }
+
+        .content { padding: 28px 32px 48px; max-width: 1200px; margin: 0 auto; width: 100%; }
+
+        /* Header */
+        .page-heading {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 24px; gap: 16px; flex-wrap: wrap;
+        }
+        .page-title { font-size: 22px; font-weight: 800; }
+
+        /* Tab Bar */
+        /* FLUTTER: TabBar inside AppBar bottom or custom Row */
+        .filter-tabs {
+            display: flex; gap: 8px; margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-subtle);
+            padding-bottom: 16px;
+            overflow-x: auto;
+        }
+        .tab-btn {
+            padding: 8px 16px; border-radius: var(--r-full);
+            font-size: 13px; font-weight: 600; cursor: pointer;
+            border: 1px solid transparent; background: transparent; color: var(--text-secondary);
+            white-space: nowrap; transition: all 150ms ease;
+        }
+        .tab-btn:hover { background: rgba(255,255,255,.05); color: var(--text-primary); }
+        .tab-btn.active {
+            background: rgba(255,255,255,.08); color: var(--text-primary);
+            border-color: var(--border-glass);
+        }
+
+        /* ══ DATA TABLE (Desktop) ══ */
+        /* FLUTTER: DataTable widget wrapped in SingleChildScrollView */
+        .table-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--r-lg);
+            overflow-x: auto;
+        }
+        .data-table {
+            width: 100%; min-width: 800px; border-collapse: collapse; text-align: left;
+        }
+        .data-table th, .data-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .data-table th {
+            font-size: 11px; font-weight: 700; color: var(--text-tertiary);
+            text-transform: uppercase; letter-spacing: 0.5px;
+            background: rgba(255,255,255,.02);
+        }
+        .data-table tbody tr { transition: background 150ms ease; cursor: pointer; }
+        .data-table tbody tr:hover { background: rgba(255,255,255,.03); }
+        .data-table tbody tr:last-child td { border-bottom: none; }
+
+        /* Table cells */
+        .cell-trip { display: flex; align-items: center; gap: 12px; }
+        .cell-img { width: 48px; height: 48px; border-radius: var(--r-sm); object-fit: cover; background: var(--border-subtle); }
+        .cell-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+        .cell-duration { font-size: 12px; color: var(--text-tertiary); display: flex; align-items: center; gap: 4px; }
+        
+        .cell-price { font-weight: 700; color: var(--primary-light); }
+        .cell-stats { font-size: 13px; }
+        .cell-date { font-size: 13px; color: var(--text-secondary); }
+
+        /* Badges */
+        .status-badge {
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 4px 10px; border-radius: var(--r-full);
+            font-size: 11px; font-weight: 700; white-space: nowrap;
+        }
+        .status-live     { background: rgba(16,185,129,.12);  border: 1px solid rgba(16,185,129,.2);  color: var(--status-success); }
+        .status-draft    { background: rgba(255,255,255,.05);  border: 1px solid var(--border-subtle); color: var(--text-tertiary); }
+        .status-pending  { background: rgba(250,204,21,.10);   border: 1px solid rgba(250,204,21,.2);  color: var(--accent-yellow); }
+        .status-full     { background: rgba(239,68,68,.10);    border: 1px solid rgba(239,68,68,.2);   color: var(--accent-rose); }
+        .status-completed{ background: rgba(20,184,166,.10);   border: 1px solid rgba(20,184,166,.2);  color: var(--accent-teal); }
+
+        /* Actions */
+        .actions-flex { display: flex; gap: 8px; }
+        .action-btn {
+            width: 32px; height: 32px; border-radius: var(--r-sm);
+            background: transparent; border: 1px solid transparent;
+            display: inline-flex; align-items: center; justify-content: center;
+            color: var(--text-secondary); cursor: pointer; transition: all 150ms ease;
+        }
+        .action-btn:hover { background: rgba(255,255,255,.08); border-color: var(--border-subtle); color: var(--text-primary); }
+
+        /* ══ MOBILE LIST VIEW ══ */
+        /* FLUTTER: List of Cards instead of DataTable on smaller screens */
+        .mobile-list { display: none; flex-direction: column; gap: 12px; }
+        .mobile-trip-card {
+            background: var(--bg-surface); padding: 12px;
+            border: 1px solid var(--border-subtle); border-radius: var(--r-lg);
+        }
+        .mtc-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+        .mtc-title { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+        .mtc-meta { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle); margin-top: 8px;}
+        .mtc-actions { display: flex; gap: 6px; justify-content: flex-end; padding-top: 8px; }
+        
+        /* Responsive */
+        .mobile-menu-btn { display: none; }
+        .sidebar-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(2px); z-index: 15; opacity: 0; pointer-events: none; transition: opacity 250ms ease; }
+        .sidebar-overlay.active { opacity: 1; pointer-events: auto; }
+
+        @media (max-width: 900px) {
+            .sidebar { position: fixed; transform: translateX(-100%); transition: transform 250ms; box-shadow: 4px 0 24px rgba(0,0,0,0.5); }
+            .sidebar.open { transform: translateX(0); }
+            .mobile-menu-btn { display: flex; }
+            .topbar { padding: 14px 20px; }
+            .content { padding: 20px 20px 48px; }
+        }
+
+        @media (max-width: 768px) {
+            .table-card { display: none; } /* Hide table on mobile */
+            .mobile-list { display: flex; } /* Show cards instead */
+        }
+    </style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+        <div class="logo-mark">S</div>
+        <span class="logo-text">SoleGoes</span>
+    </div>
+    <nav class="sidebar-nav">
+        <span class="nav-section-label">Overview</span>
+        <a class="nav-item" href="03_agency_dashboard.html"><i data-lucide="layout-dashboard" width="16" height="16"></i>Dashboard</a>
+        <span class="nav-section-label" style="margin-top:8px;">Manage</span>
+        <a class="nav-item active" href="04_agency_trips.html"><i data-lucide="map" width="16" height="16"></i>My Trips<span class="nav-badge">5</span></a>
+        <a class="nav-item" href="06_agency_bookings.html"><i data-lucide="calendar-check" width="16" height="16"></i>Bookings</a>
+    </nav>
+</aside>
+
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<div class="main-area">
+    <header class="topbar">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <button class="icon-btn mobile-menu-btn" style="border:none;background:none;" onclick="toggleSidebar()">
+                <i data-lucide="menu" width="18" height="18"></i>
+            </button>
+            <span style="font-weight:600;">My Trips</span>
+        </div>
+        <div class="topbar-right">
+            <div class="icon-btn"><i data-lucide="bell" width="17" height="17"></i></div>
+        </div>
+    </header>
+
+    <div class="content">
+        <div class="page-heading">
+            <h1 class="page-title">Manage Trips</h1>
+            <button class="btn btn-primary" style="gap:8px;" onclick="window.location.href='05_agency_add_trip.html'">
+                <i data-lucide="plus" width="17" height="17"></i>
+                Add Trip
+            </button>
+        </div>
+
+        <div class="filter-tabs">
+            <button class="tab-btn active">All (5)</button>
+            <button class="tab-btn">Live (2)</button>
+            <button class="tab-btn">Pending (1)</button>
+            <button class="tab-btn">Drafts (1)</button>
+            <button class="tab-btn">Completed (1)</button>
+        </div>
+
+        <!-- Desktop Data Table -->
+        <div class="table-card">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Trip Details</th>
+                        <th>Status</th>
+                        <th>Price</th>
+                        <th>Bookings</th>
+                        <th>Dates</th>
+                        <th style="width:100px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="cell-trip">
+                                <img class="cell-img" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=100&q=80" alt="Spiti" />
+                                <div>
+                                    <div class="cell-title">Spiti Valley Winter Escape</div>
+                                    <div class="cell-duration"><i data-lucide="clock" width="12" height="12"></i> 7 Days / 6 Nights</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="status-badge status-live">● Live</span></td>
+                        <td class="cell-price">₹12,500</td>
+                        <td>
+                            <div class="cell-stats">8 / 12</div>
+                            <div style="font-size:11px;color:var(--text-tertiary);">Filling fast</div>
+                        </td>
+                        <td>
+                            <div class="cell-date">Mar 15, 2026</div>
+                            <div style="font-size:11px;color:var(--text-tertiary);">to Mar 22</div>
+                        </td>
+                        <td>
+                            <div class="actions-flex">
+                                <button class="action-btn" title="Edit Trip" onclick="window.location.href='05_agency_add_trip.html'"><i data-lucide="pencil" width="15" height="15"></i></button>
+                                <button class="action-btn" title="View Details"><i data-lucide="more-horizontal" width="15" height="15"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="cell-trip">
+                                <img class="cell-img" src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=100&q=80" alt="Chopta" />
+                                <div>
+                                    <div class="cell-title">Chopta Chandrashila Snowtrek</div>
+                                    <div class="cell-duration"><i data-lucide="clock" width="12" height="12"></i> 4 Days / 3 Nights</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="status-badge status-full">● Full</span></td>
+                        <td class="cell-price">₹6,499</td>
+                        <td><div class="cell-stats">10 / 10</div></td>
+                        <td>
+                            <div class="cell-date">Mar 28, 2026</div>
+                            <div style="font-size:11px;color:var(--text-tertiary);">to Mar 31</div>
+                        </td>
+                        <td>
+                            <div class="actions-flex">
+                                <button class="action-btn" title="Edit Trip" onclick="window.location.href='05_agency_add_trip.html'"><i data-lucide="pencil" width="15" height="15"></i></button>
+                                <button class="action-btn" title="View Details"><i data-lucide="more-horizontal" width="15" height="15"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="cell-trip">
+                                <img class="cell-img" src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=100&q=80" alt="Ladakh" />
+                                <div>
+                                    <div class="cell-title">Ladakh Summer Circuit</div>
+                                    <div class="cell-duration"><i data-lucide="clock" width="12" height="12"></i> 10 Days / 9 Nights</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="status-badge status-pending">In Review</span></td>
+                        <td class="cell-price">₹22,000</td>
+                        <td><div class="cell-stats" style="color:var(--text-tertiary);">N/A</div></td>
+                        <td>
+                            <div class="cell-date">Jun 5, 2026</div>
+                            <div style="font-size:11px;color:var(--text-tertiary);">to Jun 14</div>
+                        </td>
+                        <td>
+                            <div class="actions-flex">
+                                <button class="action-btn" title="Edit Trip" onclick="window.location.href='05_agency_add_trip.html'"><i data-lucide="pencil" width="15" height="15"></i></button>
+                                <button class="action-btn" title="View Details"><i data-lucide="more-horizontal" width="15" height="15"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="cell-trip">
+                                <img class="cell-img" src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=100&q=80" alt="Coorg" />
+                                <div>
+                                    <div class="cell-title">Coorg Coffee Trail</div>
+                                    <div class="cell-duration"><i data-lucide="clock" width="12" height="12"></i> 3 Days / 2 Nights</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="status-badge status-draft">Draft</span></td>
+                        <td class="cell-price">₹9,200</td>
+                        <td><div class="cell-stats" style="color:var(--text-tertiary);">0 / 14</div></td>
+                        <td>
+                            <div class="cell-date">May 10, 2026</div>
+                            <div style="font-size:11px;color:var(--text-tertiary);">to May 12</div>
+                        </td>
+                        <td>
+                            <div class="actions-flex">
+                                <button class="action-btn" title="Edit Trip" onclick="window.location.href='05_agency_add_trip.html'"><i data-lucide="pencil" width="15" height="15"></i></button>
+                                <button class="action-btn" title="Delete Draft"><i data-lucide="trash-2" width="15" height="15"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Mobile Card List -->
+        <div class="mobile-list">
+            <!-- Card 1 -->
+            <div class="mobile-trip-card">
+                <div class="mtc-header">
+                    <div style="display:flex;gap:12px;align-items:flex-start;">
+                        <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=100&q=80" alt="Spiti" style="width:48px;height:48px;border-radius:var(--r-sm);object-fit:cover;background:var(--border-subtle);" />
+                        <div>
+                            <div class="mtc-title">Spiti Valley Winter Escape</div>
+                            <div style="font-size:12px;color:var(--text-tertiary);"><i data-lucide="calendar" width="12" height="12" style="margin-right:4px;vertical-align:bottom;"></i>Mar 15 – 22</div>
+                        </div>
+                    </div>
+                    <span class="status-badge status-live">● Live</span>
+                </div>
+                <div class="mtc-meta">
+                    <div>
+                        <div style="font-size:11px;color:var(--text-tertiary);">Bookings</div>
+                        <div style="font-size:13px;font-weight:600;">8 / 12 seats</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="font-size:11px;color:var(--text-tertiary);">Price</div>
+                        <div style="font-size:15px;font-weight:700;color:var(--primary-light);">₹12,500</div>
+                    </div>
+                </div>
+                <div class="mtc-actions">
+                    <button class="action-btn" title="Edit Trip" onclick="window.location.href='05_agency_add_trip.html'"><i data-lucide="pencil" width="14" height="14"></i></button>
+                    <button class="action-btn" title="View Details"><i data-lucide="more-horizontal" width="14" height="14"></i></button>
+                </div>
+            </div>
+            
+            <!-- Card 2 -->
+            <div class="mobile-trip-card">
+                <div class="mtc-header">
+                    <div style="display:flex;gap:12px;align-items:flex-start;">
+                        <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=100&q=80" alt="Chopta" style="width:48px;height:48px;border-radius:var(--r-sm);object-fit:cover;background:var(--border-subtle);" />
+                        <div>
+                            <div class="mtc-title">Chopta Chandrashila Snowtrek</div>
+                            <div style="font-size:12px;color:var(--text-tertiary);"><i data-lucide="calendar" width="12" height="12" style="margin-right:4px;vertical-align:bottom;"></i>Mar 28 – 31</div>
+                        </div>
+                    </div>
+                    <span class="status-badge status-full">● Full</span>
+                </div>
+                <div class="mtc-meta">
+                    <div>
+                        <div style="font-size:11px;color:var(--text-tertiary);">Bookings</div>
+                        <div style="font-size:13px;font-weight:600;">10 / 10 seats</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="font-size:11px;color:var(--text-tertiary);">Price</div>
+                        <div style="font-size:15px;font-weight:700;color:var(--primary-light);">₹6,499</div>
+                    </div>
+                </div>
+                <div class="mtc-actions">
+                    <button class="action-btn" title="Edit Trip" onclick="window.location.href='05_agency_add_trip.html'"><i data-lucide="pencil" width="14" height="14"></i></button>
+                    <button class="action-btn" title="View Details"><i data-lucide="more-horizontal" width="14" height="14"></i></button>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="mobile-trip-card">
+                <div class="mtc-header">
+                    <div style="display:flex;gap:12px;align-items:flex-start;">
+                        <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=100&q=80" alt="Ladakh" style="width:48px;height:48px;border-radius:var(--r-sm);object-fit:cover;background:var(--border-subtle);" />
+                        <div>
+                            <div class="mtc-title">Ladakh Summer Circuit</div>
+                            <div style="font-size:12px;color:var(--text-tertiary);"><i data-lucide="calendar" width="12" height="12" style="margin-right:4px;vertical-align:bottom;"></i>Jun 5 – 14</div>
+                        </div>
+                    </div>
+                    <span class="status-badge status-pending">In Review</span>
+                </div>
+                <div class="mtc-meta">
+                    <div>
+                        <div style="font-size:11px;color:var(--text-tertiary);">Bookings</div>
+                        <div style="font-size:13px;font-weight:600;color:var(--text-tertiary);">N/A</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="font-size:11px;color:var(--text-tertiary);">Price</div>
+                        <div style="font-size:15px;font-weight:700;color:var(--primary-light);">₹22,000</div>
+                    </div>
+                </div>
+                <div class="mtc-actions">
+                    <button class="action-btn" title="Edit Trip" onclick="window.location.href='05_agency_add_trip.html'"><i data-lucide="pencil" width="14" height="14"></i></button>
+                    <button class="action-btn" title="View Details"><i data-lucide="more-horizontal" width="14" height="14"></i></button>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="mobile-trip-card">
+                <div class="mtc-header">
+                    <div style="display:flex;gap:12px;align-items:flex-start;">
+                        <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=100&q=80" alt="Coorg" style="width:48px;height:48px;border-radius:var(--r-sm);object-fit:cover;background:var(--border-subtle);" />
+                        <div>
+                            <div class="mtc-title">Coorg Coffee Trail</div>
+                            <div style="font-size:12px;color:var(--text-tertiary);"><i data-lucide="calendar" width="12" height="12" style="margin-right:4px;vertical-align:bottom;"></i>May 10 – 12</div>
+                        </div>
+                    </div>
+                    <span class="status-badge status-draft">Draft</span>
+                </div>
+                <div class="mtc-meta">
+                    <div>
+                        <div style="font-size:11px;color:var(--text-tertiary);">Bookings</div>
+                        <div style="font-size:13px;font-weight:600;color:var(--text-tertiary);">0 / 14</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="font-size:11px;color:var(--text-tertiary);">Price</div>
+                        <div style="font-size:15px;font-weight:700;color:var(--primary-light);">₹9,200</div>
+                    </div>
+                </div>
+                <div class="mtc-actions">
+                    <button class="action-btn" title="Edit Trip" onclick="window.location.href='05_agency_add_trip.html'"><i data-lucide="pencil" width="14" height="14"></i></button>
+                    <button class="action-btn" title="Delete Draft"><i data-lucide="trash-2" width="14" height="14"></i></button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    lucide.createIcons();
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('open');
+        document.getElementById('sidebar-overlay').classList.toggle('active');
+    }
+</script>
+</body>
+</html>

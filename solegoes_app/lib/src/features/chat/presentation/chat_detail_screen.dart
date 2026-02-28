@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import '../../../common_widgets/app_snackbar.dart';
 import '../../../theme/app_theme.dart';
 import '../../authentication/data/auth_repository.dart';
 import '../../trips/data/trip_repository.dart';
 import '../data/chat_providers.dart';
 import '../domain/chat_message.dart' as domain;
-import '../domain/trip_chat.dart';
 
 /// Mock message data model
 class ChatMessage {
@@ -43,16 +43,14 @@ class ChatDetailScreen extends ConsumerStatefulWidget {
   // Constructor for direct chat access with chatId
   const ChatDetailScreen({
     super.key,
-    required String chatId,
-  })  : chatId = chatId,
-        tripId = null;
+    required this.chatId,
+  }) : tripId = null;
 
   // Constructor for instant navigation with tripId
   const ChatDetailScreen.fromTripId({
     super.key,
-    required String tripId,
-  })  : tripId = tripId,
-        chatId = null;
+    required this.tripId,
+  }) : chatId = null;
 
   @override
   ConsumerState<ChatDetailScreen> createState() => _ChatDetailScreenState();
@@ -95,7 +93,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
       await repository.sendMessage(
         chatId: chatId,
         senderId: authUser.uid,
-        senderName: authUser.displayName ?? 'User',
+        senderName: authUser.displayName,
         senderAvatar: authUser.photoUrl,
         content: text,
       );
@@ -115,19 +113,14 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
     } catch (e) {
       // Show error message 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to send message: $e')),
+        AppSnackbar.showError(
+          context,
+          'Failed to send message',
         );
       }
     }
   }
 
-  String _formatTime(DateTime date) {
-    final hour = date.hour > 12 ? date.hour - 12 : (date.hour == 0 ? 12 : date.hour);
-    final amPm = date.hour >= 12 ? 'PM' : 'AM';
-    final minute = date.minute.toString().padLeft(2, '0');
-    return '$hour:$minute $amPm';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -172,12 +165,12 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
               const SizedBox(height: 16),
               Text(
                 'Error loading chat',
-                style: TextStyle(color: AppColors.textMuted),
+                style: AppTextStyles.body.copyWith(color: AppColors.textMuted),
               ),
               const SizedBox(height: 8),
               Text(
-                error.toString(),
-                style: TextStyle(color: AppColors.textTertiary, fontSize: 12),
+                'Unable to load chat',
+                style: AppTextStyles.caption.copyWith(color: AppColors.textTertiary),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -222,7 +215,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
           title: const Text('Chat'),
         ),
         body: Center(
-          child: Text('Error loading trip: $error'),
+          child: Text('Unable to load trip', style: AppTextStyles.body.copyWith(color: AppColors.textMuted)),
         ),
       ),
       data: (trip) {
@@ -281,18 +274,16 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
         tripStartDate: trip.startDate ?? DateTime.now(),
         tripEndDate: trip.endDate ?? DateTime.now().add(const Duration(days: 7)),
         userId: user.uid,
-        userName: user.displayName ?? 'User',
+        userName: user.displayName,
       );
       
       // Chat created! Provider will auto-refresh and show the chat
       ref.invalidate(tripChatProvider(tripId));
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error creating chat: $e'),
-            backgroundColor: AppColors.error,
-          ),
+        AppSnackbar.showError(
+          context,
+          'Failed to create chat',
         );
       }
     }
@@ -321,7 +312,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                     const SizedBox(height: 16),
                     Text(
                       'Error loading messages',
-                      style: TextStyle(color: AppColors.textMuted),
+                      style: AppTextStyles.body.copyWith(color: AppColors.textMuted),
                     ),
                   ],
                 ),
@@ -459,15 +450,11 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [Color(0xFF8B5CF6), Color(0xFF6366F1)],
-                  ),
+                  gradient: AppColors.primaryGradient,
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF8B5CF6).withValues(alpha: 0.2),
+                      color: AppColors.violet.withValues(alpha: 0.2),
                       blurRadius: 10,
                     ),
                   ],
@@ -486,10 +473,8 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                   children: [
                     Text(
                       chat.tripTitle,
-                      style: const TextStyle(
-                        fontSize: 14,
+                      style: AppTextStyles.label.copyWith(
                         fontWeight: FontWeight.w700,
-                        color: AppColors.textPrimary,
                       ),
                     ),
                     const SizedBox(height: 2),
@@ -499,15 +484,14 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                           width: 6,
                           height: 6,
                           decoration: const BoxDecoration(
-                            color: Color(0xFF22C55E),
+                            color: AppColors.statusConfirmed,
                             shape: BoxShape.circle,
                           ),
                         ),
                         const SizedBox(width: 6),
                         Text(
                           '${chat.participantCount} members',
-                          style: TextStyle(
-                            fontSize: 12,
+                          style: AppTextStyles.caption.copyWith(
                             color: AppColors.textMuted,
                           ),
                         ),
@@ -619,7 +603,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
             const SizedBox(height: 8),
             Text(
               'Start the conversation!',
-              style: TextStyle(color: AppColors.textMuted),
+              style: AppTextStyles.body.copyWith(color: AppColors.textMuted),
             ),
           ],
         ),
@@ -642,9 +626,6 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
   }
 
   Widget _buildMessageFromDomain(domain.ChatMessage message, bool isMe) {
-    // Format time
-    final time = _formatTime(message.timestamp);
-
     if (isMe) {
       return Padding(
         padding: const EdgeInsets.only(bottom: 16),
@@ -675,9 +656,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                 ),
                 child: Text(
                   message.content,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    color: AppColors.textPrimary,
+                  style: AppTextStyles.body.copyWith(
                     height: 1.4,
                   ),
                 ),
@@ -706,10 +685,8 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
               child: Center(
                 child: Text(
                   message.senderName.isNotEmpty ? message.senderName[0].toUpperCase() : 'U',
-                  style: const TextStyle(
-                    color: AppColors.textPrimary,
+                  style: AppTextStyles.caption.copyWith(
                     fontWeight: FontWeight.w700,
-                    fontSize: 12,
                   ),
                 ),
               ),
@@ -725,8 +702,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                     padding: const EdgeInsets.only(left: 4, bottom: 4),
                     child: Text(
                       message.senderName,
-                      style: TextStyle(
-                        fontSize: 10,
+                      style: AppTextStyles.overline.copyWith(
                         fontWeight: FontWeight.w700,
                         color: AppColors.primary,
                       ),
@@ -750,9 +726,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                     ),
                     child: Text(
                       message.content,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        color: AppColors.textPrimary,
+                      style: AppTextStyles.body.copyWith(
                         height: 1.4,
                       ),
                     ),
@@ -778,9 +752,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
         ),
         child: Text(
           date,
-          style: TextStyle(
-            fontSize: 10,
-            fontWeight: FontWeight.w500,
+          style: AppTextStyles.overline.copyWith(
             color: AppColors.textHint,
           ),
         ),
@@ -849,15 +821,11 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                       Expanded(
                         child: TextField(
                           controller: _messageController,
-                          style: const TextStyle(
-                            fontSize: 15,
-                            color: AppColors.textPrimary,
-                          ),
+                          style: AppTextStyles.body,
                           maxLines: null,
                           decoration: InputDecoration(
                             hintText: 'Send a message...',
-                            hintStyle: TextStyle(
-                              fontSize: 15,
+                            hintStyle: AppTextStyles.body.copyWith(
                               color: AppColors.textHint,
                             ),
                             border: InputBorder.none,

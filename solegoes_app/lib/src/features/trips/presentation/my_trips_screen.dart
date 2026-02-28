@@ -191,14 +191,19 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
         return ListView.builder(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
           itemCount: upcomingBookings.length,
-          itemBuilder: (context, index) =>
-              BookingCard(booking: upcomingBookings[index]),
+          itemBuilder: (context, index) => Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: BookingCard(booking: upcomingBookings[index]),
+          ),
         );
       },
       loading: () => ListView.builder(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
         itemCount: 3,
-        itemBuilder: (context, index) => const TripCardSkeleton(),
+        itemBuilder: (context, index) => const Padding(
+          padding: EdgeInsets.only(bottom: 12),
+          child: TripCardSkeleton(),
+        ),
       ),
       error: (error, _) => _buildErrorState(error.toString()),
     );
@@ -227,13 +232,19 @@ class _MyTripsScreenState extends ConsumerState<MyTripsScreen>
         return ListView.builder(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
           itemCount: pastBookings.length,
-          itemBuilder: (context, index) => BookingCard(booking: pastBookings[index]),
+          itemBuilder: (context, index) => Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: BookingCard(booking: pastBookings[index]),
+          ),
         );
       },
       loading: () => ListView.builder(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
         itemCount: 3,
-        itemBuilder: (context, index) => const TripCardSkeleton(),
+        itemBuilder: (context, index) => const Padding(
+          padding: EdgeInsets.only(bottom: 12),
+          child: TripCardSkeleton(),
+        ),
       ),
       error: (error, _) => _buildErrorState(error.toString()),
     );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import '../../../common_widgets/app_shimmer.dart';
 import '../../../theme/app_theme.dart';
 import '../../authentication/data/auth_repository.dart';
 import '../data/chat_providers.dart';
@@ -39,40 +40,6 @@ class ChatConversation {
 class ChatListScreen extends ConsumerWidget {
   const ChatListScreen({super.key});
 
-  // Mock data - In real app, this would come from Firestore
-  static const List<ChatConversation> _mockChats = [
-    ChatConversation(
-      id: 'bali_squad',
-      name: 'Bali Squad 🌴',
-      lastMessage: 'Sarah: Anyone up for surfing tomorrow?',
-      lastMessageTime: '2m ago',
-      unreadCount: 3,
-      isGroup: true,
-      isOnline: true,
-      gradientStart: '0xFF8B5CF6',
-      gradientEnd: '0xFF6366F1',
-    ),
-    ChatConversation(
-      id: 'alex_chen',
-      name: 'Alex Chen',
-      avatarUrl: 'https://i.pravatar.cc/150?img=12',
-      lastMessage: 'Hey! Are you joining the Ladakh trip?',
-      lastMessageTime: '1h ago',
-      unreadCount: 0,
-      isGroup: false,
-      isOnline: false,
-    ),
-    ChatConversation(
-      id: 'priya_patel',
-      name: 'Priya Patel',
-      avatarUrl: 'https://i.pravatar.cc/150?img=5',
-      lastMessage: 'Thanks for the recommendation!',
-      lastMessageTime: 'Yesterday',
-      unreadCount: 0,
-      isGroup: false,
-      isOnline: false,
-    ),
-  ];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -104,10 +71,8 @@ class ChatListScreen extends ConsumerWidget {
         children: [
           Text(
             'Messages',
-            style: TextStyle(
-              fontSize: 18,
+            style: AppTextStyles.h4.copyWith(
               fontWeight: FontWeight.w700,
-              color: AppColors.textPrimary,
             ),
           ),
           GestureDetector(
@@ -154,8 +119,7 @@ class ChatListScreen extends ConsumerWidget {
             const SizedBox(width: 12),
             Text(
               'Search messages...',
-              style: TextStyle(
-                fontSize: 15,
+              style: AppTextStyles.body.copyWith(
                 color: AppColors.textHint,
               ),
             ),
@@ -178,7 +142,7 @@ class ChatListScreen extends ConsumerWidget {
             const SizedBox(height: 16),
             Text(
               'Please sign in to view your chats',
-              style: TextStyle(color: AppColors.textMuted),
+              style: AppTextStyles.body.copyWith(color: AppColors.textMuted),
             ),
           ],
         ),
@@ -189,8 +153,37 @@ class ChatListScreen extends ConsumerWidget {
     final chatsAsync = ref.watch(userChatsProvider(authUser.uid));
 
     return chatsAsync.when(
-      loading: () => const Center(
-        child: CircularProgressIndicator(color: AppColors.primary),
+      loading: () => Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: List.generate(5, (index) => Padding(
+            padding: const EdgeInsets.only(bottom: 16),
+            child: Row(
+              children: [
+                AppShimmer.circle(size: 48),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AppShimmer(
+                        width: double.infinity,
+                        height: 16,
+                        borderRadius: 4,
+                      ),
+                      const SizedBox(height: 8),
+                      AppShimmer(
+                        width: 200,
+                        height: 14,
+                        borderRadius: 4,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          )),
+        ),
       ),
       error: (error, stack) => Center(
         child: Column(
@@ -200,12 +193,12 @@ class ChatListScreen extends ConsumerWidget {
             const SizedBox(height: 16),
             Text(
               'Error loading chats',
-              style: TextStyle(color: AppColors.textMuted),
+              style: AppTextStyles.body.copyWith(color: AppColors.textMuted),
             ),
             const SizedBox(height: 8),
             Text(
-              error.toString(),
-              style: TextStyle(color: AppColors.textHint, fontSize: 12),
+              'Unable to load chats',
+              style: AppTextStyles.caption.copyWith(color: AppColors.textHint),
               textAlign: TextAlign.center,
             ),
           ],
@@ -226,7 +219,7 @@ class ChatListScreen extends ConsumerWidget {
                 const SizedBox(height: 8),
                 Text(
                   'Book a trip to join trip group chats!',
-                  style: TextStyle(color: AppColors.textMuted),
+                  style: AppTextStyles.body.copyWith(color: AppColors.textMuted),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -282,20 +275,14 @@ class ChatListScreen extends ConsumerWidget {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Color(0xFF8B5CF6), Color(0xFF6366F1)],
-                ),
+                gradient: AppColors.primaryGradient,
                 shape: BoxShape.circle,
               ),
               child: Center(
                 child: Text(
                   chat.tripTitle.isNotEmpty ? chat.tripTitle[0].toUpperCase() : 'T',
-                  style: const TextStyle(
-                    fontSize: 18,
+                  style: AppTextStyles.h4.copyWith(
                     fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimary,
                   ),
                 ),
               ),
@@ -319,8 +306,7 @@ class ChatListScreen extends ConsumerWidget {
                       if (timeDisplay.isNotEmpty)
                         Text(
                           timeDisplay,
-                          style: TextStyle(
-                            fontSize: 12,
+                          style: AppTextStyles.caption.copyWith(
                             color: AppColors.textHint,
                           ),
                         ),
@@ -329,8 +315,7 @@ class ChatListScreen extends ConsumerWidget {
                   const SizedBox(height: 4),
                   Text(
                     chat.lastMessage ?? 'No messages yet',
-                    style: TextStyle(
-                      fontSize: 14,
+                    style: AppTextStyles.bodyMedium.copyWith(
                       color: AppColors.textMuted,
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -339,8 +324,7 @@ class ChatListScreen extends ConsumerWidget {
                   const SizedBox(height: 2),
                   Text(
                     '${chat.participantCount} participants • ${chat.tripLocation}',
-                    style: TextStyle(
-                      fontSize: 12,
+                    style: AppTextStyles.caption.copyWith(
                       color: AppColors.textHint,
                     ),
                   ),
@@ -348,173 +332,6 @@ class ChatListScreen extends ConsumerWidget {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildChatItem(BuildContext context, ChatConversation chat) {
-    return GestureDetector(
-      onTap: () => context.push('/chat/${chat.id}'),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 8),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: AppColors.surfaceOverlay,
-          borderRadius: BorderRadius.circular(AppRadius.md),
-          border: Border.all(color: AppColors.borderSubtle),
-        ),
-        child: Row(
-          children: [
-            // Avatar
-            _buildAvatar(chat),
-            const SizedBox(width: 16),
-            // Content
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          chat.name,
-                          style: AppTextStyles.h5,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      Text(
-                        chat.lastMessageTime,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: AppColors.textHint,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    chat.lastMessage,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: AppColors.textMuted,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
-                ],
-              ),
-            ),
-            // Unread badge
-            if (chat.unreadCount > 0) ...[
-              const SizedBox(width: 12),
-              Container(
-                width: 20,
-                height: 20,
-                decoration: const BoxDecoration(
-                  color: AppColors.primary,
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: Text(
-                    chat.unreadCount.toString(),
-                    style: const TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildAvatar(ChatConversation chat) {
-    return Stack(
-      children: [
-        if (chat.isGroup)
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Color(int.parse(chat.gradientStart ?? '0xFF8B5CF6')),
-                  Color(int.parse(chat.gradientEnd ?? '0xFF6366F1')),
-                ],
-              ),
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Text(
-                chat.name.isNotEmpty ? chat.name[0].toUpperCase() : 'G',
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-            ),
-          )
-        else
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: AppColors.borderSubtle),
-            ),
-            child: ClipOval(
-              child: chat.avatarUrl != null
-                  ? Image.network(
-                      chat.avatarUrl!,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => _buildAvatarFallback(chat.name),
-                    )
-                  : _buildAvatarFallback(chat.name),
-            ),
-          ),
-        // Online indicator
-        if (chat.isOnline)
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: Container(
-              width: 12,
-              height: 12,
-              decoration: BoxDecoration(
-                color: const Color(0xFF22C55E),
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: AppColors.bgDeep,
-                  width: 2,
-                ),
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-
-  Widget _buildAvatarFallback(String name) {
-    final initial = name.isNotEmpty ? name[0].toUpperCase() : 'U';
-    return Container(
-      color: AppColors.primary,
-      child: Center(
-        child: Text(
-          initial,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-            color: AppColors.textPrimary,
-          ),
         ),
       ),
     );
