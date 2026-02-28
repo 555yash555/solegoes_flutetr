@@ -80,14 +80,14 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     final phoneNumber = phone.isNotEmpty ? '+91$phone' : null;
 
     // Call auth controller
-    final success = await ref.read(authControllerProvider.notifier).createUserWithEmailAndPassword(
+    final user = await ref.read(authControllerProvider.notifier).createUserWithEmailAndPassword(
       email: email,
       password: password,
       displayName: name,
       phoneNumber: phoneNumber,
     );
 
-    if (success && mounted) {
+    if (user != null && mounted) {
       context.go('/profile-setup');
     }
   }
@@ -385,53 +385,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       style: AppTextStyles.labelLarge.copyWith(color: AppColors.textPrimary),
     );
   }
-
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String hint,
-    required IconData icon,
-    bool obscureText = false,
-    TextInputType keyboardType = TextInputType.text,
-    Widget? suffixIcon,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.surfaceOverlay,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.borderSubtle),
-      ),
-      child: TextField(
-        controller: controller,
-        obscureText: obscureText,
-        keyboardType: keyboardType,
-        style: AppTextStyles.body.copyWith(color: AppColors.textPrimary),
-        decoration: InputDecoration(
-          hintText: hint,
-          hintStyle: TextStyle(
-            color: AppColors.iconMuted,
-            fontWeight: FontWeight.w500,
-          ),
-          prefixIcon: Icon(
-            icon,
-            size: 20,
-            color: AppColors.textTertiary,
-          ),
-          suffixIcon: suffixIcon != null
-              ? Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: suffixIcon,
-                )
-              : null,
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 16,
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildPhoneField() {
     return Container(
       decoration: BoxDecoration(

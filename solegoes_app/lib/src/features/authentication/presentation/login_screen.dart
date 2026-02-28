@@ -47,12 +47,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
 
     // Call auth controller
-    final success = await ref.read(authControllerProvider.notifier).signInWithEmailAndPassword(
+    final user = await ref.read(authControllerProvider.notifier).signInWithEmailAndPassword(
       email: email,
       password: password,
     );
 
-    if (success && mounted) {
+    if (user != null && mounted) {
       // Check if profile is complete
       final user = await ref.read(authStateChangesProvider.future);
       if (mounted && user != null) {
@@ -221,6 +221,30 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           ),
                         ),
                       ],
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  // Agency link
+                  Center(
+                    child: GestureDetector(
+                      onTap: () => context.go('/agency-login'),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(LucideIcons.briefcase, size: 14, color: AppColors.textTertiary),
+                          const SizedBox(width: 6),
+                          Text(
+                            'Are you an agency? ',
+                            style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textTertiary),
+                          ),
+                          Text(
+                            'Sign in here',
+                            style: AppTextStyles.labelLarge.copyWith(
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 24),

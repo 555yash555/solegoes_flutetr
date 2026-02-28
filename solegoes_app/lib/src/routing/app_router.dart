@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../features/agency/data/agency_repository.dart';
+import '../theme/app_theme.dart';
+import '../features/agency_dashboard/presentation/screens/agency_login_screen.dart';
+import '../features/agency_dashboard/presentation/screens/agency_pending_screen.dart';
+import '../features/agency_dashboard/presentation/screens/agency_signup_screen.dart';
 import '../features/authentication/data/auth_repository.dart';
 import '../features/onboarding/data/onboarding_repository.dart';
 import '../features/splash/presentation/splash_screen.dart';
@@ -26,7 +31,6 @@ import '../features/payments/presentation/payment_method_screen.dart';
 import '../features/payments/presentation/payment_confirmation_screen.dart';
 import '../features/bookings/presentation/trip_booking_screen.dart';
 import '../features/explore/presentation/explore_screen.dart';
-import '../features/explore/presentation/category_trips_screen.dart';
 import '../features/explore/presentation/category_trips_screen.dart';
 import '../features/demo/presentation/design_demo_screen.dart';
 import '../features/admin/presentation/seed_trips_screen.dart';
@@ -77,6 +81,31 @@ enum AppRoute {
   categoryTrips,
   searchFilter,
   searchResults,
+
+  // ── Agency (Phase 1) ──
+  agencyLogin,
+  agencySignup,
+  agencyPending,
+
+  // ── Agency Dashboard (Phase 3+) ──
+  agencyHome,
+  agencyTrips,
+  agencyAddTrip,
+  agencyEditTrip,
+  agencyTripDetail,
+  agencyBookings,
+  agencyTripBookings,
+  agencyBookingDetail,
+  agencyMessages,
+  agencyProfile,
+  agencySettings,
+  agencyPayouts,
+  agencyNotifications,
+
+  // ── Admin (Phase 7) ──
+  adminHome,
+  adminAgencies,
+  adminAgencyDetail,
 }
 
 @riverpod
@@ -85,13 +114,18 @@ GoRouter goRouter(Ref ref) {
   final onboardingRepoAsync = ref.watch(onboardingRepositoryProvider);
 
   return GoRouter(
-    initialLocation: '/splash',
     debugLogDiagnostics: true,
     redirect: (context, state) async {
       final path = state.uri.path;
 
-      // Skip auth redirect for demo, seed, and splash screens
-      if (path == '/demo' || path == '/seed-trips' || path == '/splash') return null;
+      // Skip auth redirect for demo, seed, splash, and agency auth screens
+      if (path == '/demo' ||
+          path == '/seed-trips' ||
+          path == '/splash' ||
+          path == '/agency-login' ||
+          path == '/agency-signup') {
+        return null;
+      }
 
       // Check onboarding status
       final isOnboardingComplete = onboardingRepoAsync.when(
@@ -117,20 +151,64 @@ GoRouter goRouter(Ref ref) {
       }
 
       if (isLoggedIn && isOnAuthRoute) {
-        // Logged in and on auth page -> check profile completion
+        // Logged in and on auth page — check profile completion AND role
         try {
-          final user = await authRepository.getUserProfile(authRepository.currentUser!.uid);
+          final user =
+              await authRepository.getUserProfile(authRepository.currentUser!.uid);
           if (!user.isProfileComplete) {
             return '/profile-setup';
           }
           if (!user.isPreferencesComplete) {
             return '/preferences';
           }
+          // Role-based redirect
+          if (user.role == 'agency') {
+            if (user.agencyId != null) {
+              try {
+                final agencyRepo = ref.read(agencyRepositoryProvider);
+                final agency = await agencyRepo.getAgencyById(user.agencyId!);
+                if (agency.verificationStatus == 'approved') {
+                  return '/agency';
+                } else {
+                  return '/agency-pending';
+                }
+              } catch (_) {
+                return '/agency-pending';
+              }
+            }
+            return '/agency-login';
+          }
+          if (user.role == 'superAdmin') {
+            return '/admin';
+          }
         } catch (e) {
           // If we can't get user profile, go to profile setup
           return '/profile-setup';
         }
         return '/';
+      }
+
+      // Logged in and NOT on auth page — role-based guard
+      if (isLoggedIn && !isOnAuthRoute) {
+        try {
+          final user =
+              await authRepository.getUserProfile(authRepository.currentUser!.uid);
+
+          if (user.role == 'agency') {
+            // Agency routes: /agency-* and /agency are allowed
+            final isOnAgencyRoute = path.startsWith('/agency');
+            if (!isOnAgencyRoute) {
+              // Redirect agency user away from consumer screens
+              if (user.agencyId == null) return '/agency-login';
+              return '/agency-pending';
+            }
+          } else if (user.role == 'superAdmin') {
+            if (!path.startsWith('/admin')) return '/admin';
+          }
+          // consumers fall through — existing routing unchanged
+        } catch (_) {
+          // ignore — don't block access on fetch failure
+        }
       }
 
       // Allow access to main app even if profile is incomplete (user can skip)
@@ -199,6 +277,40 @@ GoRouter goRouter(Ref ref) {
         path: '/preferences',
         name: AppRoute.preferences.name,
         builder: (context, state) => const PreferencesScreen(),
+      ),
+
+      // ── Agency Auth Routes (Phase 1) ──
+      GoRoute(
+        path: '/agency-login',
+        name: AppRoute.agencyLogin.name,
+        builder: (context, state) => const AgencyLoginScreen(),
+      ),
+      GoRoute(
+        path: '/agency-signup',
+        name: AppRoute.agencySignup.name,
+        builder: (context, state) => const AgencySignupScreen(),
+      ),
+      GoRoute(
+        path: '/agency-pending',
+        name: AppRoute.agencyPending.name,
+        builder: (context, state) => const AgencyPendingScreen(),
+      ),
+
+      // ── Agency Placeholder (Phase 3 will replace with StatefulShellRoute) ──
+      GoRoute(
+        path: '/agency',
+        name: AppRoute.agencyHome.name,
+        builder: (context, state) => Scaffold(
+          backgroundColor: AppColors.bgDeep,
+          body: Center(
+            child: Text(
+              'Agency Dashboard\n(Phase 3)',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                  color: Colors.white, fontSize: 24, fontWeight: FontWeight.w700),
+            ),
+          ),
+        ),
       ),
 
       // ===========================================

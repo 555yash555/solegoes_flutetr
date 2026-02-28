@@ -68,15 +68,19 @@ lib/src/features/
 │       │   ├── agency_bookings_screen.dart
 │       │   ├── agency_trip_bookings_screen.dart
 │       │   ├── agency_profile_screen.dart
+│       │   ├── agency_settings_screen.dart
+│       │   ├── agency_messages_screen.dart
+│       │   ├── agency_trip_detail_screen.dart
+│       │   ├── agency_booking_detail_screen.dart
+│       │   ├── agency_payouts_screen.dart
 │       │   ├── agency_signup_screen.dart
 │       │   └── agency_pending_screen.dart
 │       └── components/
 │           ├── dashboard_sidebar.dart
 │           ├── dashboard_topbar.dart
-│           ├── dashboard_nav_rail.dart
-│           ├── dashboard_bottom_nav.dart
 │           ├── stats_card.dart
 │           ├── data_table_card.dart
+│           ├── notification_popover.dart
 │           └── trip_wizard/
 │               ├── step_basic_info.dart
 │               ├── step_media.dart
@@ -164,65 +168,56 @@ class AgencyRepository {
 
 ## 4. Responsive Layout Strategy
 
-### Breakpoints
+### Breakpoints (matching HTML mockups)
 
 | Name | Width | Navigation | Grid Columns | Content Width |
 |------|-------|------------|-------------|---------------|
-| Mobile | < 600px | Bottom nav (4 tabs) | 1 | Full width |
-| Tablet | 600-900px | Navigation rail (64px, icons only) | 2 | Full minus rail |
-| Desktop | > 900px | Permanent sidebar (280px) | 3-4 | max 1200px, centered |
+| Mobile | < 900px | Hamburger → drawer overlay | 1-2 | Full width |
+| Desktop | > 900px | Permanent sidebar (240px) | 2-4 | Full minus sidebar |
+
+**Note:** The approved HTML mockups (`03`–`06`) use a **two-breakpoint system** — fixed sidebar on desktop, drawer overlay on mobile. No bottom nav or navigation rail. Data tables switch to card lists at 768px. Stats grids go from 4-col to 2-col at 600px.
 
 ### DashboardScaffold — Adaptive Layout
 
-The shell uses `LayoutBuilder` to render completely different layout trees at each breakpoint — not CSS-style media queries that hide/show elements.
+Reference: Shell components designed in `design_mockups/03_agency_dashboard.html` (reused across `04`, `06`).
 
 ```
 Desktop (> 900px):
 ┌─────────────┬──────────────────────────────────────────┐
-│             │  Topbar: breadcrumb + search + avatar     │
-│  Sidebar    ├──────────────────────────────────────────┤
-│  280px      │                                          │
-│  permanent  │  Content Area                            │
-│             │  ┌──────────────────────────────────┐    │
-│  Logo       │  │  ConstrainedBox(maxWidth: 1200)  │    │
-│  Nav items  │  │  Center-aligned on wide monitors  │    │
-│  Divider    │  │                                    │   │
-│  Settings   │  │  Adaptive grid inside              │   │
-│  Logout     │  └──────────────────────────────────┘    │
-│             │                                          │
+│  Sidebar    │  Topbar: greeting + date + bell + avatar  │
+│  240px      ├──────────────────────────────────────────┤
+│  fixed      │                                          │
+│             │  Content Area                            │
+│  Logo       │  Padded, scrollable                      │
+│  Nav items: │  Adaptive grid inside                    │
+│   Dashboard │                                          │
+│   My Trips  │                                          │
+│   Bookings  │                                          │
+│   Messages  │                                          │
+│   Payouts   │                                          │
+│  ─────────  │                                          │
+│  Profile    │                                          │
+│  Settings   │                                          │
+│  Sign out   │                                          │
 └─────────────┴──────────────────────────────────────────┘
   - Hover states on nav items, table rows, cards
   - Mouse cursor changes on interactive elements
   - Scrollbar styling (thin, themed)
 
-Tablet (600-900px):
-┌──────┬─────────────────────────────────────────────────┐
-│ Rail │  Topbar: page title + avatar                     │
-│ 64px ├─────────────────────────────────────────────────┤
-│      │                                                  │
-│ Icons│  Content Area                                    │
-│ only │  2-column grid                                   │
-│      │  Touch-friendly tap targets (min 44px)           │
-│      │                                                  │
-└──────┴─────────────────────────────────────────────────┘
-  - Tooltip on rail icons for labels
-  - No hover states (touch device)
-
-Mobile (< 600px):
+Mobile (< 900px):
 ┌────────────────────────────────────────────────────────┐
-│  Topbar: hamburger + title + avatar                     │
+│  Topbar: hamburger ☰ + page title + bell + avatar      │
 ├────────────────────────────────────────────────────────┤
 │                                                         │
 │  Content Area                                           │
-│  Single column, full width                              │
+│  Single/two column, full width                          │
 │  Pull-to-refresh on lists                               │
+│  Data tables → card lists at 768px                      │
 │                                                         │
-├────────────────────────────────────────────────────────┤
-│  Bottom Nav: Home | Trips | Bookings | Profile          │
 └────────────────────────────────────────────────────────┘
-  - Hamburger opens modal drawer (overlay, not push)
+  ☰ opens drawer overlay (same sidebar content, slides in from left)
+  - Touch-friendly tap targets (min 44px)
   - Bottom sheet for actions instead of dropdown menus
-  - Swipe gestures on cards where appropriate
 ```
 
 ### Implementation Pattern
@@ -238,11 +233,9 @@ class DashboardScaffold extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         if (constraints.maxWidth > 900) {
-          return _DesktopLayout(...);   // Row: [Sidebar, Expanded(Column: [Topbar, Content])]
-        } else if (constraints.maxWidth > 600) {
-          return _TabletLayout(...);    // Row: [NavigationRail, Expanded(Column: [Topbar, Content])]
+          return _DesktopLayout(...);   // Row: [Sidebar(240px), Expanded(Column: [Topbar, Content])]
         } else {
-          return _MobileLayout(...);    // Scaffold(body: Column([Topbar, Content]), bottomNav: ...)
+          return _MobileLayout(...);   // Scaffold(drawer: Sidebar, body: Column([Topbar, Content]))
         }
       },
     );
@@ -250,11 +243,10 @@ class DashboardScaffold extends StatelessWidget {
 }
 ```
 
-Each layout variant is a separate widget tree — not the same tree with conditional padding:
-- Desktop: `Row` with sidebar + content
-- Tablet: `Row` with rail + content
-- Mobile: `Scaffold` with bottom nav
-- Content area uses the same child widget, but the shell around it changes completely
+Two layout variants — same sidebar widget used in both (permanent vs drawer):
+- Desktop: `Row` with permanent sidebar + content
+- Mobile: `Scaffold` with drawer sidebar + hamburger topbar
+- Content area uses the same child widget, the shell around it changes
 
 ### Adaptive Content Grids
 
@@ -277,6 +269,7 @@ Combined with `GridView.builder` or `Wrap` with calculated item widths — conte
 
 ### 5.1 Agency Home Screen
 
+**Reference Mockup:** `design_mockups/03_agency_dashboard.html`
 **Purpose:** Dashboard overview with key metrics and recent activity.
 
 **Layout:**
@@ -294,6 +287,7 @@ Combined with `GridView.builder` or `Wrap` with calculated item widths — conte
 
 ### 5.2 Agency Trips Screen
 
+**Reference Mockup:** `design_mockups/04_agency_trips.html`
 **Purpose:** Full trip management — view, filter, create, edit.
 
 **Layout:**
@@ -311,6 +305,7 @@ Combined with `GridView.builder` or `Wrap` with calculated item widths — conte
 
 ### 5.3 Agency Add Trip Screen (Wizard)
 
+**Reference Mockup:** `design_mockups/05_agency_add_trip.html`
 **Purpose:** Multi-step form to create a new trip.
 
 **Layout:** Full-screen (exits the shell navigation). Content centered at `maxWidth: 720px`.
@@ -332,6 +327,7 @@ Combined with `GridView.builder` or `Wrap` with calculated item widths — conte
 
 ### 5.4 Agency Bookings Screen
 
+**Reference Mockup:** `design_mockups/06_agency_bookings.html`
 **Purpose:** View all bookings across all agency trips.
 
 **Layout:**
@@ -344,6 +340,7 @@ Combined with `GridView.builder` or `Wrap` with calculated item widths — conte
 
 ### 5.5 Agency Trip Bookings Screen
 
+**Reference Mockup:** None — derive layout from `06_agency_bookings.html` with trip-specific header
 **Purpose:** Bookings for a specific trip (accessed from trips screen).
 
 **Layout:** Same as bookings screen but filtered to one trip. Header shows trip name + total bookings + revenue.
@@ -352,6 +349,7 @@ Combined with `GridView.builder` or `Wrap` with calculated item widths — conte
 
 ### 5.6 Agency Profile Screen
 
+**Reference Mockup:** None — needs HTML mockup design
 **Purpose:** Edit agency public profile.
 
 **Layout:**
@@ -387,6 +385,7 @@ Combined with `GridView.builder` or `Wrap` with calculated item widths — conte
 
 ### 5.8 Agency Signup Screen
 
+**Reference Mockup:** `design_mockups/01_agency_signup.html`
 **Purpose:** Self-serve agency registration (3-step wizard).
 
 **Layout:** Centered single column, `maxWidth: 520px`. Progress stepper at top.
@@ -407,6 +406,7 @@ Combined with `GridView.builder` or `Wrap` with calculated item widths — conte
 
 ### 5.9 Agency Pending Screen
 
+**Reference Mockup:** `design_mockups/02_agency_pending.html`
 **Purpose:** Shown to agency users whose verification is pending.
 
 **Layout:** Centered content. Illustration/icon + "Your application is under review" message + status indicator. No navigation shell — just a simple page with logout button.
@@ -415,6 +415,7 @@ Combined with `GridView.builder` or `Wrap` with calculated item widths — conte
 
 ### 5.10 Admin Home Screen
 
+**Reference Mockup:** None — needs HTML mockup design
 **Purpose:** Platform overview.
 
 **Layout:** Stats grid — Total Users, Total Agencies, Pending Approvals, Total Revenue, Active Trips
@@ -423,6 +424,7 @@ Combined with `GridView.builder` or `Wrap` with calculated item widths — conte
 
 ### 5.11 Admin Agencies Screen
 
+**Reference Mockup:** None — needs HTML mockup design
 **Purpose:** Agency verification queue.
 
 **Layout:**
@@ -435,9 +437,92 @@ Combined with `GridView.builder` or `Wrap` with calculated item widths — conte
 
 ### 5.12 Admin Agency Detail Screen
 
+**Reference Mockup:** None — needs HTML mockup design
 **Purpose:** Full agency details for review before approval.
 
 **Layout:** Two sections — agency info (name, description, documents, portfolio) + their trips list (if any)
+
+### 5.13 Agency Messages Screen
+
+**Reference Mockup:** None — needs HTML mockup design
+**Purpose:** Agency-side chat hub for trip-specific group conversations and traveler inquiries.
+
+**Layout:**
+- Desktop — 2-pane: conversation list (left, 320px) + active chat (right)
+- Mobile — conversation list → tap to open chat (push navigation)
+- Each conversation tied to a trip (trip name as chat header)
+- Unread badge count on sidebar nav item
+
+**Data:** Reuses existing `ChatRepository` — `watchTripChat()`, `sendMessage()`. Filtered to chats for agency's trips.
+
+### 5.14 Notifications Center
+
+**Reference Mockup:** None — needs HTML mockup design (popover visible in `03`–`06` topbar bell icon but no expanded view)
+**Purpose:** Inform agency of new bookings, application status changes, pending payouts, unread messages.
+
+**Layout:**
+- Desktop — popover dropdown from topbar bell icon (max 5 recent, "View All" link)
+- Mobile — full-screen notifications list (push from topbar bell tap)
+- Each notification: icon + title + body + timestamp + read/unread state
+- Mark as read on tap, "Mark all as read" action
+
+**Data:** `notifications` collection filtered by `userId` (agency owner UID). Real-time stream.
+
+### 5.15 Agency Trip Detail Screen
+
+**Reference Mockup:** None — needs HTML mockup design
+**Purpose:** Read-only analytical view of a single trip (distinct from the add/edit wizard).
+
+**Layout:**
+- Header — trip image + title + status badge + "Edit" button
+- Stats row — total bookings, revenue generated, conversion rate, average rating
+- Sections: itinerary summary, pricing styles breakdown, boarding/dropping points, bookings list (last 10)
+- "View All Bookings" → navigates to `/agency/trips/:id/bookings`
+
+**Data:** `tripRepository.getTripById(tripId)` + `bookingRepository.getBookingsForTrip(tripId)`
+
+### 5.16 Agency Booking Detail Screen
+
+**Reference Mockup:** None — needs HTML mockup design (drawer or modal)
+**Purpose:** Manage a specific traveler's reservation — view full details, process actions.
+
+**Layout:**
+- Desktop — slide-out drawer (400px) or modal overlay
+- Mobile — full-screen push
+- Sections: traveler info (name, email, phone), trip + package selected, boarding/dropping points, payment info (amount, method, status), booking timeline
+- Actions: cancel booking (with confirmation), contact traveler (WhatsApp/email link)
+
+**Data:** `bookingRepository.getBookingById(bookingId)`
+
+### 5.17 Agency Settings Screen
+
+**Reference Mockup:** None — needs HTML mockup design
+**Purpose:** Account settings separate from public profile — security, banking, team management.
+
+**Layout:** Single column, sectioned cards.
+
+**Sections:**
+- Account Security — change password, manage linked social accounts
+- Bank Details — view/update account holder, account number, IFSC, bank name (submitted during signup)
+- GST & Documents — view/re-upload GST certificate
+- Notifications Preferences — toggle email/push notifications for bookings, messages, payouts
+- Danger Zone — deactivate agency account
+
+**Data:** `agencyRepository.watchAgency(agencyId)` for read, `agencyRepository.updateAgency()` for write. Password change via `FirebaseAuth.updatePassword()`.
+
+### 5.18 Agency Payouts Screen
+
+**Reference Mockup:** None — needs HTML mockup design
+**Purpose:** Financial ledger showing revenue, platform fee deductions, and payout history.
+
+**Layout:**
+- Summary cards — Total Revenue, Platform Fees, Net Payouts, Pending Payout
+- Payout history table — date, amount, status (processed/pending/failed), reference ID
+- Desktop: DataTable with sortable columns
+- Mobile: Card list
+- Filter by date range
+
+**Data:** Future `payouts` collection or computed from bookings. Initially can show aggregated booking revenue from `bookingRepository.getBookingsForAgency(agencyId)`.
 
 ---
 
@@ -457,9 +542,15 @@ enum AppRoute {
   agencyTrips,
   agencyAddTrip,
   agencyEditTrip,
+  agencyTripDetail,
   agencyBookings,
   agencyTripBookings,
+  agencyBookingDetail,
+  agencyMessages,
   agencyProfile,
+  agencySettings,
+  agencyPayouts,
+  agencyNotifications,
 
   // Admin
   adminHome,
@@ -478,15 +569,21 @@ enum AppRoute {
 
 // Agency Dashboard (AgencyShell)
 StatefulShellRoute(builder: AgencyShell)
-  Branch 0: /agency         → AgencyHomeScreen
-  Branch 1: /agency/trips   → AgencyTripsScreen
-  Branch 2: /agency/bookings → AgencyBookingsScreen
-  Branch 3: /agency/profile → AgencyProfileScreen
+  Branch 0: /agency           → AgencyHomeScreen
+  Branch 1: /agency/trips     → AgencyTripsScreen
+  Branch 2: /agency/bookings  → AgencyBookingsScreen
+  Branch 3: /agency/messages  → AgencyMessagesScreen
+  Branch 4: /agency/profile   → AgencyProfileScreen
 
 // Agency Detail Routes (full screen, no shell nav)
-/agency/trips/add           → AgencyAddTripScreen
-/agency/trips/:id/edit      → AgencyAddTripScreen (pre-filled, edit mode)
-/agency/trips/:id/bookings  → AgencyTripBookingsScreen
+/agency/trips/add             → AgencyAddTripScreen
+/agency/trips/:id/edit        → AgencyAddTripScreen (pre-filled, edit mode)
+/agency/trips/:id             → AgencyTripDetailScreen (read-only analytics)
+/agency/trips/:id/bookings    → AgencyTripBookingsScreen
+/agency/bookings/:id          → AgencyBookingDetailScreen
+/agency/settings              → AgencySettingsScreen
+/agency/payouts               → AgencyPayoutsScreen
+/agency/notifications         → AgencyNotificationsScreen
 
 // Admin Dashboard (AdminShell)
 StatefulShellRoute(builder: AdminShell)
@@ -728,13 +825,15 @@ All styling from existing tokens — no hardcoded values:
 ### Phase 1: Agency Signup & Login
 
 **Goal:** Agency entry point from consumer app, dedicated login, self-serve registration.
+**Approach:** Convert approved HTML mockups → Flutter. Follow `rule.md` for theming, reuse `common_widgets/`, match `design_mockups/shared/design-system.css` tokens to `AppColors`/`AppTextStyles`.
 
 | Task | File | What |
 |------|------|------|
 | "Are you an agency?" link | `login_screen.dart` + `signup_screen.dart` | Link on consumer auth screens → `/agency-login` |
-| Agency Login screen | `screens/agency_login_screen.dart` | Web-optimized split layout (ref: `design_mockups/00_agency_login.html`) |
-| Signup screen | `screens/agency_signup_screen.dart` | 3-step wizard (ref: `design_mockups/01_agency_signup.html`) |
-| Pending screen | `screens/agency_pending_screen.dart` | Waiting for approval (ref: `design_mockups/02_agency_pending.html`) |
+| Convert `00_agency_login.html` → Flutter | `screens/agency_login_screen.dart` | HTML→Flutter: split layout, hero image, form card, social login, responsive |
+| Convert `01_agency_signup.html` → Flutter | `screens/agency_signup_screen.dart` | HTML→Flutter: 3-step wizard with brand panel, form fields, upload zones |
+| Convert `02_agency_pending.html` → Flutter | `screens/agency_pending_screen.dart` | HTML→Flutter: animated status rings, submitted details pills, timeline, support links |
+| WhatsApp support link | Pending screen | Hard-link `wa.me` URL for partner support team on pending + rejected states |
 | AuthRepository updates | `authentication/data/auth_repository.dart` | `registerAgency()` method |
 | Firebase Storage | | Document upload integration |
 | Add routes | `routing/app_router.dart` | `/agency-login`, `/agency-signup`, `/agency-pending` |
@@ -755,52 +854,58 @@ All styling from existing tokens — no hardcoded values:
 
 ### Phase 3: Dashboard Shell
 
-**Goal:** Responsive navigation working at all 3 breakpoints.
+**Goal:** Responsive navigation working at both breakpoints (sidebar ↔ drawer).
+**Approach:** Extract shell components from `design_mockups/03_agency_dashboard.html` → Flutter. Sidebar, topbar, and drawer pattern is consistent across mockups `03`–`06`.
 
 | Task | File | What |
 |------|------|------|
-| DashboardScaffold | `agency_dashboard/presentation/agency_shell.dart` | LayoutBuilder with desktop/tablet/mobile variants |
-| Sidebar | `components/dashboard_sidebar.dart` | Logo, nav items, divider, logout |
-| Nav Rail | `components/dashboard_nav_rail.dart` | Icon-only vertical nav for tablet |
-| Bottom Nav | `components/dashboard_bottom_nav.dart` | 4-tab bottom bar for mobile |
-| Topbar | `components/dashboard_topbar.dart` | Breadcrumb + search + user avatar |
-| Shell routes | `routing/app_router.dart` | `StatefulShellRoute` with 4 branches |
-| Placeholder screens | All 4 agency screens | Empty `Scaffold` with title text |
-| Checkpoint | | Resize browser: shell adapts sidebar, rail, bottom nav. All 4 tabs navigate. |
+| DashboardScaffold | `agency_dashboard/presentation/agency_shell.dart` | LayoutBuilder: permanent sidebar (>900px) / drawer (<900px) — convert from HTML shell |
+| Convert sidebar from HTML → Flutter | `components/dashboard_sidebar.dart` | 240px fixed sidebar: logo, nav items (Dashboard, My Trips, Bookings, Messages, Payouts), Profile, Settings, Sign out |
+| Convert topbar from HTML → Flutter | `components/dashboard_topbar.dart` | Greeting + date (desktop) / hamburger + title (mobile) + notification bell + avatar |
+| Notification popover | `components/notification_popover.dart` | Bell icon dropdown — placeholder data initially, wired to real data in Phase 8 |
+| Shell routes | `routing/app_router.dart` | `StatefulShellRoute` with branches for dashboard nav items |
+| Placeholder screens | All agency screens | Empty `Scaffold` with title text |
+| Checkpoint | | Resize browser: sidebar ↔ drawer transition. All nav items route correctly. Bell icon shows popover. |
 
-### Phase 4: Agency Home + Profile
+### Phase 4: Agency Home + Profile + Settings
 
-**Goal:** Real data on dashboard.
+**Goal:** Real data on dashboard. Profile and account settings working.
+**Approach:** Convert `03_agency_dashboard.html` content area → Flutter. Profile + Settings have no mockup yet (design or build from plan spec).
 
 | Task | File | What |
 |------|------|------|
-| StatsCard widget | `components/stats_card.dart` | Reusable metric card with icon, value, label |
-| Agency Home | `screens/agency_home_screen.dart` | Stats grid + recent trips + recent bookings |
-| Agency Profile | `screens/agency_profile_screen.dart` | Edit form with logo/cover upload |
-| Checkpoint | | Agency sees real stats from Firestore. Can edit profile and see changes. |
+| StatsCard widget | `components/stats_card.dart` | Reusable metric card — convert from `03` HTML stats grid |
+| Convert `03_agency_dashboard.html` content → Flutter | `screens/agency_home_screen.dart` | HTML→Flutter: stats grid, recent trips, recent bookings, quick actions |
+| Agency Profile | `screens/agency_profile_screen.dart` | Edit form with logo/cover upload (no mockup — build from plan spec 5.6) |
+| Agency Settings | `screens/agency_settings_screen.dart` | Account security, bank details, GST docs, notification prefs (no mockup — build from plan spec 5.17) |
+| Checkpoint | | Agency sees real stats from Firestore. Can edit profile, update bank details, change password. |
 
 ### Phase 5: Trip Management
 
 **Goal:** Agency can create and manage trips.
+**Approach:** Convert `04_agency_trips.html` and `05_agency_add_trip.html` → Flutter. Trip detail viewer has no mockup yet.
 
 | Task | File | What |
 |------|------|------|
-| Trip list screen | `screens/agency_trips_screen.dart` | DataTable (desktop) / Cards (mobile) with filters |
-| Add Trip wizard | `screens/agency_add_trip_screen.dart` | 6-step stepper |
-| Wizard steps | `components/trip_wizard/step_*.dart` | Individual step forms |
+| Convert `04_agency_trips.html` → Flutter | `screens/agency_trips_screen.dart` | HTML→Flutter: filter tabs, data table (desktop), card list (mobile), action buttons |
+| Convert `05_agency_add_trip.html` → Flutter | `screens/agency_add_trip_screen.dart` | HTML→Flutter: 6-step wizard with stepper, form fields, upload zones, chip selects |
+| Wizard steps | `components/trip_wizard/step_*.dart` | Individual step forms — convert each wizard step from HTML |
 | TripRepository updates | `trips/data/trip_repository.dart` | `createTrip()`, `updateTrip()` |
-| Checkpoint | | Create trip via wizard, appears in consumer Explore feed. Edit existing trip. |
+| Trip Detail Viewer | `screens/agency_trip_detail_screen.dart` | Read-only analytics view — stats, bookings, revenue, itinerary (no mockup — build from plan spec 5.15) |
+| Checkpoint | | Create trip via wizard, appears in consumer Explore feed. Edit existing trip. View trip analytics. |
 
 ### Phase 6: Booking Management
 
 **Goal:** Agency can view bookings.
+**Approach:** Convert `06_agency_bookings.html` → Flutter. Booking detail has no mockup yet.
 
 | Task | File | What |
 |------|------|------|
-| Bookings screen | `screens/agency_bookings_screen.dart` | All bookings with filters |
+| Convert `06_agency_bookings.html` → Flutter | `screens/agency_bookings_screen.dart` | HTML→Flutter: filter tabs, data table (desktop), card list (mobile) |
 | Trip bookings screen | `screens/agency_trip_bookings_screen.dart` | Per-trip bookings |
 | BookingRepository updates | `bookings/data/booking_repository.dart` | `getBookingsForTrip()`, `getBookingsForAgency()` |
-| Checkpoint | | Agency views bookings across trips. Filter by status works. |
+| Booking Detail | `screens/agency_booking_detail_screen.dart` | Drawer/modal with traveler info, package, payment, timeline (no mockup — build from plan spec 5.16) |
+| Checkpoint | | Agency views bookings across trips. Filter by status works. Tap booking to see full details. |
 
 ### Phase 7: Superadmin
 
@@ -815,9 +920,63 @@ All styling from existing tokens — no hardcoded values:
 | Admin routes | `routing/app_router.dart` | `StatefulShellRoute` for admin |
 | Checkpoint | | Admin approves agency, agency auto-redirects to dashboard. |
 
+### Phase 8: Messages, Notifications & Payouts
+
+**Goal:** Agency can chat with travelers, receive notifications, and view financials.
+
+| Task | File | What |
+|------|------|------|
+| Messages screen | `screens/agency_messages_screen.dart` | 2-pane chat hub (desktop) / list→detail (mobile). Reuses `ChatRepository` |
+| Notifications screen | `screens/agency_notifications_screen.dart` | Full notification list with read/unread, mark all read |
+| Notification popover (wire up) | `components/notification_popover.dart` | Connect bell icon popover to real notification data |
+| Payouts screen | `screens/agency_payouts_screen.dart` | Revenue summary cards + payout history table/cards |
+| Notifications collection | Firestore | Create `notifications` collection, agency-filtered stream provider |
+| Payouts data | Firestore or computed | Payout records or aggregated from bookings |
+| Checkpoint | | Agency can chat with travelers, see real-time notifications, view revenue & payout history. |
+
 ---
 
-## 12. References
+## 12. HTML → Flutter Conversion Guidelines
+
+The approved HTML mockups (`design_mockups/00`–`06`) are the source of truth for **layout, styling, responsiveness, and visual structure**. However, they are **not** the source of truth for data fields.
+
+### What to trust from the HTML mockups
+- Layout structure (split views, grids, card vs table breakpoints)
+- Visual hierarchy (spacing, typography scale, color usage)
+- Responsive behavior (breakpoints, stacking, drawer transitions)
+- Component patterns (filter tabs, status badges, upload zones, wizard steppers)
+- Interactions (hover states, toggles, collapsible sections)
+
+### What NOT to blindly copy from the HTML mockups
+- **Field names** — HTML may use display labels like "Company Name" but the model field is `businessName`. Always map to actual Freezed model fields.
+- **Data values** — HTML contains placeholder/demo data. Flutter screens must use **zero static data**. All values come from Riverpod providers backed by Firestore.
+- **Extra fields** — HTML may show fields not in `database_schema.md` or the Freezed models. Do not invent fields. If an HTML field has no model equivalent, **ask the user** whether to add it to the schema or skip it.
+- **Missing fields** — the model may have fields not shown in the HTML. Only display what the mockup shows unless the user requests otherwise.
+- **Field grouping** — HTML may group data differently than the model. Follow the model structure for data fetching, use the HTML for visual grouping.
+
+### Conversion rules
+1. **No static data** — every text, number, badge, and list item must come from a provider. Use `AsyncValue` loading/error/data pattern.
+2. **Match model fields** — before converting a screen, cross-reference the HTML fields against the relevant Freezed model (`Trip`, `Booking`, `Agency`, `AppUser`) and `database_schema.md`.
+3. **Flag mismatches** — if the HTML shows a field that doesn't exist in the model (e.g. "conversion rate" on a trip card, "withdrawal history" in payouts), pause and ask the user with an alternative suggestion (e.g. "HTML shows X, model has Y — should I use Y or add X to the schema?").
+4. **Shimmer loading** — use `AppShimmer` skeletons matching the HTML layout shape, never raw `CircularProgressIndicator`.
+5. **Error states** — use `AppSnackbar` and `AsyncValueUI` extension, never raw `ScaffoldMessenger`.
+6. **Theming** — map HTML CSS vars from `design-system.css` to existing `AppColors`/`AppTextStyles` tokens. Do not hardcode hex values.
+
+### Data source mapping
+
+| HTML Screen | Primary Model(s) | Repository | Key Fields |
+|-------------|-------------------|------------|------------|
+| `00_agency_login` | `AppUser` | `AuthRepository` | email, password (auth only, no model display) |
+| `01_agency_signup` | `Agency` | `AgencyRepository` | businessName, email, phone, description, specialties, teamSize, yearsExperience, documents |
+| `02_agency_pending` | `Agency` | `AgencyRepository.watchAgency()` | verificationStatus, businessName, gstin, documents |
+| `03_agency_dashboard` | `Agency`, `Trip`, `Booking` | `AgencyRepository`, `TripRepository`, `BookingRepository` | agency.stats, recent trips, recent bookings |
+| `04_agency_trips` | `Trip` | `TripRepository.getTripsByAgency()` | title, status, price, imageUrl, startDate, categories |
+| `05_agency_add_trip` | `Trip`, `TripStyle`, `TripPoint` | `TripRepository.createTrip()` | All trip fields + pricingStyles + boardingPoints + droppingPoints + itinerary |
+| `06_agency_bookings` | `Booking` | `BookingRepository.getBookingsForAgency()` | userName, tripTitle, selectedStyleName, amount, status, bookingDate |
+
+---
+
+## 13. References
 
 | Resource | Location |
 |----------|----------|

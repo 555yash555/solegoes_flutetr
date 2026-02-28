@@ -25,6 +25,11 @@ abstract class AppUser with _$AppUser {
     // Profile completion status
     @Default(false) bool isProfileComplete,
     @Default(false) bool isPreferencesComplete,
+    // Role-based access: 'consumer' | 'agency' | 'superAdmin'
+    // @Default ensures existing Firestore docs without this field stay consumer
+    @Default('consumer') String role,
+    // Only present for agency users
+    String? agencyId,
   }) = _AppUser;
 
   factory AppUser.fromJson(Map<String, dynamic> json) => _$AppUserFromJson(json);

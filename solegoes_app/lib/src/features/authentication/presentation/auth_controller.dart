@@ -16,13 +16,14 @@ class AuthController extends _$AuthController {
   // EMAIL/PASSWORD AUTH
   // ===========================================
 
-  Future<bool> signInWithEmailAndPassword({
+  Future<AppUser?> signInWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
     state = const AsyncLoading();
+    AppUser? user;
     state = await AsyncValue.guard(() async {
-      await ref.read(authRepositoryProvider).signInWithEmailAndPassword(
+      user = await ref.read(authRepositoryProvider).signInWithEmailAndPassword(
         email,
         password,
       );
@@ -30,18 +31,19 @@ class AuthController extends _$AuthController {
     if (state.hasError) {
       ref.read(globalErrorProvider.notifier).setException(state.error!);
     }
-    return !state.hasError;
+    return state.hasError ? null : user;
   }
 
-  Future<bool> createUserWithEmailAndPassword({
+  Future<AppUser?> createUserWithEmailAndPassword({
     required String email,
     required String password,
     required String displayName,
     String? phoneNumber,
   }) async {
     state = const AsyncLoading();
+    AppUser? user;
     state = await AsyncValue.guard(() async {
-      await ref.read(authRepositoryProvider).createUserWithEmailAndPassword(
+      user = await ref.read(authRepositoryProvider).createUserWithEmailAndPassword(
         email: email,
         password: password,
         displayName: displayName,
@@ -51,10 +53,8 @@ class AuthController extends _$AuthController {
     if (state.hasError) {
       ref.read(globalErrorProvider.notifier).setException(state.error!);
     }
-    return !state.hasError;
+    return state.hasError ? null : user;
   }
-
-  // ===========================================
   // GOOGLE SIGN-IN
   // ===========================================
 

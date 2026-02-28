@@ -31,6 +31,8 @@ _AppUser _$AppUserFromJson(Map<String, dynamic> json) => _AppUser(
   travelStyle: json['travelStyle'] as String?,
   isProfileComplete: json['isProfileComplete'] as bool? ?? false,
   isPreferencesComplete: json['isPreferencesComplete'] as bool? ?? false,
+  role: json['role'] as String? ?? 'consumer',
+  agencyId: json['agencyId'] as String?,
 );
 
 Map<String, dynamic> _$AppUserToJson(_AppUser instance) => <String, dynamic>{
@@ -50,4 +52,6 @@ Map<String, dynamic> _$AppUserToJson(_AppUser instance) => <String, dynamic>{
   'travelStyle': instance.travelStyle,
   'isProfileComplete': instance.isProfileComplete,
   'isPreferencesComplete': instance.isPreferencesComplete,
+  'role': instance.role,
+  'agencyId': instance.agencyId,
 };

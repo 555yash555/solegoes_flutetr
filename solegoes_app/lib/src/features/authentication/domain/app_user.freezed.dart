@@ -18,7 +18,10 @@ mixin _$AppUser {
  String get uid; String get email; String get displayName; bool get isEmailVerified; String? get photoUrl; String? get phoneNumber;// Profile fields
  String? get bio; String? get city; String? get gender; DateTime? get birthDate; List<String> get personalityTraits;// Preferences
  List<String> get interests; String? get budgetRange; String? get travelStyle;// Profile completion status
- bool get isProfileComplete; bool get isPreferencesComplete;
+ bool get isProfileComplete; bool get isPreferencesComplete;// Role-based access: 'consumer' | 'agency' | 'superAdmin'
+// @Default ensures existing Firestore docs without this field stay consumer
+ String get role;// Only present for agency users
+ String? get agencyId;
 /// Create a copy of AppUser
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -31,16 +34,16 @@ $AppUserCopyWith<AppUser> get copyWith => _$AppUserCopyWithImpl<AppUser>(this as
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppUser&&(identical(other.uid, uid) || other.uid == uid)&&(identical(other.email, email) || other.email == email)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.isEmailVerified, isEmailVerified) || other.isEmailVerified == isEmailVerified)&&(identical(other.photoUrl, photoUrl) || other.photoUrl == photoUrl)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.bio, bio) || other.bio == bio)&&(identical(other.city, city) || other.city == city)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.birthDate, birthDate) || other.birthDate == birthDate)&&const DeepCollectionEquality().equals(other.personalityTraits, personalityTraits)&&const DeepCollectionEquality().equals(other.interests, interests)&&(identical(other.budgetRange, budgetRange) || other.budgetRange == budgetRange)&&(identical(other.travelStyle, travelStyle) || other.travelStyle == travelStyle)&&(identical(other.isProfileComplete, isProfileComplete) || other.isProfileComplete == isProfileComplete)&&(identical(other.isPreferencesComplete, isPreferencesComplete) || other.isPreferencesComplete == isPreferencesComplete));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppUser&&(identical(other.uid, uid) || other.uid == uid)&&(identical(other.email, email) || other.email == email)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.isEmailVerified, isEmailVerified) || other.isEmailVerified == isEmailVerified)&&(identical(other.photoUrl, photoUrl) || other.photoUrl == photoUrl)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.bio, bio) || other.bio == bio)&&(identical(other.city, city) || other.city == city)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.birthDate, birthDate) || other.birthDate == birthDate)&&const DeepCollectionEquality().equals(other.personalityTraits, personalityTraits)&&const DeepCollectionEquality().equals(other.interests, interests)&&(identical(other.budgetRange, budgetRange) || other.budgetRange == budgetRange)&&(identical(other.travelStyle, travelStyle) || other.travelStyle == travelStyle)&&(identical(other.isProfileComplete, isProfileComplete) || other.isProfileComplete == isProfileComplete)&&(identical(other.isPreferencesComplete, isPreferencesComplete) || other.isPreferencesComplete == isPreferencesComplete)&&(identical(other.role, role) || other.role == role)&&(identical(other.agencyId, agencyId) || other.agencyId == agencyId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,uid,email,displayName,isEmailVerified,photoUrl,phoneNumber,bio,city,gender,birthDate,const DeepCollectionEquality().hash(personalityTraits),const DeepCollectionEquality().hash(interests),budgetRange,travelStyle,isProfileComplete,isPreferencesComplete);
+int get hashCode => Object.hash(runtimeType,uid,email,displayName,isEmailVerified,photoUrl,phoneNumber,bio,city,gender,birthDate,const DeepCollectionEquality().hash(personalityTraits),const DeepCollectionEquality().hash(interests),budgetRange,travelStyle,isProfileComplete,isPreferencesComplete,role,agencyId);
 
 @override
 String toString() {
-  return 'AppUser(uid: $uid, email: $email, displayName: $displayName, isEmailVerified: $isEmailVerified, photoUrl: $photoUrl, phoneNumber: $phoneNumber, bio: $bio, city: $city, gender: $gender, birthDate: $birthDate, personalityTraits: $personalityTraits, interests: $interests, budgetRange: $budgetRange, travelStyle: $travelStyle, isProfileComplete: $isProfileComplete, isPreferencesComplete: $isPreferencesComplete)';
+  return 'AppUser(uid: $uid, email: $email, displayName: $displayName, isEmailVerified: $isEmailVerified, photoUrl: $photoUrl, phoneNumber: $phoneNumber, bio: $bio, city: $city, gender: $gender, birthDate: $birthDate, personalityTraits: $personalityTraits, interests: $interests, budgetRange: $budgetRange, travelStyle: $travelStyle, isProfileComplete: $isProfileComplete, isPreferencesComplete: $isPreferencesComplete, role: $role, agencyId: $agencyId)';
 }
 
 
@@ -51,7 +54,7 @@ abstract mixin class $AppUserCopyWith<$Res>  {
   factory $AppUserCopyWith(AppUser value, $Res Function(AppUser) _then) = _$AppUserCopyWithImpl;
 @useResult
 $Res call({
- String uid, String email, String displayName, bool isEmailVerified, String? photoUrl, String? phoneNumber, String? bio, String? city, String? gender, DateTime? birthDate, List<String> personalityTraits, List<String> interests, String? budgetRange, String? travelStyle, bool isProfileComplete, bool isPreferencesComplete
+ String uid, String email, String displayName, bool isEmailVerified, String? photoUrl, String? phoneNumber, String? bio, String? city, String? gender, DateTime? birthDate, List<String> personalityTraits, List<String> interests, String? budgetRange, String? travelStyle, bool isProfileComplete, bool isPreferencesComplete, String role, String? agencyId
 });
 
 
@@ -68,7 +71,7 @@ class _$AppUserCopyWithImpl<$Res>
 
 /// Create a copy of AppUser
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? uid = null,Object? email = null,Object? displayName = null,Object? isEmailVerified = null,Object? photoUrl = freezed,Object? phoneNumber = freezed,Object? bio = freezed,Object? city = freezed,Object? gender = freezed,Object? birthDate = freezed,Object? personalityTraits = null,Object? interests = null,Object? budgetRange = freezed,Object? travelStyle = freezed,Object? isProfileComplete = null,Object? isPreferencesComplete = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? uid = null,Object? email = null,Object? displayName = null,Object? isEmailVerified = null,Object? photoUrl = freezed,Object? phoneNumber = freezed,Object? bio = freezed,Object? city = freezed,Object? gender = freezed,Object? birthDate = freezed,Object? personalityTraits = null,Object? interests = null,Object? budgetRange = freezed,Object? travelStyle = freezed,Object? isProfileComplete = null,Object? isPreferencesComplete = null,Object? role = null,Object? agencyId = freezed,}) {
   return _then(_self.copyWith(
 uid: null == uid ? _self.uid : uid // ignore: cast_nullable_to_non_nullable
 as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
@@ -86,7 +89,9 @@ as List<String>,budgetRange: freezed == budgetRange ? _self.budgetRange : budget
 as String?,travelStyle: freezed == travelStyle ? _self.travelStyle : travelStyle // ignore: cast_nullable_to_non_nullable
 as String?,isProfileComplete: null == isProfileComplete ? _self.isProfileComplete : isProfileComplete // ignore: cast_nullable_to_non_nullable
 as bool,isPreferencesComplete: null == isPreferencesComplete ? _self.isPreferencesComplete : isPreferencesComplete // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,role: null == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
+as String,agencyId: freezed == agencyId ? _self.agencyId : agencyId // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -171,10 +176,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String uid,  String email,  String displayName,  bool isEmailVerified,  String? photoUrl,  String? phoneNumber,  String? bio,  String? city,  String? gender,  DateTime? birthDate,  List<String> personalityTraits,  List<String> interests,  String? budgetRange,  String? travelStyle,  bool isProfileComplete,  bool isPreferencesComplete)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String uid,  String email,  String displayName,  bool isEmailVerified,  String? photoUrl,  String? phoneNumber,  String? bio,  String? city,  String? gender,  DateTime? birthDate,  List<String> personalityTraits,  List<String> interests,  String? budgetRange,  String? travelStyle,  bool isProfileComplete,  bool isPreferencesComplete,  String role,  String? agencyId)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AppUser() when $default != null:
-return $default(_that.uid,_that.email,_that.displayName,_that.isEmailVerified,_that.photoUrl,_that.phoneNumber,_that.bio,_that.city,_that.gender,_that.birthDate,_that.personalityTraits,_that.interests,_that.budgetRange,_that.travelStyle,_that.isProfileComplete,_that.isPreferencesComplete);case _:
+return $default(_that.uid,_that.email,_that.displayName,_that.isEmailVerified,_that.photoUrl,_that.phoneNumber,_that.bio,_that.city,_that.gender,_that.birthDate,_that.personalityTraits,_that.interests,_that.budgetRange,_that.travelStyle,_that.isProfileComplete,_that.isPreferencesComplete,_that.role,_that.agencyId);case _:
   return orElse();
 
 }
@@ -192,10 +197,10 @@ return $default(_that.uid,_that.email,_that.displayName,_that.isEmailVerified,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String uid,  String email,  String displayName,  bool isEmailVerified,  String? photoUrl,  String? phoneNumber,  String? bio,  String? city,  String? gender,  DateTime? birthDate,  List<String> personalityTraits,  List<String> interests,  String? budgetRange,  String? travelStyle,  bool isProfileComplete,  bool isPreferencesComplete)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String uid,  String email,  String displayName,  bool isEmailVerified,  String? photoUrl,  String? phoneNumber,  String? bio,  String? city,  String? gender,  DateTime? birthDate,  List<String> personalityTraits,  List<String> interests,  String? budgetRange,  String? travelStyle,  bool isProfileComplete,  bool isPreferencesComplete,  String role,  String? agencyId)  $default,) {final _that = this;
 switch (_that) {
 case _AppUser():
-return $default(_that.uid,_that.email,_that.displayName,_that.isEmailVerified,_that.photoUrl,_that.phoneNumber,_that.bio,_that.city,_that.gender,_that.birthDate,_that.personalityTraits,_that.interests,_that.budgetRange,_that.travelStyle,_that.isProfileComplete,_that.isPreferencesComplete);case _:
+return $default(_that.uid,_that.email,_that.displayName,_that.isEmailVerified,_that.photoUrl,_that.phoneNumber,_that.bio,_that.city,_that.gender,_that.birthDate,_that.personalityTraits,_that.interests,_that.budgetRange,_that.travelStyle,_that.isProfileComplete,_that.isPreferencesComplete,_that.role,_that.agencyId);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -212,10 +217,10 @@ return $default(_that.uid,_that.email,_that.displayName,_that.isEmailVerified,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String uid,  String email,  String displayName,  bool isEmailVerified,  String? photoUrl,  String? phoneNumber,  String? bio,  String? city,  String? gender,  DateTime? birthDate,  List<String> personalityTraits,  List<String> interests,  String? budgetRange,  String? travelStyle,  bool isProfileComplete,  bool isPreferencesComplete)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String uid,  String email,  String displayName,  bool isEmailVerified,  String? photoUrl,  String? phoneNumber,  String? bio,  String? city,  String? gender,  DateTime? birthDate,  List<String> personalityTraits,  List<String> interests,  String? budgetRange,  String? travelStyle,  bool isProfileComplete,  bool isPreferencesComplete,  String role,  String? agencyId)?  $default,) {final _that = this;
 switch (_that) {
 case _AppUser() when $default != null:
-return $default(_that.uid,_that.email,_that.displayName,_that.isEmailVerified,_that.photoUrl,_that.phoneNumber,_that.bio,_that.city,_that.gender,_that.birthDate,_that.personalityTraits,_that.interests,_that.budgetRange,_that.travelStyle,_that.isProfileComplete,_that.isPreferencesComplete);case _:
+return $default(_that.uid,_that.email,_that.displayName,_that.isEmailVerified,_that.photoUrl,_that.phoneNumber,_that.bio,_that.city,_that.gender,_that.birthDate,_that.personalityTraits,_that.interests,_that.budgetRange,_that.travelStyle,_that.isProfileComplete,_that.isPreferencesComplete,_that.role,_that.agencyId);case _:
   return null;
 
 }
@@ -227,7 +232,7 @@ return $default(_that.uid,_that.email,_that.displayName,_that.isEmailVerified,_t
 @JsonSerializable()
 
 class _AppUser implements AppUser {
-  const _AppUser({required this.uid, required this.email, this.displayName = '', this.isEmailVerified = false, this.photoUrl, this.phoneNumber, this.bio, this.city, this.gender, this.birthDate, final  List<String> personalityTraits = const [], final  List<String> interests = const [], this.budgetRange, this.travelStyle, this.isProfileComplete = false, this.isPreferencesComplete = false}): _personalityTraits = personalityTraits,_interests = interests;
+  const _AppUser({required this.uid, required this.email, this.displayName = '', this.isEmailVerified = false, this.photoUrl, this.phoneNumber, this.bio, this.city, this.gender, this.birthDate, final  List<String> personalityTraits = const [], final  List<String> interests = const [], this.budgetRange, this.travelStyle, this.isProfileComplete = false, this.isPreferencesComplete = false, this.role = 'consumer', this.agencyId}): _personalityTraits = personalityTraits,_interests = interests;
   factory _AppUser.fromJson(Map<String, dynamic> json) => _$AppUserFromJson(json);
 
 @override final  String uid;
@@ -262,6 +267,11 @@ class _AppUser implements AppUser {
 // Profile completion status
 @override@JsonKey() final  bool isProfileComplete;
 @override@JsonKey() final  bool isPreferencesComplete;
+// Role-based access: 'consumer' | 'agency' | 'superAdmin'
+// @Default ensures existing Firestore docs without this field stay consumer
+@override@JsonKey() final  String role;
+// Only present for agency users
+@override final  String? agencyId;
 
 /// Create a copy of AppUser
 /// with the given fields replaced by the non-null parameter values.
@@ -276,16 +286,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AppUser&&(identical(other.uid, uid) || other.uid == uid)&&(identical(other.email, email) || other.email == email)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.isEmailVerified, isEmailVerified) || other.isEmailVerified == isEmailVerified)&&(identical(other.photoUrl, photoUrl) || other.photoUrl == photoUrl)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.bio, bio) || other.bio == bio)&&(identical(other.city, city) || other.city == city)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.birthDate, birthDate) || other.birthDate == birthDate)&&const DeepCollectionEquality().equals(other._personalityTraits, _personalityTraits)&&const DeepCollectionEquality().equals(other._interests, _interests)&&(identical(other.budgetRange, budgetRange) || other.budgetRange == budgetRange)&&(identical(other.travelStyle, travelStyle) || other.travelStyle == travelStyle)&&(identical(other.isProfileComplete, isProfileComplete) || other.isProfileComplete == isProfileComplete)&&(identical(other.isPreferencesComplete, isPreferencesComplete) || other.isPreferencesComplete == isPreferencesComplete));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AppUser&&(identical(other.uid, uid) || other.uid == uid)&&(identical(other.email, email) || other.email == email)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.isEmailVerified, isEmailVerified) || other.isEmailVerified == isEmailVerified)&&(identical(other.photoUrl, photoUrl) || other.photoUrl == photoUrl)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.bio, bio) || other.bio == bio)&&(identical(other.city, city) || other.city == city)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.birthDate, birthDate) || other.birthDate == birthDate)&&const DeepCollectionEquality().equals(other._personalityTraits, _personalityTraits)&&const DeepCollectionEquality().equals(other._interests, _interests)&&(identical(other.budgetRange, budgetRange) || other.budgetRange == budgetRange)&&(identical(other.travelStyle, travelStyle) || other.travelStyle == travelStyle)&&(identical(other.isProfileComplete, isProfileComplete) || other.isProfileComplete == isProfileComplete)&&(identical(other.isPreferencesComplete, isPreferencesComplete) || other.isPreferencesComplete == isPreferencesComplete)&&(identical(other.role, role) || other.role == role)&&(identical(other.agencyId, agencyId) || other.agencyId == agencyId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,uid,email,displayName,isEmailVerified,photoUrl,phoneNumber,bio,city,gender,birthDate,const DeepCollectionEquality().hash(_personalityTraits),const DeepCollectionEquality().hash(_interests),budgetRange,travelStyle,isProfileComplete,isPreferencesComplete);
+int get hashCode => Object.hash(runtimeType,uid,email,displayName,isEmailVerified,photoUrl,phoneNumber,bio,city,gender,birthDate,const DeepCollectionEquality().hash(_personalityTraits),const DeepCollectionEquality().hash(_interests),budgetRange,travelStyle,isProfileComplete,isPreferencesComplete,role,agencyId);
 
 @override
 String toString() {
-  return 'AppUser(uid: $uid, email: $email, displayName: $displayName, isEmailVerified: $isEmailVerified, photoUrl: $photoUrl, phoneNumber: $phoneNumber, bio: $bio, city: $city, gender: $gender, birthDate: $birthDate, personalityTraits: $personalityTraits, interests: $interests, budgetRange: $budgetRange, travelStyle: $travelStyle, isProfileComplete: $isProfileComplete, isPreferencesComplete: $isPreferencesComplete)';
+  return 'AppUser(uid: $uid, email: $email, displayName: $displayName, isEmailVerified: $isEmailVerified, photoUrl: $photoUrl, phoneNumber: $phoneNumber, bio: $bio, city: $city, gender: $gender, birthDate: $birthDate, personalityTraits: $personalityTraits, interests: $interests, budgetRange: $budgetRange, travelStyle: $travelStyle, isProfileComplete: $isProfileComplete, isPreferencesComplete: $isPreferencesComplete, role: $role, agencyId: $agencyId)';
 }
 
 
@@ -296,7 +306,7 @@ abstract mixin class _$AppUserCopyWith<$Res> implements $AppUserCopyWith<$Res> {
   factory _$AppUserCopyWith(_AppUser value, $Res Function(_AppUser) _then) = __$AppUserCopyWithImpl;
 @override @useResult
 $Res call({
- String uid, String email, String displayName, bool isEmailVerified, String? photoUrl, String? phoneNumber, String? bio, String? city, String? gender, DateTime? birthDate, List<String> personalityTraits, List<String> interests, String? budgetRange, String? travelStyle, bool isProfileComplete, bool isPreferencesComplete
+ String uid, String email, String displayName, bool isEmailVerified, String? photoUrl, String? phoneNumber, String? bio, String? city, String? gender, DateTime? birthDate, List<String> personalityTraits, List<String> interests, String? budgetRange, String? travelStyle, bool isProfileComplete, bool isPreferencesComplete, String role, String? agencyId
 });
 
 
@@ -313,7 +323,7 @@ class __$AppUserCopyWithImpl<$Res>
 
 /// Create a copy of AppUser
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? uid = null,Object? email = null,Object? displayName = null,Object? isEmailVerified = null,Object? photoUrl = freezed,Object? phoneNumber = freezed,Object? bio = freezed,Object? city = freezed,Object? gender = freezed,Object? birthDate = freezed,Object? personalityTraits = null,Object? interests = null,Object? budgetRange = freezed,Object? travelStyle = freezed,Object? isProfileComplete = null,Object? isPreferencesComplete = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? uid = null,Object? email = null,Object? displayName = null,Object? isEmailVerified = null,Object? photoUrl = freezed,Object? phoneNumber = freezed,Object? bio = freezed,Object? city = freezed,Object? gender = freezed,Object? birthDate = freezed,Object? personalityTraits = null,Object? interests = null,Object? budgetRange = freezed,Object? travelStyle = freezed,Object? isProfileComplete = null,Object? isPreferencesComplete = null,Object? role = null,Object? agencyId = freezed,}) {
   return _then(_AppUser(
 uid: null == uid ? _self.uid : uid // ignore: cast_nullable_to_non_nullable
 as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
@@ -331,7 +341,9 @@ as List<String>,budgetRange: freezed == budgetRange ? _self.budgetRange : budget
 as String?,travelStyle: freezed == travelStyle ? _self.travelStyle : travelStyle // ignore: cast_nullable_to_non_nullable
 as String?,isProfileComplete: null == isProfileComplete ? _self.isProfileComplete : isProfileComplete // ignore: cast_nullable_to_non_nullable
 as bool,isPreferencesComplete: null == isPreferencesComplete ? _self.isPreferencesComplete : isPreferencesComplete // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,role: null == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
+as String,agencyId: freezed == agencyId ? _self.agencyId : agencyId // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
