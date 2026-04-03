@@ -381,3 +381,93 @@ final class UserTripBookingFamily extends $Family
   @override
   String toString() => r'userTripBookingProvider';
 }
+
+/// Real-time stream of recent bookings for an agency.
+/// Requires agencyId to be denormalized on booking documents.
+
+@ProviderFor(agencyBookingsStream)
+final agencyBookingsStreamProvider = AgencyBookingsStreamFamily._();
+
+/// Real-time stream of recent bookings for an agency.
+/// Requires agencyId to be denormalized on booking documents.
+
+final class AgencyBookingsStreamProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<Booking>>,
+          List<Booking>,
+          Stream<List<Booking>>
+        >
+    with $FutureModifier<List<Booking>>, $StreamProvider<List<Booking>> {
+  /// Real-time stream of recent bookings for an agency.
+  /// Requires agencyId to be denormalized on booking documents.
+  AgencyBookingsStreamProvider._({
+    required AgencyBookingsStreamFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'agencyBookingsStreamProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$agencyBookingsStreamHash();
+
+  @override
+  String toString() {
+    return r'agencyBookingsStreamProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $StreamProviderElement<List<Booking>> $createElement(
+    $ProviderPointer pointer,
+  ) => $StreamProviderElement(pointer);
+
+  @override
+  Stream<List<Booking>> create(Ref ref) {
+    final argument = this.argument as String;
+    return agencyBookingsStream(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is AgencyBookingsStreamProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$agencyBookingsStreamHash() =>
+    r'75c0047c0692049a49d1ff995b8f0672f0820e56';
+
+/// Real-time stream of recent bookings for an agency.
+/// Requires agencyId to be denormalized on booking documents.
+
+final class AgencyBookingsStreamFamily extends $Family
+    with $FunctionalFamilyOverride<Stream<List<Booking>>, String> {
+  AgencyBookingsStreamFamily._()
+    : super(
+        retry: null,
+        name: r'agencyBookingsStreamProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  /// Real-time stream of recent bookings for an agency.
+  /// Requires agencyId to be denormalized on booking documents.
+
+  AgencyBookingsStreamProvider call(String agencyId) =>
+      AgencyBookingsStreamProvider._(argument: agencyId, from: this);
+
+  @override
+  String toString() => r'agencyBookingsStreamProvider';
+}

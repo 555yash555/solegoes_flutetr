@@ -48,7 +48,7 @@ final class AuthRepositoryProvider
   }
 }
 
-String _$authRepositoryHash() => r'5610009096f9eb719549203a4a88cc0620f40316';
+String _$authRepositoryHash() => r'47630a88e98886fbe14c9f7e9392cd4374f3e9fc';
 
 @ProviderFor(authStateChanges)
 final authStateChangesProvider = AuthStateChangesProvider._();

@@ -54,6 +54,8 @@ abstract class Booking with _$Booking {
     DateTime? tripStartDate,
     String? userEmail,
     String? userName,
+    // Denormalized agency reference for agency-side queries
+    String? agencyId,
     // Trip style/package selection
     String? selectedStyleId,
     String? selectedStyleName,
@@ -106,6 +108,7 @@ Booking bookingFromFirestore(DocumentSnapshot doc) {
         : null,
     userEmail: data['userEmail'] as String?,
     userName: data['userName'] as String?,
+    agencyId: data['agencyId'] as String?,
     selectedStyleId: data['selectedStyleId'] as String?,
     selectedStyleName: data['selectedStyleName'] as String?,
     selectedBoardingPoint: _parseSelectedTripPoint(
@@ -148,6 +151,7 @@ Map<String, dynamic> bookingToFirestore(Booking booking) {
         : null,
     'userEmail': booking.userEmail,
     'userName': booking.userName,
+    if (booking.agencyId != null) 'agencyId': booking.agencyId,
     'selectedStyleId': booking.selectedStyleId,
     'selectedStyleName': booking.selectedStyleName,
     'selectedBoardingPoint': _selectedTripPointToFirestore(booking.selectedBoardingPoint),

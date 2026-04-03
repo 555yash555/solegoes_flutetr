@@ -110,6 +110,26 @@ Before writing any code, read and follow all rules below.
 - Always use `SafeArea` for screens with custom backgrounds.
 - Always use `AppColors.bgDeep` as scaffold background.
 
+### Provider Reuse — Use What Already Exists
+
+**BEFORE writing any new provider or calling Firestore directly in a widget/redirect, check if these canonical providers already cover your need:**
+
+| Need | Use this provider | Source file |
+|---|---|---|
+| Current logged-in user (full profile, role, agencyId) | `authStateChangesProvider` → `AsyncValue<AppUser?>` | `auth_repository.dart` |
+| Auth repository instance | `authRepositoryProvider` | `auth_repository.dart` |
+| Live agency doc (real-time stream) | `agencyStreamProvider(agencyId)` → `AsyncValue<Agency>` | `agency_repository.dart` |
+| One-time agency fetch | `agencyFutureProvider(agencyId)` → `AsyncValue<Agency>` | `agency_repository.dart` |
+| Agency repository instance | `agencyRepositoryProvider` | `agency_repository.dart` |
+| Onboarding completion status | `onboardingRepositoryProvider` → `AsyncValue<OnboardingRepository>` | `onboarding_repository.dart` |
+
+**Rules:**
+- **NEVER call `authRepository.getUserProfile(uid)` inside a redirect or widget** when you only need `role` or `agencyId` — use `authStateChangesProvider` instead. It is already streaming the full `AppUser` from Firestore with retry logic.
+- **NEVER call `FirebaseFirestore.instance.collection(...)` directly** in a screen or redirect. All Firestore access must go through a repository.
+- **NEVER duplicate an existing provider** — define it once, `ref.watch`/`ref.read` everywhere.
+- When a `redirect` function needs user data, prefer **synchronous `AsyncValue.when()`** on an already-watched provider over an `await`ed Firestore call inside the redirect body. Async calls inside redirects are fragile — race conditions, silent failures, and catch-to-bad-route traps.
+- After reading `authStateChangesProvider`, always handle `null` (not logged in) and the `loading` state explicitly — do not assume `data` is always present.
+
 ---
 
 ## Task

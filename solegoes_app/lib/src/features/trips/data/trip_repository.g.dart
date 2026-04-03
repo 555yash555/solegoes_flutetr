@@ -303,3 +303,91 @@ final class WeekendGetawaysProvider
 }
 
 String _$weekendGetawaysHash() => r'666e2087476e4d69fcd38dd6e189fdc8a28e1244';
+
+/// Real-time stream of all trips for the given agency (all statuses).
+/// Used by AgencyHomeScreen (preview, limit 5) and AgencyTripsScreen (full list).
+
+@ProviderFor(agencyTripsStream)
+final agencyTripsStreamProvider = AgencyTripsStreamFamily._();
+
+/// Real-time stream of all trips for the given agency (all statuses).
+/// Used by AgencyHomeScreen (preview, limit 5) and AgencyTripsScreen (full list).
+
+final class AgencyTripsStreamProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<Trip>>,
+          List<Trip>,
+          Stream<List<Trip>>
+        >
+    with $FutureModifier<List<Trip>>, $StreamProvider<List<Trip>> {
+  /// Real-time stream of all trips for the given agency (all statuses).
+  /// Used by AgencyHomeScreen (preview, limit 5) and AgencyTripsScreen (full list).
+  AgencyTripsStreamProvider._({
+    required AgencyTripsStreamFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'agencyTripsStreamProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$agencyTripsStreamHash();
+
+  @override
+  String toString() {
+    return r'agencyTripsStreamProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $StreamProviderElement<List<Trip>> $createElement($ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
+
+  @override
+  Stream<List<Trip>> create(Ref ref) {
+    final argument = this.argument as String;
+    return agencyTripsStream(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is AgencyTripsStreamProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$agencyTripsStreamHash() => r'b725a267e23832d76af86d76b710834f7b8c5550';
+
+/// Real-time stream of all trips for the given agency (all statuses).
+/// Used by AgencyHomeScreen (preview, limit 5) and AgencyTripsScreen (full list).
+
+final class AgencyTripsStreamFamily extends $Family
+    with $FunctionalFamilyOverride<Stream<List<Trip>>, String> {
+  AgencyTripsStreamFamily._()
+    : super(
+        retry: null,
+        name: r'agencyTripsStreamProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  /// Real-time stream of all trips for the given agency (all statuses).
+  /// Used by AgencyHomeScreen (preview, limit 5) and AgencyTripsScreen (full list).
+
+  AgencyTripsStreamProvider call(String agencyId) =>
+      AgencyTripsStreamProvider._(argument: agencyId, from: this);
+
+  @override
+  String toString() => r'agencyTripsStreamProvider';
+}

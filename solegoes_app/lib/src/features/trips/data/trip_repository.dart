@@ -95,12 +95,11 @@ class TripRepository {
     }
   }
 
-  /// Get trips by agency
+  /// Get all trips for an agency (all statuses — live, draft, pending, etc.)
   Future<List<Trip>> getTripsByAgency(String agencyId) async {
     try {
       final snapshot = await _firestore
           .collection('trips')
-          .where('status', isEqualTo: 'live')
           .where('agencyId', isEqualTo: agencyId)
           .orderBy('createdAt', descending: true)
           .get();
@@ -111,6 +110,18 @@ class TripRepository {
     } catch (e) {
       throw Exception('Failed to fetch trips by agency: $e');
     }
+  }
+
+  /// Real-time stream of all trips for an agency (all statuses)
+  Stream<List<Trip>> watchAgencyTrips(String agencyId) {
+    return _firestore
+        .collection('trips')
+        .where('agencyId', isEqualTo: agencyId)
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => Trip.fromJson({...doc.data(), 'tripId': doc.id}))
+            .toList());
   }
 
   /// Search trips by text
@@ -216,4 +227,11 @@ Stream<List<Trip>> weekendGetaways(Ref ref) {
       return t.duration <= 4;
     }).toList();
   });
+}
+
+/// Real-time stream of all trips for the given agency (all statuses).
+/// Used by AgencyHomeScreen (preview, limit 5) and AgencyTripsScreen (full list).
+@riverpod
+Stream<List<Trip>> agencyTripsStream(Ref ref, String agencyId) {
+  return ref.watch(tripRepositoryProvider).watchAgencyTrips(agencyId);
 }

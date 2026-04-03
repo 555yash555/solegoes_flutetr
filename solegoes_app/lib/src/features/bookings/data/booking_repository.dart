@@ -158,6 +158,33 @@ class BookingRepository {
     if (query.docs.isEmpty) return null;
     return bookingFromFirestore(query.docs.first);
   }
+
+  /// Get recent bookings for an agency (requires agencyId field on booking docs).
+  /// Returns bookings ordered by bookingDate desc, limited to [limit] results.
+  Future<List<Booking>> getBookingsForAgency(
+    String agencyId, {
+    int limit = 20,
+  }) async {
+    final query = await _bookingsRef
+        .where('agencyId', isEqualTo: agencyId)
+        .orderBy('bookingDate', descending: true)
+        .limit(limit)
+        .get();
+    return query.docs.map((doc) => bookingFromFirestore(doc)).toList();
+  }
+
+  /// Real-time stream of bookings for an agency.
+  Stream<List<Booking>> watchBookingsForAgency(
+    String agencyId, {
+    int limit = 20,
+  }) {
+    return _bookingsRef
+        .where('agencyId', isEqualTo: agencyId)
+        .orderBy('bookingDate', descending: true)
+        .limit(limit)
+        .snapshots()
+        .map((snap) => snap.docs.map(bookingFromFirestore).toList());
+  }
 }
 
 /// Provider for BookingRepository
@@ -192,4 +219,11 @@ Future<Booking?> bookingByPaymentId(Ref ref, String paymentId) {
 Future<Booking?> userTripBooking(Ref ref, String tripId, String userId) {
   final repository = ref.watch(bookingRepositoryProvider);
   return repository.getUserBookingForTrip(tripId, userId);
+}
+
+/// Real-time stream of recent bookings for an agency.
+/// Requires agencyId to be denormalized on booking documents.
+@riverpod
+Stream<List<Booking>> agencyBookingsStream(Ref ref, String agencyId) {
+  return ref.watch(bookingRepositoryProvider).watchBookingsForAgency(agencyId);
 }

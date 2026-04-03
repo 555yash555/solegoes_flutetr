@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,6 +30,10 @@ class _AgencyPendingScreenState extends ConsumerState<AgencyPendingScreen>
   late final AnimationController _pulseCtrl;
   late final AnimationController _blinkCtrl;
 
+  // Dev-mode: auto-navigate to dashboard after 10 s
+  Timer? _autoNav;
+  int _countdown = 10;
+
   @override
   void initState() {
     super.initState();
@@ -48,10 +53,24 @@ class _AgencyPendingScreenState extends ConsumerState<AgencyPendingScreen>
       vsync: this,
       duration: const Duration(milliseconds: 1400),
     )..repeat(reverse: true);
+
+    // Auto-navigate after 10 seconds (dev convenience)
+    _autoNav = Timer.periodic(const Duration(seconds: 1), (t) {
+      if (!mounted) {
+        t.cancel();
+        return;
+      }
+      setState(() => _countdown--);
+      if (_countdown <= 0) {
+        t.cancel();
+        context.go('/agency');
+      }
+    });
   }
 
   @override
   void dispose() {
+    _autoNav?.cancel();
     _outerRingCtrl.dispose();
     _innerRingCtrl.dispose();
     _pulseCtrl.dispose();
@@ -190,7 +209,31 @@ class _AgencyPendingScreenState extends ConsumerState<AgencyPendingScreen>
                               style: AppTextStyles.labelSmall,
                             ),
                             const SizedBox(height: 14),
-                            _buildSupportRow(), 
+                            // Dev countdown banner
+        Container(
+          margin: const EdgeInsets.only(bottom: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          decoration: BoxDecoration(
+            color: AppColors.surfaceOverlay,
+            border: Border.all(color: AppColors.borderSubtle),
+            borderRadius: AppRadius.mdAll,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(LucideIcons.zap,
+                  size: 13, color: AppColors.accentYellow),
+              const SizedBox(width: 8),
+              Text(
+                'Dev mode — auto-opening dashboard in $_countdown s',
+                style: AppTextStyles.labelSmall.copyWith(
+                  color: AppColors.textSecondary,
+                ),
+              ),
+            ],
+          ),
+        ),
+        _buildSupportRow(), 
                           ],
                         ),
                       ),

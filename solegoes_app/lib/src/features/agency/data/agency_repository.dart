@@ -97,6 +97,39 @@ class AgencyRepository {
       'totalBookings': FieldValue.increment(1),
     });
   }
+
+  // ===========================================
+  // PROFILE UPDATES
+  // ===========================================
+
+  /// Partial update of editable agency profile fields.
+  /// Only provided (non-null) keys are written to Firestore.
+  Future<void> updateAgencyProfile(
+    String agencyId, {
+    String? businessName,
+    String? email,
+    String? phone,
+    String? description,
+    List<String>? specialties,
+    String? teamSize,
+    int? yearsExperience,
+    String? logoUrl,
+    String? coverImageUrl,
+  }) async {
+    final updates = <String, dynamic>{
+      'updatedAt': FieldValue.serverTimestamp(),
+    };
+    if (businessName != null) updates['businessName'] = businessName;
+    if (email != null) updates['email'] = email;
+    if (phone != null) updates['phone'] = phone;
+    if (description != null) updates['description'] = description;
+    if (specialties != null) updates['specialties'] = specialties;
+    if (teamSize != null) updates['teamSize'] = teamSize;
+    if (yearsExperience != null) updates['yearsExperience'] = yearsExperience;
+    if (logoUrl != null) updates['logoUrl'] = logoUrl;
+    if (coverImageUrl != null) updates['coverImageUrl'] = coverImageUrl;
+    await _agencies.doc(agencyId).update(updates);
+  }
 }
 
 // ===========================================

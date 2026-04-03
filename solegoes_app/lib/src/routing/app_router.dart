@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../features/agency/data/agency_repository.dart';
-import '../theme/app_theme.dart';
+import '../features/agency_dashboard/presentation/agency_shell.dart';
+import '../features/agency_dashboard/presentation/screens/agency_bookings_screen.dart';
+import '../features/agency_dashboard/presentation/screens/agency_home_screen.dart';
 import '../features/agency_dashboard/presentation/screens/agency_login_screen.dart';
+import '../features/agency_dashboard/presentation/screens/agency_messages_screen.dart';
+import '../features/agency_dashboard/presentation/screens/agency_payouts_screen.dart';
 import '../features/agency_dashboard/presentation/screens/agency_pending_screen.dart';
+import '../features/agency_dashboard/presentation/screens/agency_profile_screen.dart';
 import '../features/agency_dashboard/presentation/screens/agency_signup_screen.dart';
+import '../features/agency_dashboard/presentation/screens/agency_trips_screen.dart';
 import '../features/authentication/data/auth_repository.dart';
 import '../features/onboarding/data/onboarding_repository.dart';
 import '../features/splash/presentation/splash_screen.dart';
@@ -112,6 +118,9 @@ enum AppRoute {
 GoRouter goRouter(Ref ref) {
   final authRepository = ref.watch(authRepositoryProvider);
   final onboardingRepoAsync = ref.watch(onboardingRepositoryProvider);
+  // Watch the live user stream — gives us the role synchronously without
+  // an extra Firestore round-trip inside the redirect.
+  final authStateAsync = ref.watch(authStateChangesProvider);
 
   return GoRouter(
     debugLogDiagnostics: true,
@@ -123,7 +132,8 @@ GoRouter goRouter(Ref ref) {
           path == '/seed-trips' ||
           path == '/splash' ||
           path == '/agency-login' ||
-          path == '/agency-signup') {
+          path == '/agency-signup' ||
+          path == '/agency-pending') {
         return null;
       }
 
@@ -134,9 +144,23 @@ GoRouter goRouter(Ref ref) {
         error: (_, __) => true, // Assume complete on error
       );
 
-      // If onboarding not complete and not on onboarding page, go to onboarding
+      // If onboarding not complete and not on onboarding page, go to onboarding.
+      // Skip for agency/superAdmin users — they never do consumer onboarding.
       if (!isOnboardingComplete && path != '/onboarding') {
-        return '/onboarding';
+        // Read role from the already-live auth stream — no async Firestore call needed.
+        final currentRole = authStateAsync.when(
+          data: (user) => user?.role,
+          loading: () => null, // still loading → be safe, don't redirect yet
+          error: (_, __) => null,
+        );
+        // null = still loading or error — hold off, don't send to onboarding
+        if (currentRole == null ||
+            currentRole == 'agency' ||
+            currentRole == 'superAdmin') {
+          // Non-consumer or unknown yet — skip onboarding redirect
+        } else {
+          return '/onboarding';
+        }
       }
 
       final isLoggedIn = authRepository.currentUser != null;
@@ -296,21 +320,70 @@ GoRouter goRouter(Ref ref) {
         builder: (context, state) => const AgencyPendingScreen(),
       ),
 
-      // ── Agency Placeholder (Phase 3 will replace with StatefulShellRoute) ──
-      GoRoute(
-        path: '/agency',
-        name: AppRoute.agencyHome.name,
-        builder: (context, state) => Scaffold(
-          backgroundColor: AppColors.bgDeep,
-          body: Center(
-            child: Text(
-              'Agency Dashboard\n(Phase 3)',
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                  color: Colors.white, fontSize: 24, fontWeight: FontWeight.w700),
-            ),
+      // ── Agency Dashboard Shell (Phase 3) ──
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) {
+          return AgencyShell(navigationShell: navigationShell);
+        },
+        branches: [
+          // 0: Dashboard
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/agency',
+                name: AppRoute.agencyHome.name,
+                builder: (context, state) => const AgencyHomeScreen(),
+              ),
+            ],
           ),
-        ),
+          // 1: My Trips
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/agency/trips',
+                name: AppRoute.agencyTrips.name,
+                builder: (context, state) => const AgencyTripsScreen(),
+              ),
+            ],
+          ),
+          // 2: Bookings
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/agency/bookings',
+                name: AppRoute.agencyBookings.name,
+                builder: (context, state) => const AgencyBookingsScreen(),
+              ),
+            ],
+          ),
+          // 3: Messages
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/agency/messages',
+                name: AppRoute.agencyMessages.name,
+                builder: (context, state) => const AgencyMessagesScreen(),
+              ),
+            ],
+          ),
+          // 4: Payouts
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/agency/payouts',
+                name: AppRoute.agencyPayouts.name,
+                builder: (context, state) => const AgencyPayoutsScreen(),
+              ),
+            ],
+          ),
+        ],
+      ),
+
+      // ── Agency non-shell detail routes ──
+      GoRoute(
+        path: '/agency/profile',
+        name: AppRoute.agencyProfile.name,
+        builder: (context, state) => const AgencyProfileScreen(),
       ),
 
       // ===========================================

@@ -116,91 +116,98 @@
 ## Phase 4: Agency Home + Profile + Settings
 
 **Goal:** Real data displayed on dashboard. Profile and account settings working.
-**Approach:** Convert `03_agency_dashboard.html` content area → Flutter. Profile + Settings have no mockup (build from plan specs).
+**Approach:** Data layer first — add missing providers and repository methods, then build screens against real data.
+**Rule:** Never build a screen against placeholder/mocked data if the repository method can be added immediately.
 
-- [ ] **4.1** Create `StatsCard` reusable widget
-  - File: `components/stats_card.dart` (NEW)
-  - Convert from HTML stats grid in `03_agency_dashboard.html`
-  - Icon, value, label, optional trend indicator
-  - Desktop: hover scale 1.02 + shadow
-- [ ] **4.2** Convert `03_agency_dashboard.html` content → Flutter
-  - File: `screens/agency_home_screen.dart`
-  - HTML→Flutter: stats grid (4-col → 2-col responsive), recent trips rows, recent bookings rows, quick action tiles
-  - Data: `agency.stats` + `tripRepository.getTripsByAgency()` + `bookingRepository.getBookingsForAgency()`
-- [ ] **4.3** Add `getBookingsForAgency(agencyId)` to BookingRepository
+### 4a — Data Layer (implement BEFORE screens)
+
+- [x] **4.1** Confirm `agencyStreamProvider(agencyId)` already streams `agency.stats`, `agency.rating` ✅
+  - `stats` map: `totalRevenue`, `activeBookings`, `completedTrips` — denormalized, updated by booking events
+  - `rating` — `@Default(0.0) double rating`
+- [ ] **4.2** Add `agencyTripsProvider(agencyId)` Riverpod provider to `trip_repository.dart`
+  - Wrap existing `getTripsByAgency(agencyId)` as a `@riverpod` `FutureProvider`
+  - Returns `List<Trip>` ordered by `createdAt desc`, limit 5 for home screen preview
+- [ ] **4.3** Add `getBookingsForAgency(agencyId)` to `BookingRepository`
   - File: `lib/src/features/bookings/data/booking_repository.dart`
-- [ ] **4.4** Build Agency Profile Screen
-  - File: `screens/agency_profile_screen.dart`
-  - Desktop: 2-col (logo+cover left, form right)
-  - Mobile: single column
-  - Fields: business name, email, phone, description, specialties, team size, years experience
-  - Logo + cover image upload to Firebase Storage
-- [ ] **4.5** Build Agency Settings Screen (no mockup — build from plan spec 5.17)
-  - File: `screens/agency_settings_screen.dart` (NEW)
-  - Sections: Account Security (change password, linked accounts), Bank Details (view/update), GST & Documents (view/re-upload), Notification Preferences, Danger Zone (deactivate)
-  - Route: /agency/settings (accessed from sidebar)
-- [ ] **4.6** Verify: agency sees real stats from Firestore
-- [ ] **4.7** Verify: agency can edit profile, changes persist
-- [ ] **4.8** Verify: agency can update bank details and change password from settings
+  - Query: `bookings` where `agencyId == agencyId`, order by `createdAt desc`, limit 5
+  - Add `@riverpod agencyBookings(Ref, agencyId)` provider
+- [ ] **4.4** Add `updateAgencyProfile(agencyId, fields)` to `AgencyRepository`
+  - Partial Firestore update for: businessName, email, phone, description, specialties, teamSize, yearsExperience
+  - File: `lib/src/features/agency/data/agency_repository.dart`
 
-**Checkpoint:** Agency sees real stats. Can edit profile.
+### 4b — Screens (implement AFTER data layer is done)
+
+- [ ] **4.5** Create `StatsCard` reusable component
+  - File: `lib/src/features/agency_dashboard/presentation/components/stats_card.dart` (NEW)
+  - Props: icon, iconBg, iconColor, label, value, delta (String?), deltaUp (bool?)
+  - Hover: slight scale + border highlight
+- [ ] **4.6** Convert `03_agency_dashboard.html` content area → `AgencyHomeScreen`
+  - File: `screens/agency_home_screen.dart`
+  - Sections: stats grid (4-col → 2-col, AppShimmer while loading), recent trips list, quick actions grid, recent bookings list
+  - Data: `authStateChangesProvider` → agencyId → `agencyStreamProvider` + `agencyTripsProvider` + `agencyBookingsProvider`
+  - "Publish a Trip" CTA → `context.go('/agency/trips/add')`
+- [ ] **4.7** Build `AgencyProfileScreen`
+  - File: `screens/agency_profile_screen.dart`
+  - Desktop: 2-col (avatar/cover left, form right). Mobile: single column.
+  - Reads: `agencyStreamProvider`. Saves via `agencyRepository.updateAgencyProfile()`
+  - Fields: businessName, email, phone, description, specialties chips, teamSize, yearsExperience
+- [ ] **4.8** Build `AgencySettingsScreen`
+  - File: `screens/agency_settings_screen.dart` (NEW), route: `/agency/settings`
+  - Sections: Account Security (change password), Bank Details (view/update), Danger Zone (deactivate)
+
+### 4c — Verification
+
+- [ ] **4.9** Verify: stats grid shows real values from `agency.stats` (not zeros)
+- [ ] **4.10** Verify: Recent Trips and Recent Bookings render from Firestore
+- [ ] **4.11** Verify: agency can edit profile and changes persist in Firestore
+
+**Checkpoint:** Agency sees real stats. Recent trips and bookings from Firestore. Can edit profile.
 
 ---
 
 ## Phase 5: Trip Management
 
 **Goal:** Agency can create and manage trips.
-**Approach:** Convert `04_agency_trips.html` and `05_agency_add_trip.html` → Flutter. Trip detail viewer has no mockup.
+**Approach:** Data layer first (repository methods + Riverpod providers), then screens.
 
-- [ ] **5.1** Add `createTrip()` to TripRepository
-  - File: `lib/src/features/trips/data/trip_repository.dart`
-  - Sets agencyId, agencyName, isVerifiedAgency, status from agency context
-- [ ] **5.2** Add `updateTrip()` to TripRepository
-- [ ] **5.3** Add `deleteTripDraft()` to TripRepository (only drafts)
-- [ ] **5.4** Convert `04_agency_trips.html` → Flutter
-  - File: `screens/agency_trips_screen.dart`
-  - HTML→Flutter: filter tabs (All/Live/Pending/Drafts/Completed), data table (desktop), card list (mobile at 768px)
+### 5a — Data Layer (implement BEFORE screens)
+
+- [ ] **5.1** Add `createTrip(Trip trip)` to `TripRepository`
+  - Sets `agencyId`, `agencyName`, `isVerifiedAgency`, `status: draft`, `createdAt`
+- [ ] **5.2** Add `updateTrip(String tripId, Map<String,dynamic> fields)` to `TripRepository`
+- [ ] **5.3** Add `deleteTripDraft(String tripId)` to `TripRepository` (drafts only — check status)
+- [ ] **5.4** Add `agencyTripsStreamProvider(agencyId)` — real-time stream of all trips for agency
+  - File: `trip_repository.dart` — watch `trips` where `agencyId == agencyId`, order by `createdAt desc`
+  - Used by both home screen preview AND full trips list screen
+- [ ] **5.5** Add `saveTripDraft(Trip trip)` to `TripRepository`
+  - Upsert to `trip_drafts` subcollection under `agencies/{agencyId}`
+
+### 5b — Screens (implement AFTER data layer)
+
+- [ ] **5.6** Convert `04_agency_trips.html` → `AgencyTripsScreen`
+  - Filter tabs: All / Live / Pending / Drafts / Completed
+  - Desktop: data table. Mobile: card list (breakpoint 768px)
   - Action buttons: edit, delete, more menu
-  - "Add Trip" button
+  - "Add Trip" button → `/agency/trips/add`
   - Paginated: 20 per page
-- [ ] **5.5** Convert Trip Wizard from `05_agency_add_trip.html` — Step 1: Basic Info
-  - File: `components/trip_wizard/step_basic_info.dart` (NEW)
-  - HTML→Flutter: form fields, chip multi-select for categories
-  - Fields: title, description, location, duration, categories, group size, start/end dates
-- [ ] **5.6** Convert Trip Wizard — Step 2: Media
-  - File: `components/trip_wizard/step_media.dart` (NEW)
-  - HTML→Flutter: upload zones with drag-drop styling from mockup
-  - Primary image + gallery (max 10), Firebase Storage upload
-- [ ] **5.7** Create Trip Wizard — Step 3: Pricing Styles
-  - File: `components/trip_wizard/step_pricing.dart` (NEW)
-  - Dynamic list: name, price, accommodation, meals, inclusions (min 1, max 5)
-- [ ] **5.8** Create Trip Wizard — Step 4: Itinerary
-  - File: `components/trip_wizard/step_itinerary.dart` (NEW)
-  - Day-by-day: title, description, activities. Auto-generates from duration.
-- [ ] **5.9** Create Trip Wizard — Step 5: Logistics
-  - File: `components/trip_wizard/step_logistics.dart` (NEW)
-  - Boarding + dropping points: name, address, date/time
-- [ ] **5.10** Create Trip Wizard — Step 6: Review
-  - File: `components/trip_wizard/step_review.dart` (NEW)
-  - Read-only summary. "Publish" button.
-- [ ] **5.11** Convert `05_agency_add_trip.html` shell → Flutter (orchestrates wizard)
-  - File: `screens/agency_add_trip_screen.dart` (NEW)
-  - HTML→Flutter: full-screen wizard with stepper (desktop circles / mobile progress bar), back/next sticky footer
-  - "Save Draft" + "Unsaved Draft" badge from mockup
-  - Route: /agency/trips/add
-- [ ] **5.12** Build edit mode (pre-fill wizard from existing trip)
-  - Route: /agency/trips/:id/edit
-- [ ] **5.13** Build Agency Trip Detail Screen (no mockup — build from plan spec 5.15)
-  - File: `screens/agency_trip_detail_screen.dart` (NEW)
-  - Header: trip image + title + status badge + "Edit" button
-  - Stats row: total bookings, revenue, conversion rate, avg rating
-  - Sections: itinerary summary, pricing breakdown, boarding/dropping points, recent bookings
-  - "View All Bookings" → `/agency/trips/:id/bookings`
-  - Route: /agency/trips/:id
-- [ ] **5.14** Add routes for add/edit/detail trip in app_router.dart
-- [ ] **5.15** Verify: create trip via wizard → appears in consumer Explore feed
-- [ ] **5.16** Verify: edit existing trip → changes reflected
-- [ ] **5.17** Verify: trip detail shows correct analytics and links to bookings
+- [ ] **5.7** Convert `05_agency_add_trip.html` wizard shell → `AgencyAddTripScreen`
+  - File: `screens/agency_add_trip_screen.dart` (NEW), route: `/agency/trips/add`
+  - Full-screen wizard with stepper, back/next sticky footer, Save Draft + Unsaved Draft badge
+- [ ] **5.8** Trip Wizard Step 1: Basic Info — title, description, location, duration, categories, group size, dates
+- [ ] **5.9** Trip Wizard Step 2: Media — primary image + gallery (max 10), Firebase Storage
+- [ ] **5.10** Trip Wizard Step 3: Pricing — dynamic list (name, price, accommodation, meals, inclusions)
+- [ ] **5.11** Trip Wizard Step 4: Itinerary — day-by-day (title, description, activities)
+- [ ] **5.12** Trip Wizard Step 5: Logistics — boarding + dropping points (name, address, date/time)
+- [ ] **5.13** Trip Wizard Step 6: Review — read-only summary + Publish button
+- [ ] **5.14** Build edit mode — pre-fill wizard from existing trip. Route: `/agency/trips/:id/edit`
+- [ ] **5.15** Build `AgencyTripDetailScreen` — stats, itinerary summary, pricing, recent bookings. Route: `/agency/trips/:id`
+- [ ] **5.16** Add routes: `/agency/trips/add`, `/agency/trips/:id`, `/agency/trips/:id/edit` to `app_router.dart`
+
+### 5c — Verification
+
+- [ ] **5.17** Verify: create trip via wizard → appears in consumer Explore feed
+- [ ] **5.18** Verify: edit existing trip → changes reflected
+- [ ] **5.19** Verify: trip detail shows correct analytics
 
 **Checkpoint:** Full trip CRUD working. Trips visible to consumers.
 
@@ -312,19 +319,22 @@
 
 ## Progress Summary
 
-| Phase | Tasks | Done | Mockup | Status |
-|-------|-------|------|--------|--------|
-| 1. Agency Signup & Login | 12 | 0 | `00`, `01`, `02` | Not started |
-| 2. Foundation | 9 | 0 | — | Not started |
-| 3. Dashboard Shell | 8 | 0 | Shell from `03`–`06` | Not started |
-| 4. Home + Profile + Settings | 8 | 0 | `03` (home only) | Not started |
-| 5. Trip Management | 17 | 0 | `04`, `05` | Not started |
-| 6. Booking Management | 9 | 0 | `06` | Not started |
-| 7. Superadmin | 9 | 0 | No mockups | Not started |
-| 8. Messages, Notifications & Payouts | 9 | 0 | No mockups | Not started |
-| **Total** | **81** | **0** | **7 HTML mockups** | — |
+| Phase | Status | Data Layer | Screens |
+|-------|--------|------------|--------|
+| 1. Agency Signup & Login | ✅ Built | N/A | ✅ All screens |
+| 2. Foundation | ✅ Built | ✅ Models + repos | N/A |
+| 3. Dashboard Shell | ✅ Built | N/A | ✅ Shell + placeholders |
+| 4. Home + Profile + Settings | 🔄 In progress | ❌ Missing providers | ❌ Placeholder only |
+| 5. Trip Management | Not started | ❌ Missing write methods | ❌ |
+| 6. Booking Management | Not started | ❌ Missing agency query | ❌ |
+| 7. Superadmin | Not started | ❌ | ❌ |
+| 8. Messages, Notifications & Payouts | Not started | ❌ | ❌ |
 
-### Screens Without Mockups (need design or build from plan spec)
-- Agency Profile, Agency Settings, Agency Trip Detail Viewer, Agency Booking Detail
+### Data Layer Rule
+**Never implement a screen before its data layer is complete.**
+Order for each phase: repository methods → Riverpod providers → screen widgets.
+
+### Screens Without Mockups (build from plan spec)
+- Agency Profile, Agency Settings, Agency Trip Detail, Agency Booking Detail
 - Agency Messages, Agency Notifications, Agency Payouts
 - All 3 Admin screens
