@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bookings — SoleGoes Agency</title>
+    <link rel="stylesheet" href="shared/design-system.css" />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <style>
+        /*
+         * SCREEN: AgencyBookingsScreen (inside DashboardScaffold)
+         */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            background: var(--bg-deep);
+            overflow-x: hidden;
+        }
+
+        /* ══════════════════════════════════
+           SIDEBAR (Reused from Dashboard)
+           ══════════════════════════════════ */
+        .sidebar {
+            width: 240px; flex-shrink: 0; background: var(--bg-surface);
+            border-right: 1px solid var(--border-subtle); display: flex;
+            flex-direction: column; position: sticky; top: 0; height: 100vh; z-index: 20;
+        }
+        .sidebar-logo { padding: 24px 20px 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border-subtle); flex-shrink: 0; }
+        .sidebar-logo .logo-text { font-size: 18px; font-weight: 800; }
+        .sidebar-nav { flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 2px; }
+        .nav-section-label { font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-tertiary); padding: 10px 8px 6px; }
+        .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: var(--r-md); font-size: 13px; font-weight: 500; color: var(--text-secondary); cursor: pointer; text-decoration: none; }
+        .nav-item:hover:not(.active) { background: rgba(255,255,255,.05); color: var(--text-primary); }
+        .nav-item.active { background: rgba(99,102,241,.14); color: var(--primary-light); font-weight: 600; }
+        .nav-item .nav-badge { margin-left: auto; background: var(--primary); color: #fff; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: var(--r-full); min-width: 18px; text-align: center; }
+
+        /* ══════════════════════════════════
+           MAIN AREA
+           ══════════════════════════════════ */
+        .main-area { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+
+        /* Top bar */
+        .topbar {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 16px 32px; border-bottom: 1px solid var(--border-subtle);
+            background: rgba(9,9,11,.85); backdrop-filter: blur(12px);
+            position: sticky; top: 0; z-index: 10; flex-shrink: 0;
+        }
+        .topbar-right { display: flex; align-items: center; gap: 10px; }
+        .icon-btn {
+            width: 36px; height: 36px; border-radius: var(--r-md);
+            background: rgba(255,255,255,.05); border: 1px solid var(--border-subtle);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; color: var(--text-secondary);
+        }
+
+        .content { padding: 28px 32px 48px; max-width: 1200px; margin: 0 auto; width: 100%; }
+
+        /* Header */
+        .page-heading {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 24px; gap: 16px; flex-wrap: wrap;
+        }
+        .page-title { font-size: 22px; font-weight: 800; }
+
+        /* Tab Bar */
+        /* FLUTTER: TabBar inside AppBar bottom or custom Row */
+        .filter-tabs {
+            display: flex; gap: 8px; margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-subtle);
+            padding-bottom: 16px;
+            overflow-x: auto;
+        }
+        .tab-btn {
+            padding: 8px 16px; border-radius: var(--r-full);
+            font-size: 13px; font-weight: 600; cursor: pointer;
+            border: 1px solid transparent; background: transparent; color: var(--text-secondary);
+            white-space: nowrap; transition: all 150ms ease;
+        }
+        .tab-btn:hover { background: rgba(255,255,255,.05); color: var(--text-primary); }
+        .tab-btn.active {
+            background: rgba(255,255,255,.08); color: var(--text-primary);
+            border-color: var(--border-glass);
+        }
+
+        /* ══ DATA TABLE (Desktop) ══ */
+        /* FLUTTER: DataTable widget wrapped in SingleChildScrollView */
+        .table-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--r-lg);
+            overflow-x: auto;
+        }
+        .data-table {
+            width: 100%; min-width: 800px; border-collapse: collapse; text-align: left;
+        }
+        .data-table th, .data-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .data-table th {
+            font-size: 11px; font-weight: 700; color: var(--text-tertiary);
+            text-transform: uppercase; letter-spacing: 0.5px;
+            background: rgba(255,255,255,.02);
+        }
+        .data-table tbody tr { transition: background 150ms ease; cursor: pointer; }
+        .data-table tbody tr:hover { background: rgba(255,255,255,.03); }
+        .data-table tbody tr:last-child td { border-bottom: none; }
+
+        /* Table cells */
+        .cell-traveler { display: flex; align-items: center; gap: 12px; }
+        .cell-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: var(--border-subtle); display:flex; align-items:center; justify-content:center; color:var(--text-tertiary); font-weight:700;}
+        .cell-name { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+        .cell-email { font-size: 12px; color: var(--text-tertiary); }
+        
+        .cell-trip { font-weight: 500; }
+        .cell-package { font-size: 13px; color: var(--text-secondary); }
+        .cell-price { font-weight: 700; color: var(--text-primary); }
+        .cell-date { font-size: 13px; color: var(--text-secondary); }
+
+        /* Badges */
+        .status-badge {
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 4px 10px; border-radius: var(--r-full);
+            font-size: 11px; font-weight: 700; white-space: nowrap;
+        }
+        .status-live     { background: rgba(16,185,129,.12);  border: 1px solid rgba(16,185,129,.2);  color: var(--status-success); }
+        .status-draft    { background: rgba(255,255,255,.05);  border: 1px solid var(--border-subtle); color: var(--text-tertiary); }
+        .status-pending  { background: rgba(250,204,21,.10);   border: 1px solid rgba(250,204,21,.2);  color: var(--accent-yellow); }
+        .status-full     { background: rgba(239,68,68,.10);    border: 1px solid rgba(239,68,68,.2);   color: var(--accent-rose); }
+        .status-completed{ background: rgba(20,184,166,.10);   border: 1px solid rgba(20,184,166,.2);  color: var(--accent-teal); }
+
+        /* Actions */
+        .actions-flex { display: flex; gap: 8px; }
+        .action-btn {
+            width: 32px; height: 32px; border-radius: var(--r-sm);
+            background: transparent; border: 1px solid transparent;
+            display: inline-flex; align-items: center; justify-content: center;
+            color: var(--text-secondary); cursor: pointer; transition: all 150ms ease;
+        }
+        .action-btn:hover { background: rgba(255,255,255,.08); border-color: var(--border-subtle); color: var(--text-primary); }
+
+        /* ══ MOBILE LIST VIEW ══ */
+        /* FLUTTER: List of Cards instead of DataTable on smaller screens */
+        .mobile-list { display: none; flex-direction: column; gap: 12px; }
+        .mobile-trip-card {
+            background: var(--bg-surface); padding: 12px;
+            border: 1px solid var(--border-subtle); border-radius: var(--r-lg);
+        }
+        .mtc-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+        .mtc-title { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+        .mtc-meta { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle); margin-top: 8px;}
+        .mtc-actions { display: flex; gap: 6px; justify-content: flex-end; padding-top: 8px; }
+        
+        /* Responsive */
+        .mobile-menu-btn { display: none; }
+        .sidebar-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(2px); z-index: 15; opacity: 0; pointer-events: none; transition: opacity 250ms ease; }
+        .sidebar-overlay.active { opacity: 1; pointer-events: auto; }
+
+        @media (max-width: 900px) {
+            .sidebar { position: fixed; transform: translateX(-100%); transition: transform 250ms; box-shadow: 4px 0 24px rgba(0,0,0,0.5); }
+            .sidebar.open { transform: translateX(0); }
+            .mobile-menu-btn { display: flex; }
+            .topbar { padding: 14px 20px; }
+            .content { padding: 20px 20px 48px; }
+        }
+
+        @media (max-width: 768px) {
+            .table-card { display: none; } /* Hide table on mobile */
+            .mobile-list { display: flex; } /* Show cards instead */
+        }
+    </style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+        <div class="logo-mark">S</div>
+        <span class="logo-text">SoleGoes</span>
+    </div>
+    <nav class="sidebar-nav">
+        <span class="nav-section-label">Overview</span>
+        <a class="nav-item" href="03_agency_dashboard.html"><i data-lucide="layout-dashboard" width="16" height="16"></i>Dashboard</a>
+        <span class="nav-section-label" style="margin-top:8px;">Manage</span>
+        <a class="nav-item" href="04_agency_trips.html"><i data-lucide="map" width="16" height="16"></i>My Trips<span class="nav-badge">5</span></a>
+        <a class="nav-item active" href="06_agency_bookings.html"><i data-lucide="calendar-check" width="16" height="16"></i>Bookings</a>
+    </nav>
+</aside>
+
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<div class="main-area">
+    <header class="topbar">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <button class="icon-btn mobile-menu-btn" style="border:none;background:none;" onclick="toggleSidebar()">
+                <i data-lucide="menu" width="18" height="18"></i>
+            </button>
+            <span style="font-weight:600;">Bookings</span>
+        </div>
+        <div class="topbar-right">
+            <div class="icon-btn"><i data-lucide="bell" width="17" height="17"></i></div>
+        </div>
+    </header>
+
+    <div class="content">
+        <div class="page-heading">
+            <h1 class="page-title">Manage Bookings</h1>
+            <button class="btn btn-outline" style="gap:8px;">
+                <i data-lucide="download" width="17" height="17"></i>
+                Export CSV
+            </button>
+        </div>
+
+        <div class="filter-tabs">
+            <button class="tab-btn active">All (24)</button>
+            <button class="tab-btn">Confirmed (18)</button>
+            <button class="tab-btn">Pending (4)</button>
+            <button class="tab-btn">Cancelled (2)</button>
+        </div>
+
+        <!-- Desktop Data Table -->
+        <div class="table-card">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Traveler</th>
+                        <th>Trip</th>
+                        <th>Package</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="cell-traveler">
+                                <img class="cell-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&q=80" alt="Avatar" />
+                                <div>
+                                    <div class="cell-name">Aisha Sharma</div>
+                                    <div class="cell-email">aisha.s@example.com</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="cell-trip">Spiti Winter Expedition</td>
+                        <td>
+                            <div class="cell-package">Standard Sharing</div>
+                            <div style="font-size:11px;color:var(--text-tertiary);">2 Travelers</div>
+                        </td>
+                        <td class="cell-price">₹25,000</td>
+                        <td><span class="status-badge status-live">● Confirmed</span></td>
+                        <td>
+                            <div class="cell-date">Oct 12, 2026</div>
+                            <div style="font-size:11px;color:var(--text-tertiary);">10:30 AM</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="cell-traveler">
+                                <div class="cell-avatar">R</div>
+                                <div>
+                                    <div class="cell-name">Rahul Verma</div>
+                                    <div class="cell-email">rahuldv@gmail.com</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="cell-trip">Chopta Snowtrek</td>
+                        <td>
+                            <div class="cell-package">Private Room</div>
+                            <div style="font-size:11px;color:var(--text-tertiary);">1 Traveler</div>
+                        </td>
+                        <td class="cell-price">₹8,500</td>
+                        <td><span class="status-badge status-live">● Confirmed</span></td>
+                        <td>
+                            <div class="cell-date">Oct 10, 2026</div>
+                            <div style="font-size:11px;color:var(--text-tertiary);">18:45 PM</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="cell-traveler">
+                                <img class="cell-avatar" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&q=80" alt="Avatar" />
+                                <div>
+                                    <div class="cell-name">Karan Patel</div>
+                                    <div class="cell-email">kp.adventures@mail.com</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="cell-trip">Spiti Winter Expedition</td>
+                        <td>
+                            <div class="cell-package">Premium Sharing</div>
+                            <div style="font-size:11px;color:var(--text-tertiary);">3 Travelers</div>
+                        </td>
+                        <td class="cell-price">₹45,000</td>
+                        <td><span class="status-badge status-pending">Pending</span></td>
+                        <td>
+                            <div class="cell-date">Oct 09, 2026</div>
+                            <div style="font-size:11px;color:var(--text-tertiary);">09:12 AM</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Mobile Card List -->
+        <div class="mobile-list">
+            <!-- Card 1 -->
+            <div class="mobile-trip-card">
+                <div class="mtc-header">
+                    <div class="cell-traveler">
+                        <img class="cell-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&q=80" alt="Avatar" />
+                        <div>
+                            <div class="mtc-title">Aisha Sharma</div>
+                            <div class="cell-email">Spiti Winter Expedition</div>
+                        </div>
+                    </div>
+                    <span class="status-badge status-live">Confirmed</span>
+                </div>
+                <div class="mtc-meta">
+                    <div>
+                        <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:2px;">Package</div>
+                        <div style="font-size:13px;font-weight:600;">Standard (x2)</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:2px;">Amount</div>
+                        <div style="font-size:13px;font-weight:700;color:var(--primary-light);">₹25,000</div>
+                    </div>
+                </div>
+                <div class="mtc-actions">
+                    <button class="btn btn-outline" style="flex:1;font-size:12px;padding:6px;">View Details</button>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="mobile-trip-card">
+                <div class="mtc-header">
+                    <div class="cell-traveler">
+                        <div class="cell-avatar">R</div>
+                        <div>
+                            <div class="mtc-title">Rahul Verma</div>
+                            <div class="cell-email">Chopta Snowtrek</div>
+                        </div>
+                    </div>
+                    <span class="status-badge status-live">Confirmed</span>
+                </div>
+                <div class="mtc-meta">
+                    <div>
+                        <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:2px;">Package</div>
+                        <div style="font-size:13px;font-weight:600;">Private Room (x1)</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:2px;">Amount</div>
+                        <div style="font-size:13px;font-weight:700;color:var(--primary-light);">₹8,500</div>
+                    </div>
+                </div>
+                <div class="mtc-actions">
+                    <button class="btn btn-outline" style="flex:1;font-size:12px;padding:6px;">View Details</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    lucide.createIcons();
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('open');
+        document.getElementById('sidebar-overlay').classList.toggle('active');
+    }
+</script>
+</body>
+</html>

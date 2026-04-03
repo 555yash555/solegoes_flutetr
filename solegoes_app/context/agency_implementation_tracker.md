@@ -1,8 +1,8 @@
 # Agency Dashboard — Implementation Tracker
 
 **Reference:** `context/AGENCY_WEB_APP_PLAN.md` (full plan)
-**Last Updated:** 2026-03-01
-**Priority:** Agency signup & login first, then foundation, then dashboard
+**Last Updated:** 2026-04-04
+**Status:** Flutter handles agency entry & onboarding only (Phases 1–3 complete). Phases 4–8 (operations dashboard) moved to Next.js → see `../agency_dashboard/`.
 **Approach:** 7 screens have approved HTML mockups → convert to Flutter. Remaining screens build from plan specs.
 
 **Conversion rule:** HTML mockups are source of truth for **layout/styling/responsiveness only**. Data fields must match actual Freezed models (`Trip`, `Booking`, `Agency`, `AppUser`) and `database_schema.md`. HTML may have extra, missing, or differently-named fields — do NOT blindly copy. If mismatch found, ask user with alternative suggestion. Zero static data — all values from Riverpod providers. See plan section 12 for full guidelines.
@@ -319,16 +319,25 @@
 
 ## Progress Summary
 
-| Phase | Status | Data Layer | Screens |
-|-------|--------|------------|--------|
-| 1. Agency Signup & Login | ✅ Built | N/A | ✅ All screens |
-| 2. Foundation | ✅ Built | ✅ Models + repos | N/A |
-| 3. Dashboard Shell | ✅ Built | N/A | ✅ Shell + placeholders |
-| 4. Home + Profile + Settings | 🔄 In progress | ❌ Missing providers | ❌ Placeholder only |
-| 5. Trip Management | Not started | ❌ Missing write methods | ❌ |
-| 6. Booking Management | Not started | ❌ Missing agency query | ❌ |
-| 7. Superadmin | Not started | ❌ | ❌ |
-| 8. Messages, Notifications & Payouts | Not started | ❌ | ❌ |
+| Phase | Status | Data Layer | Screens | Notes |
+|-------|--------|------------|---------|-------|
+| 1. Agency Signup & Login | ✅ Complete | N/A | ✅ All screens | login, signup (3-step), pending, registerAgency(), routes |
+| 2. Foundation | ✅ Complete | ✅ Models + repos | N/A | AppUser role/agencyId, Agency model, AgencyRepository, GoRouter role redirect |
+| 3. Dashboard Shell | ✅ Complete | N/A | ✅ Shell + placeholders | AgencyShell, sidebar (450 lines), topbar, 5 placeholder screens |
+| 4–8. Operations Dashboard | 🚫 Moved to Next.js | — | — | Continued in `../agency_dashboard/` |
+
+### What Flutter owns (permanent)
+- Consumer mobile app — full trip discovery, booking, chat, payments
+- Agency login screen (`/agency-login`)
+- Agency signup 3-step wizard (`/agency-signup`) — company details, document upload, bank details
+- Agency pending screen (`/agency-pending`) — animated, auto-redirects on approval
+- Role-based GoRouter redirect — consumer → `/`, agency+approved → `/agency`, agency+pending → `/agency-pending`, superAdmin → `/admin`
+- Scroll-down hint indicator on signup screen
+
+### What Next.js owns (new)
+- All agency day-to-day operations: dashboard, trips, bookings, messages, profile, settings, payouts
+- Superadmin approval queue
+- See `../agency_dashboard/` for the full Next.js project
 
 ### Data Layer Rule
 **Never implement a screen before its data layer is complete.**

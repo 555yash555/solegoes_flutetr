@@ -23,9 +23,16 @@ class AgencySignupScreen extends ConsumerStatefulWidget {
       _AgencySignupScreenState();
 }
 
-class _AgencySignupScreenState extends ConsumerState<AgencySignupScreen> {
+class _AgencySignupScreenState extends ConsumerState<AgencySignupScreen>
+    with SingleTickerProviderStateMixin {
   int _currentStep = 0; // 0-indexed: 0=Company, 1=Documents, 2=Bank
   bool _isSubmitting = false;
+
+  // ── Scroll hint ──
+  final _scrollCtrl = ScrollController();
+  bool _showScrollHint = false;
+  late final AnimationController _bounceCtrl;
+  late final Animation<double> _bounceAnim;
 
   // ── Step 1 controllers ──
   final _businessNameCtrl = TextEditingController();
@@ -77,6 +84,28 @@ class _AgencySignupScreenState extends ConsumerState<AgencySignupScreen> {
   void initState() {
     super.initState();
     _loadDraft();
+    _bounceCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    )..repeat(reverse: true);
+    _bounceAnim = Tween<double>(begin: 0, end: 8).animate(
+      CurvedAnimation(parent: _bounceCtrl, curve: Curves.easeInOut),
+    );
+    _scrollCtrl.addListener(_onScroll);
+    // Check after first frame so scroll extents are calculated
+    WidgetsBinding.instance.addPostFrameCallback((_) => _onScroll());
+  }
+
+  void _onScroll() {
+    if (!_scrollCtrl.hasClients) return;
+    final atBottom = _scrollCtrl.position.pixels >=
+        _scrollCtrl.position.maxScrollExtent - 40;
+    final hasScroll =
+        _scrollCtrl.position.maxScrollExtent > 0;
+    final shouldShow = hasScroll && !atBottom;
+    if (shouldShow != _showScrollHint) {
+      setState(() => _showScrollHint = shouldShow);
+    }
   }
 
   Future<void> _loadDraft() async {
@@ -156,6 +185,9 @@ class _AgencySignupScreenState extends ConsumerState<AgencySignupScreen> {
 
   @override
   void dispose() {
+    _scrollCtrl.removeListener(_onScroll);
+    _scrollCtrl.dispose();
+    _bounceCtrl.dispose();
     _businessNameCtrl.dispose();
     _emailCtrl.dispose();
     _phoneCtrl.dispose();
@@ -253,6 +285,13 @@ class _AgencySignupScreenState extends ConsumerState<AgencySignupScreen> {
     if (valid) {
       setState(() => _currentStep++);
       _saveDraft();
+      // Re-check scroll hint after step changes (content height differs per step)
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_scrollCtrl.hasClients) {
+          _scrollCtrl.jumpTo(0);
+          _onScroll();
+        }
+      });
     }
   }
 
@@ -390,23 +429,29 @@ class _AgencySignupScreenState extends ConsumerState<AgencySignupScreen> {
               children: [
                 _buildFormTopbar(true),
                 Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildStepper(true),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 40, vertical: 28),
-                          child: Center(
-                            child: ConstrainedBox(
-                              constraints: const BoxConstraints(maxWidth: 680),
-                              child: _buildCurrentStep(),
+                  child: Stack(
+                    children: [
+                      SingleChildScrollView(
+                        controller: _scrollCtrl,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildStepper(true),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 40, vertical: 28),
+                              child: Center(
+                                child: ConstrainedBox(
+                                  constraints: const BoxConstraints(maxWidth: 680),
+                                  child: _buildCurrentStep(),
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      _buildScrollHint(),
+                    ],
                   ),
                 ),
                 Container(
@@ -445,25 +490,105 @@ class _AgencySignupScreenState extends ConsumerState<AgencySignupScreen> {
       children: [
         _buildFormTopbar(false),
         Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildStepper(false),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 28, 20, 56),
-                  child: Center(
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 680),
-                      child: _buildCurrentStep(),
+          child: Stack(
+            children: [
+              SingleChildScrollView(
+                controller: _scrollCtrl,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildStepper(false),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 28, 20, 56),
+                      child: Center(
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 680),
+                          child: _buildCurrentStep(),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              _buildScrollHint(),
+            ],
           ),
         ),
       ],
+    );
+  }
+
+  // ─── Animated scroll-down hint indicator (right-edge, non-intrusive) ───
+  Widget _buildScrollHint() {
+    return Positioned(
+      right: 12,
+      top: 0,
+      bottom: 0,
+      child: IgnorePointer(
+        ignoring: !_showScrollHint,
+        child: AnimatedOpacity(
+          duration: const Duration(milliseconds: 300),
+          opacity: _showScrollHint ? 1.0 : 0.0,
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: GestureDetector(
+              onTap: () {
+                _scrollCtrl.animateTo(
+                  _scrollCtrl.position.maxScrollExtent,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                );
+              },
+              child: AnimatedBuilder(
+                animation: _bounceAnim,
+                builder: (context, child) => Transform.translate(
+                  offset: Offset(0, _bounceAnim.value),
+                  child: child,
+                ),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: AppColors.bgSurface,
+                    borderRadius: AppRadius.mdAll,
+                    border: Border.all(
+                      color: AppColors.primary.withValues(alpha: 0.35),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.primary.withValues(alpha: 0.2),
+                        blurRadius: 10,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        LucideIcons.chevronsDown,
+                        size: 14,
+                        color: AppColors.primary,
+                      ),
+                      const SizedBox(height: 6),
+                      RotatedBox(
+                        quarterTurns: 1,
+                        child: Text(
+                          'scroll for more',
+                          style: AppTextStyles.labelSmall.copyWith(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 10,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
